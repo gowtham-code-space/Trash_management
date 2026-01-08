@@ -28,7 +28,6 @@ notifications: 3
  */
 function BottomNav({ user, menuItems, isActive }) {
 const navigate = useNavigate();
-const { isDarkTheme } = ThemeStore();
 
 // Filter menu items to only show those with showMobile: true
 const mobileMenuItems = menuItems.filter(item => item.showMobile === true);
@@ -52,7 +51,7 @@ return (
         <div className={`transition-colors duration-300 ${active ? "text-primaryLight" : "text-primary"}`}>
             <Icon 
             isPressed={active} 
-            isDarkTheme={isDarkTheme} 
+            isDarkTheme={false} 
             defaultColor={active ? "#1E8E54" : "#145B47"} 
             />
         </div>
@@ -128,7 +127,7 @@ return currentItem ? currentItem.label : "Dashboard";
 }
 
 return (
-<div className={isDarkTheme ? "dark" : ""}>
+<div>
 <div className="flex h-screen overflow-hidden">
     {/* DESKTOP SIDEBAR - Background updated to primary */}
     <aside className="hidden md:flex w-64 h-full bg-primary border-r border-primary flex-col z-20 shrink-0 transition-all duration-300">
@@ -159,7 +158,7 @@ return (
             >
             <Icon 
                 isPressed={active} 
-                isDarkTheme={isDarkTheme} 
+                isDarkTheme={false} 
                 defaultColor={active ? "white" : "#ECF7F0"}
                 OnpressColor="white"
                 DarkThemeColor="white"
@@ -192,7 +191,7 @@ return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
     
     {/* TOP HEADER */}
-    <header className="h-20  bg-white border-b border-secondary px-4 md:px-8 flex items-center justify-between z-10 shadow-sm shrink-0">
+    <header className={`${isDarkTheme && "dark"} h-20  bg-white border-b border-secondary px-4 md:px-8 flex items-center justify-between z-10 shadow-sm shrink-0`}>
         <div className="flex items-center gap-2 md:gap-4">
         <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight truncate">
             {getPageTitle()}
@@ -234,7 +233,7 @@ return (
     </header>
 
     {/* MAIN CONTENT AREA */}
-    <main className="flex-1 overflow-auto bg-background p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar">
+    <main className={`flex-1 overflow-auto bg-background p-4 md:p-8 pb-24 md:pb-8 custom-scrollbar ${isDarkTheme ? "dark" : ""}`}>
         <div className="animate-fade-in max-w-7xl mx-auto">
         <Outlet />
         </div>

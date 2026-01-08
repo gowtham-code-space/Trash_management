@@ -42,8 +42,6 @@ const trendData = [
     { week: "Week 2", complaints: 19 },
     { week: "Week 3", complaints: 15 },
     { week: "Week 4", complaints: 22 },
-    { week: "Week 5", complaints: 18 },
-    { week: "Week 6", complaints: 25 },
 ];
 
 const communityData = [

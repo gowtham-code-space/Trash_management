@@ -14,6 +14,7 @@ import {
     Pie,
     Cell,
 } from "recharts";
+import { ToastContainer } from "react-toastify";
 
 function RadarChart({ data , yearDropDown}) {
     const [selectedYear, setSelectedYear] = useState("2025");
@@ -73,6 +74,7 @@ function RadarChart({ data , yearDropDown}) {
             Overall resolution performance for {selectedYear}
             </p>
         </div>
+        <ToastContainer/>
         </div>
     );
 }

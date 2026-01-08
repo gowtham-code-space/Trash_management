@@ -14,6 +14,7 @@ import {
     Pie,
     Cell,
 } from "recharts";
+import { ToastContainer } from "react-toastify";
 function PieChart({ data , yearDropDown}) {
     const [selectedYear, setSelectedYear] = useState("2025");
     
@@ -86,6 +87,7 @@ function PieChart({ data , yearDropDown}) {
             );
             })}
         </div>
+        <ToastContainer/>
         </div>
     );
 }

@@ -1,7 +1,9 @@
 import React from "react";
 import { RightArrow } from "../../../assets/icons/icons";
-
+import { useNavigate } from "react-router-dom";
 function MyReports({ report }) {
+    const navigate = useNavigate();
+
     function getStatusStyle(status) {
         if (status === "Pending") return "bg-warning text-black";
         if (status === "Critical") return "bg-error text-white";
@@ -9,7 +11,7 @@ function MyReports({ report }) {
     }
 
     return (
-    <div className="flex items-center justify-between p-3 bg-white border border-secondary rounded-lg mb-2 transition-all hover:border-primaryLight group active:scale-[0.99]">
+    <div onClick={()=>navigate("/trash-details")} className="hover:cursor-pointer flex items-center justify-between p-3 bg-white border border-secondary rounded-lg mb-2 transition-all hover:border-primaryLight group active:scale-[0.99]">
         <div className="flex items-center gap-3">
         {/* Thumbnail */}
         <div className="w-12 h-12 rounded-md overflow-hidden bg-background border border-secondary shrink-0">

@@ -213,7 +213,7 @@ export default ToastNotification;
 
 
 
-
+=================================================================================================================================
 added dark theme Logic
 
 🏗️ Master Frontend Engineer Guidelines & Instructions (v3.1)
@@ -427,11 +427,83 @@ export default function Signup() {
 
 🎪 ICON SYSTEM (UNCHANGED — FINAL AUTHORITY)
 
+📊 Ⅺ. GRAPH / STATISTICS COMPONENT SYSTEM (NEW — REQUIRED)
+Allowed Graph Components ONLY
+
+📁 Location:
+
+components/Statistics/
+├── RadarChart.jsx
+├── LineChart.jsx
+└── PieChart.jsx
+
+
+🚫 NO Recharts usage in pages
+🚫 NO inline charts
+
+Import Graphs
+import RadarChart from "../../components/Statistics/RadarChart";
+import LineChart from "../../components/Statistics/LineChart";
+import PieChart from "../../components/Statistics/PieChart";
+
+Data Contracts (STRICT)
+Radar
+const radarData = [
+  { category: "Resolved", value: 85 },
+  { category: "Pending", value: 45 },
+];
+
+Line
+const trendData = [
+  { week: "Week 1", complaints: 12 },
+  { week: "Week 2", complaints: 19 },
+];
+
+Pie
+const communityData = [
+  { name: "Accepted", value: 85, color: "#1E8E54" },
+  { name: "Declined", value: 15, color: "#E75A4C" },
+];
+
+
+🚫 No inline data
+🚫 No mutation inside JSX
+
+Using Graphs in Pages
+function StatisticsPage() {
+  return (
+    <div className="space-y-6">
+      <RadarChart data={radarData} yearDropDown={["2025", "2026"]} />
+
+      <LineChart
+        data={trendData}
+        yearDropDown={["2025", "2026"]}
+        monthDropDown={months}
+      />
+
+      <PieChart data={communityData} yearDropDown={["2025", "2026"]} />
+    </div>
+  );
+}
+
+
+🟢 Graphs already include:
+
+Card wrapper
+
+Theme tokens
+
+Hover scale-[0.99]
+
+Toast notifications
+
+Dark mode support
+
+🚫 Do NOT rewrap
+🚫 Do NOT restyle
 ✔ Centralized import only
 ✔ Priority logic enforced
 ✔ Single Icons.jsx source of truth
-
-(No changes applied — your existing system remains valid)
 
 🛑 FINAL ENFORCEMENT
 

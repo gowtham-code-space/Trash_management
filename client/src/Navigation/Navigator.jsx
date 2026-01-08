@@ -8,6 +8,7 @@ import Signup from "../pages/Signup/Signup";
 import Home from "../pages/Residents/Home";
 import Map from "../pages/Residents/Map";
 import ReportTrash from "../pages/Residents/ReportTrash";
+import TrashDetails from "../pages/Residents/TrashDetails"
 import Feedback from "../pages/Residents/Feedback";
 import Settings from "../pages/Residents/Settings";
 import ResidentStats from "../pages/Residents/ResidentStats";
@@ -44,6 +45,7 @@ return (
             <Route index element={<Home/>} />
             <Route path="map" element={<Map/>} />
             <Route path="report-trash" element={<ReportTrash/>} />
+            <Route path="trash-details" element={<TrashDetails/>} />
             <Route path="statistics" element={<ResidentStats/>} /> {/* checking zustand */}
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />

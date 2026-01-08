@@ -2,18 +2,14 @@ import { useState } from "react";
 import ToastNotification from "../Notification/ToastNotification";
 import {
     RadarChart as RechartsRadar,
-    PolarGrid,
-    PolarAngleAxis,
-    Radar,
     LineChart as RechartsLine,
     Line,
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
     PieChart as RechartsPie,
-    Pie,
-    Cell,
 } from "recharts";
+import { ToastContainer } from "react-toastify";
 function LineChart({ data ,monthDropDown, yearDropDown}) {
     const [selectedMonth, setSelectedMonth] = useState(monthDropDown[0] || null);
     const [selectedYear, setSelectedYear] = useState(yearDropDown[0] || null);
@@ -99,7 +95,7 @@ function LineChart({ data ,monthDropDown, yearDropDown}) {
             </ResponsiveContainer>
         </div>
 
-        <div className="grid grid-cols-6 gap-2 mt-4 pt-4 border-t border-secondary">
+        <div className="flex justify-around gap-2 mt-4 pt-4 border-t border-secondary">
             {data?.map(function (item, index) {
             return (
                 <div key={index} className="text-center">
@@ -108,6 +104,7 @@ function LineChart({ data ,monthDropDown, yearDropDown}) {
             );
             })}
         </div>
+        <ToastContainer/>
         </div>
     );
 }
