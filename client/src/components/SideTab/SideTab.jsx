@@ -13,7 +13,8 @@ Add,
 People,
 Certificate,
 Notification,
-Search
+Search,
+TrashRoute
 } from "../../assets/icons/icons";
 import ThemeStore from "../../store/ThemeStore";
 
@@ -80,6 +81,7 @@ const menuConfig = {
 Resident: [
     { id: "", label: "Home", icon: Home, showMobile: true },
     { id: "map", label: "Map", icon: Map, showMobile: true },
+    { id: "route-timings", label: "Routes & timings", icon: TrashRoute, showMobile: false },
     { id: "report-trash", label: "Report", icon: Camera, showMobile: true },
     { id: "statistics", label: "Statistics", icon: Stats, showMobile: true },
     { id: "quiz", label: "Quiz", icon: Certificate, showMobile: true },

@@ -486,6 +486,46 @@ function StatisticsPage() {
   );
 }
 
+⏺ Notifications:
+import:
+import ToasNotification from import  ToastNotification  from "../../components/Notification/ToastNotification";
+
+✔ Use only
+ToastNotification(message, type)
+from
+../../components/Notification/ToastNotification
+
+types for toast:
+import { toast } from "react-toastify";
+
+function ToastNotification(message, type = "default") {
+switch (type) {
+    case "success":
+    toast.success(message);
+    break;
+
+    case "error":
+    toast.error(message);
+    break;
+
+    case "warning":
+    toast.warn(message);
+    break;
+
+    case "info":
+    toast.info(message);
+    break;
+
+    default:
+    toast(message);
+    break;
+}
+}
+
+export default ToastNotification;
+
+
+<style/> for animation is strictly prohibited
 
 🟢 Graphs already include:
 
@@ -498,6 +538,74 @@ Hover scale-[0.99]
 Toast notifications
 
 Dark mode support
+
+🎪 ICON SYSTEM — COMPLETE & FINAL REGISTRY
+📦 Ⅰ. Centralized Import (MANDATORY)
+import {
+  Home,
+  Map,
+  Add,
+  Settings,
+  FeedBack,
+  Task,
+  Stats,
+  Notification,
+  LogOut,
+  Mobile,
+  Email,
+  Camera,
+  People,
+  Language,
+  Brightness,
+  Certificate,
+  Search,
+  Location,
+  Trash,
+  Check,
+  Star,
+  QR,
+  RightArrow,
+  LeftArrow,
+  UpArrow,
+  DownArrow,
+  QRScanner,
+  X,
+  Expand,
+  TrashVehicle,
+  TrashRoute,
+  ZoomIn,
+  ZoomOut
+} from "../../assets/icons/icons";
+
+🎨 Ⅱ. Icon Prop Priority Logic
+
+▶ Icon color resolution order MUST follow this hierarchy
+| Priority | Prop           | Description           |
+| -------- | -------------- | --------------------- |
+| ①        | `isPressed`    | Uses `OnpressColor`   |
+| ②        | `isDarkTheme`  | Uses `DarkThemeColor` |
+| ③        | `defaultColor` | Fallback color        |
+
+| Prop             | Type    | Default     |
+| ---------------- | ------- | ----------- |
+| `size`           | Number  | `25`        |
+| `isPressed`      | Boolean | `false`     |
+| `isDarkTheme`    | Boolean | `false`     |
+| `defaultColor`   | String  | `"black"`   |
+| `DarkThemeColor` | String  | `"#fff"`    |
+| `OnpressColor`   | String  | `"#1E8E54"` |
+
+🧩 Ⅲ. Icon Usage Examples
+🟢 Primary Navigation (Dark Background)
+function NavButton() {
+  return (
+    <button className="bg-primary p-3 rounded-large hover:scale-[1.02] active:scale-[0.99] transition-all">
+      <Home size={20} isDarkTheme={true} />
+    </button>
+  );
+}
+
+Make it responsive
 
 🚫 Do NOT rewrap
 🚫 Do NOT restyle

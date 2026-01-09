@@ -12,9 +12,7 @@ import TrashDetails from "../pages/Residents/TrashDetails"
 import Feedback from "../pages/Residents/Feedback";
 import Settings from "../pages/Residents/Settings";
 import ResidentStats from "../pages/Residents/ResidentStats";
-
-// testing
-import ThemeStore from "../store/ThemeStore";
+import RouteTimings from "../pages/RouteTimings/RouteTimings";
 
 //Quiz
 import Quiz from "../pages/Quiz/Quiz";
@@ -22,11 +20,11 @@ import TakeQuiz from "../pages/Quiz/TakeQuiz";
 
 
 
+
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanittaryInspector", "MHO"
 const mockUser = { role: "Resident", name: "Alex Rivera" };
 
 function Navigator() {
-    const {isDarkTheme , toggleTheme} = ThemeStore();
 return (
     <Router>
     <Routes>
@@ -45,8 +43,9 @@ return (
             <Route index element={<Home/>} />
             <Route path="map" element={<Map/>} />
             <Route path="report-trash" element={<ReportTrash/>} />
+            <Route path="route-timings" element={<RouteTimings/>} />
             <Route path="trash-details" element={<TrashDetails/>} />
-            <Route path="statistics" element={<ResidentStats/>} /> {/* checking zustand */}
+            <Route path="statistics" element={<ResidentStats/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="feedback" element={<Feedback/>} />

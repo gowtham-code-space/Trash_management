@@ -34,6 +34,14 @@ import { FaChevronDown } from "react-icons/fa";
 import { FaStar } from "react-icons/fa"; //ratings
 import { MdQrCodeScanner } from "react-icons/md"; //QR
 
+// trash routes
+import { BsTruck } from "react-icons/bs";
+import { TbRouteSquare } from "react-icons/tb";
+
+//map zoom
+import { MdAdd } from "react-icons/md";
+import { RiSubtractLine } from "react-icons/ri";
+
 const defaultSize = 25;
 const defaultColor = "black";
 const DarkThemeColor = "#fff";
@@ -168,3 +176,16 @@ export function Expand({ size, isPressed = false, isDarkTheme = false, defaultCo
     return <Icons Icon={RiExpandDiagonalLine} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
+export function TrashVehicle({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BsTruck} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function TrashRoute({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={TbRouteSquare} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function ZoomIn({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdAdd} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function ZoomOut({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={RiSubtractLine} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}

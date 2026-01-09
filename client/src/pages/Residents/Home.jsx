@@ -7,7 +7,8 @@ import {
     Star,
     Add,
     RightArrow,
-    Check
+    Check,
+    TrashRoute
 } from "../../assets/icons/icons";
 import MyReports from "../../components/Cards/Residents/MyReports";
 import Pagination from "../../utils/Pagination";
@@ -72,46 +73,59 @@ function Home() {
                 <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                 
                 {/* Report Trash Action */}
-                <button 
-                    onClick={() => navigate("report-trash")} 
-                    className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                    <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                    <Camera size={22} isPressed={false} defaultColor="#145B47" />
-                    </div>
-                    <div className="text-center">
-                    <p className="text-sm font-bold leading-tight">Report trash</p>
-                    <p className="text-xs mt-1 font-medium opacity-80">Photo + location</p>
-                    </div>
-                </button>
+                    <button 
+                        onClick={() => navigate("report-trash")} 
+                        className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                        <Camera size={22} isPressed={false} defaultColor="#145B47" />
+                        </div>
+                        <div className="text-center">
+                        <p className="text-sm font-bold leading-tight">Report trash</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">Photo + location</p>
+                        </div>
+                    </button>
 
-                {/* Scan QR Action */}
-                <button 
-                    onClick={() => navigate("feedback")} 
-                    className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                    <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                    <QR size={22} isPressed={false} defaultColor="#145B47" />
-                    </div>
-                    <div className="text-center">
-                    <p className="text-sm font-bold leading-tight">Scan QR</p>
-                    <p className="text-xs mt-1 font-medium opacity-80">Rate Trashman</p>
-                    </div>
-                </button>
+                    {/* Scan QR Action */}
+                    <button 
+                        onClick={() => navigate("feedback")} 
+                        className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                        <QR size={22} isPressed={false} defaultColor="#145B47" />
+                        </div>
+                        <div className="text-center">
+                        <p className="text-sm font-bold leading-tight">Scan QR</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">Rate Trashman</p>
+                        </div>
+                    </button>
+                    {/* Routes & Timings */}
+                    <button 
+                        onClick={() => navigate("route-timings")} 
+                        className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                        <TrashRoute size={22} isPressed={false} defaultColor="#145B47" />
+                        </div>
+                        <div className="text-center">
+                        <p className="text-sm font-bold leading-tight">Route & Timings</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">Open Routes</p>
+                        </div>
+                    </button>
+                    {/* Quiz Action */}
+                    <button 
+                        onClick={() => navigate("quiz")} 
+                        className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                        <Certificate size={22} isPressed={false} defaultColor="#145B47" />
+                        </div>
+                        <div className="text-center">
+                        <p className="text-sm font-bold leading-tight">Quiz</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">Earn points</p>
+                        </div>
+                    </button>
 
-                {/* Quiz Action */}
-                <button 
-                    onClick={() => navigate("quiz")} 
-                    className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
-                >
-                    <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                    <Certificate size={22} isPressed={false} defaultColor="#145B47" />
-                    </div>
-                    <div className="text-center">
-                    <p className="text-sm font-bold leading-tight">Quiz</p>
-                    <p className="text-xs mt-1 font-medium opacity-80">Earn points</p>
-                    </div>
-                </button>
                 </div>
             </div>
 
@@ -161,6 +175,18 @@ function Home() {
                         <div className="text-left">
                         <p className="text-xs font-bold text-black tracking-tight">Scan QR Code</p>
                         <p className="text-xs text-gray-500 font-medium">Verify collection</p>
+                        </div>
+                    </div>
+                    <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                    </button>
+                    <button onClick={()=>navigate("route-timings")} className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                        <TrashRoute size={18} isPressed={false} isDarkTheme={true} />
+                        </div>
+                        <div className="text-left">
+                        <p className="text-xs font-bold text-black tracking-tight">Routes & Timings</p>
+                        <p className="text-xs text-gray-500 font-medium">Live Track the Trash truck</p>
                         </div>
                     </div>
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
