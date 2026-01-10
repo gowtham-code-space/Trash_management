@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TNgovLogo from "../../assets/TNgov.png";
-import ThemeStore from "../../store/ThemeStore";
+import TNgovLogo from "../../../assets/TNgov.png";
+import ThemeStore from "../../../store/ThemeStore";
 
 // Sample JSON data for the identity card
 const cardData = {

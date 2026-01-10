@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Settings, Mobile, Email } from "../../assets/icons/icons";
-import ToastNotification from "../../components/Notification/ToastNotification";
+import { Settings, Mobile, Email } from "../../../assets/icons/icons";
+import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
-import OtpVerificationModal from "../../components/Modals/Login/OtpVerificationModal";
+import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
 
 //Themeprovider
-import ThemeStore from "../../store/ThemeStore";
+import ThemeStore from "../../../store/ThemeStore";
 
 // Mock database declared at the top level
 const mockUsers = [

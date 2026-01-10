@@ -17,7 +17,8 @@ import {
 import { ToastContainer } from "react-toastify";
 function PieChart({ data , yearDropDown}) {
     const [selectedYear, setSelectedYear] = useState("2025");
-    
+    //role for testing: "Resident", "TrashMan", "SuperVisor", "SanittaryInspector", "MHO"
+    const role = "TrashMan"
     function handleYearChange(event) {
         const newYear = event.target.value;
         setSelectedYear(newYear);
@@ -27,9 +28,16 @@ function PieChart({ data , yearDropDown}) {
     return (
         <div className="bg-secondary p-6 rounded-large border border-secondary">
         <div className="flex items-center justify-between mb-2">
+            {role === "Resident" ? 
             <h2 className="text-base font-semibold text-secondaryDark">
             Community Response
             </h2>
+
+            : role === "TrashMan" ?
+            <h2 className="text-base font-semibold text-secondaryDark">
+            Attendance
+            </h2> : ""
+            }
             
             <select
             value={selectedYear}
@@ -46,7 +54,14 @@ function PieChart({ data , yearDropDown}) {
             </select>
         </div>
         
-        <p className="text-sm text-secondaryDark mb-6">Neighbor votes for {selectedYear}</p>
+        {role === "Resident" ?
+            <p className="text-sm text-secondaryDark mb-6">Neighbor votes for {selectedYear}</p>
+
+        : role === "TrashMan" ?
+        <p className="text-sm text-secondaryDark mb-6">Attendance for {selectedYear}</p>
+        
+        : ""
+        }
 
         <ResponsiveContainer width="100%" height={220}>
             <RechartsPie>

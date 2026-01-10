@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SideTab from "../components/SideTab/SideTab";
-import Login from "../pages/Login/Login";
-import Signup from "../pages/Signup/Signup";
+import Login from "../pages/Common/Login/Login";
+import Signup from "../pages/Common/Signup/Signup";
 
 //residents
 import Home from "../pages/Residents/Home";
@@ -12,11 +12,11 @@ import TrashDetails from "../pages/Residents/TrashDetails"
 import Feedback from "../pages/Residents/Feedback";
 import Settings from "../pages/Residents/Settings";
 import ResidentStats from "../pages/Residents/ResidentStats";
-import RouteTimings from "../pages/RouteTimings/RouteTimings";
+import RouteTimings from "../pages/Common/RouteTimings/RouteTimings";
 
 //Quiz
-import Quiz from "../pages/Quiz/Quiz";
-import TakeQuiz from "../pages/Quiz/TakeQuiz";
+import Quiz from "../pages/Common/Quiz/Quiz";
+import TakeQuiz from "../pages/Common/Quiz/TakeQuiz";
 
 //TrashMan
 import TrashManDashboard from "../pages/TrashMan/TrashManDashBoard";
@@ -24,7 +24,8 @@ import UploadAttendance from "../pages/TrashMan/Attendance/UploadAttendance";
 import TrashManFeedBack from "../pages/TrashMan/TrashmanFeedback";
 import ImmediateTasks from "../pages/TrashMan/ImmediateTasks/ImmediateTasks";
 //Id card
-import IdentityCard from "../pages/IdentityCard/IdentityCard";
+import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
+import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 
 
 
@@ -68,9 +69,10 @@ return (
             <Route path="route-timings" element={<RouteTimings/>} />
             <Route path="immediate-tasks" element={<ImmediateTasks/>} />
             <Route path="upload-attendance" element={<UploadAttendance/>} />
-            <Route path="statistics" element={<div>Work Statistics</div>} />
+            <Route path="statistics" element={<TrashmanStats/>} />
             <Route path="feedback" element={<TrashManFeedBack/>} />
             <Route path="quiz" element={<Quiz/>} />
+            <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<Settings/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             </>

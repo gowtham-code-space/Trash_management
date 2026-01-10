@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import ToastNotification from "../../components/Notification/ToastNotification";
+import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import {
   Location,
   Add,
   ZoomIn,
   ZoomOut,
-} from "../../assets/icons/icons";
+} from "../../../assets/icons/icons";
 
 function TrashRoute() {
   const [selectedRoute, setSelectedRoute] = useState(null);

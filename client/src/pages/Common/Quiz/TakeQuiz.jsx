@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ThemeStore from "../../store/ThemeStore";
-import QuizResultModal from "../../components/Modals/Quiz/QuizResultModal";
-import { RightArrow, LeftArrow } from "../../assets/icons/icons";
+import ThemeStore from "../../../store/ThemeStore";
+import QuizResultModal from "../../../components/Modals/Quiz/QuizResultModal";
+import { RightArrow, LeftArrow } from "../../../assets/icons/icons";
 
 // Mock quiz questions
 const quizQuestions = [

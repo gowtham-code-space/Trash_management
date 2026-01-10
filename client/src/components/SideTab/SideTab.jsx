@@ -90,9 +90,12 @@ Resident: [
 ],
 TrashMan: [
     { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "route-timings", label: "Routes", icon: Map, showMobile: true },
-    { id: "immediate-tasks", label: "Tasks", icon: Task, showMobile: true },
+    { id: "upload-attendance", label: "Attendance", icon: Certificate, showMobile: true },
+    { id: "feedback", label: "Feedback", icon: FeedBack, showMobile: true },
+    { id: "immediate-tasks", label: "Immediate tasks", icon: Task, showMobile: true },
+    { id: "route-timings", label: "Routes & timings", icon: Map, showMobile: true },
     { id: "statistics", label: "Stats", icon: Stats, showMobile: true },
+    { id: "quiz", label: "Quiz", icon:Certificate, showMobile: false },
     { id: "settings", label: "Settings", icon: Settings, showMobile: true },
 ],
 SuperVisor: [

@@ -1,5 +1,5 @@
 import React from 'react'
-import ThemeStore from '../../store/ThemeStore';
+import ThemeStore from '../../../store/ThemeStore';
 export default function Signup() {
     const {isDarkTheme , toggleTheme} = ThemeStore();
     return (

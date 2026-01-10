@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import ThemeStore from "../../store/ThemeStore";
-import Pagination from "../../utils/Pagination";
-import { Certificate, Task, Star, Check, QR } from "../../assets/icons/icons";
+import ThemeStore from "../../../store/ThemeStore";
+import Pagination from "../../../utils/Pagination";
+import { Certificate, Task, Star, Check, QR } from "../../../assets/icons/icons";
 import { useNavigate } from "react-router-dom";
 // Mock data for quiz history
 const quizHistory = [
