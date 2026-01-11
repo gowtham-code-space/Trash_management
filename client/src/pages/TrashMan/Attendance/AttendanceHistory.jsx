@@ -101,7 +101,7 @@ function AttendanceHistory({ isDarkTheme }) {
         return (
             <div
                 key={record.id}
-                className="group bg-white border border-secondary/50 rounded-large p-5 hover:shadow-lg hover:border-primary/30 hover:-translate-y-0.5 transition-all duration-300"
+                className="group bg-white border border-secondary/50 rounded-large p-5 hover:shadow-lg hover:border-primary/30"
             >
                 <div className="flex items-start gap-4">
                     {/* Worker Image with Status Indicator */}

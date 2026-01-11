@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LeftArrow, RightArrow } from "../assets/icons/icons";
 
-function Pagination({ data, itemsPerPage = 5, renderItem }) {
+function Pagination({ data, itemsPerPage = 5, renderItem , gridDisplay = false }) {
 const [currentPage, setCurrentPage] = useState(1);
 
 // Pagination Logic
@@ -20,7 +20,7 @@ if (pageNum >= 1 && pageNum <= totalPages) {
 return (
 <>
     {/* Render Items */}
-    <div className="transition-all animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-100">
+    <div className={`${gridDisplay && "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"} transition-all animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-100`}>
     {currentItems.map(renderItem)}
     </div>
 

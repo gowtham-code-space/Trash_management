@@ -288,7 +288,7 @@ function TrashManFeedBack() {
         </div>
 
         {isModalOpen && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="fixed inset-0 bg-primary/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-large p-6 sm:p-8 max-w-md w-full space-y-4">
                 <div className="flex items-center justify-between">
                 <h3 className="text-lg sm:text-xl font-bold text-primary">

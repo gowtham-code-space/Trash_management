@@ -23,15 +23,20 @@ import TrashManDashboard from "../pages/TrashMan/TrashManDashBoard";
 import UploadAttendance from "../pages/TrashMan/Attendance/UploadAttendance";
 import TrashManFeedBack from "../pages/TrashMan/TrashmanFeedback";
 import ImmediateTasks from "../pages/TrashMan/ImmediateTasks/ImmediateTasks";
+
+//Supervisor
+import SupervisorDashboard from "../pages/Supervisor/SupervisorDashBoard";
+
 //Id card
 import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
 import TrashmanStats from "../pages/TrashMan/TrashmanStats";
+import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
 
 
 
 
-// Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanittaryInspector", "MHO"
-const mockUser = { role: "TrashMan", name: "Alex Rivera" };
+// Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
+const mockUser = { role: "SuperVisor", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -54,7 +59,7 @@ return (
             <Route path="report-trash" element={<ReportTrash/>} />
             <Route path="route-timings" element={<RouteTimings/>} />
             <Route path="trash-details" element={<TrashDetails/>} />
-            <Route path="statistics" element={<ResidentStats/>} />
+            <Route path="my-stats" element={<ResidentStats/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="feedback" element={<Feedback/>} />
@@ -69,7 +74,7 @@ return (
             <Route path="route-timings" element={<RouteTimings/>} />
             <Route path="immediate-tasks" element={<ImmediateTasks/>} />
             <Route path="upload-attendance" element={<UploadAttendance/>} />
-            <Route path="statistics" element={<TrashmanStats/>} />
+            <Route path="my-stats" element={<TrashmanStats/>} />
             <Route path="feedback" element={<TrashManFeedBack/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
@@ -78,24 +83,43 @@ return (
             </>
         )}
 
-        {/* SUPERVISOR & SANITARY INSPECTOR ROUTES (Shared Logic) */}
-        {(mockUser?.role === "SuperVisor" || mockUser?.role === "SanittaryInspector") && (
+        {/* SUPERVISOR */}
+        {mockUser?.role === "SuperVisor" && (
             <>
-            <Route index element={<div>Management Dashboard</div>} />
-            <Route path="search-workers" element={<div>Worker Directory</div>} />
+            <Route index element={<SupervisorDashboard/>} />
+            <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="attendance" element={<div>Attendance Logs</div>} />
             <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
-            <Route path="statistics" element={<div>Region Statistics</div>} />
-            <Route path="settings" element={<div>Admin Settings</div>} />
+            <Route path="my-stats" element={<div>Region Statistics</div>} />
+            <Route path="id-card" element={<IdentityCard/>} />
+            <Route path="search-workers" element={<SearchWorkers/>} />
+            <Route path="settings" element={<Settings/>} />
             </>
         )}
-
+        {/* SANITARY INSPECTOR */}
+        { mockUser?.role === "SanitaryInspector" && (
+            <>
+            <Route index element={<div>SI</div>} />
+            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
+            <Route path="attendance" element={<div>Attendance Logs</div>} />
+            <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
+            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
+            <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
+            <Route path="my-stats" element={<div>Region Statistics</div>} />
+            <Route path="id-card" element={<IdentityCard/>} />
+            <Route path="search-workers" element={<SearchWorkers/>} />
+            <Route path="settings" element={<Settings/>} />
+            </>
+        )}
         {/* MHO ROUTES */}
         {mockUser?.role === "MHO" && (
             <>
             <Route index element={<div>Health Officer Dashboard</div>} />
             <Route path="immediate-tasks" element={<div>Priority Tasks</div>} />
-            <Route path="statistics" element={<div>City-wide Analytics</div>} />
+            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
+            <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
+            <Route path="inspector-stats" element={<div>inspector stats</div>} />
+            <Route path="my-stats" element={<div>City-wide Analytics</div>} />
             <Route path="zones" element={<div>Zone Management</div>} />
             <Route path="settings" element={<div>System Settings</div>} />
             </>
