@@ -31,6 +31,7 @@ import SupervisorDashboard from "../pages/Supervisor/SupervisorDashBoard";
 import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
 import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
+import AllTasks from "../pages/Supervisor/Task/AllTasks";
 
 
 
@@ -89,7 +90,8 @@ return (
             <Route index element={<SupervisorDashboard/>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="attendance" element={<div>Attendance Logs</div>} />
-            <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
+            <Route path="all-tasks" element={<AllTasks/>}/>
+            <Route path="assigned-tasks" element={<div>assigned</div>}/>
             <Route path="my-stats" element={<div>Region Statistics</div>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
@@ -125,9 +127,6 @@ return (
             </>
         )}
         </Route>
-
-        {/* Catch-all Redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </Router>
 );

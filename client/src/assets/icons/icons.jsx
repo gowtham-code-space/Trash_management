@@ -45,6 +45,8 @@ import { RiSubtractLine } from "react-icons/ri";
 //info
 import { FaInfo } from "react-icons/fa6";
 
+import { LuCalendarDays } from "react-icons/lu"; //calendar
+
 const defaultSize = 25;
 const defaultColor = "black";
 const DarkThemeColor = "#fff";
@@ -194,4 +196,7 @@ export function ZoomOut({ size, isPressed = false, isDarkTheme = false, defaultC
 }
 export function Info({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
     return <Icons Icon={FaInfo} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function Calendar({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuCalendarDays} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
