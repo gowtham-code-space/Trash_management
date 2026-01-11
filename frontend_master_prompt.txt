@@ -561,7 +561,8 @@ import {
   TrashRoute,
   ZoomIn,
   ZoomOut,
-  Calendar
+  Calendar.
+  MapPin
 } from "../../assets/icons/icons";
 
 🎨 Ⅱ. Icon Prop Priority Logic

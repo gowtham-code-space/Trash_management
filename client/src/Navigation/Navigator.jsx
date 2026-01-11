@@ -23,15 +23,17 @@ import TrashManDashboard from "../pages/TrashMan/TrashManDashBoard";
 import UploadAttendance from "../pages/TrashMan/Attendance/UploadAttendance";
 import TrashManFeedBack from "../pages/TrashMan/TrashmanFeedback";
 import ImmediateTasks from "../pages/TrashMan/ImmediateTasks/ImmediateTasks";
+import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 
 //Supervisor
 import SupervisorDashboard from "../pages/Supervisor/SupervisorDashBoard";
-
+import AllTasks from "../pages/Supervisor/Task/AllTasks";
+import AssignTask from "../pages/Supervisor/Task/AssignTask";
 //Id card
 import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
-import TrashmanStats from "../pages/TrashMan/TrashmanStats";
+//search workers
 import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
-import AllTasks from "../pages/Supervisor/Task/AllTasks";
+
 
 
 
@@ -91,7 +93,7 @@ return (
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="attendance" element={<div>Attendance Logs</div>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
-            <Route path="assigned-tasks" element={<div>assigned</div>}/>
+            <Route path="assign-task" element={<AssignTask/>}/>
             <Route path="my-stats" element={<div>Region Statistics</div>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />

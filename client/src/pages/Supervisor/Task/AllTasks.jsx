@@ -25,8 +25,8 @@ function AllTasks() {
             priority: 3,
             location: "MG Road, Bangalore",
             trashType: "Mixed Waste",
-            description: "The bin near the bus stop has been overflowing for three days. It's causing a foul smell and attracting stray animals. Immediate action is required to clean and empty the bin.",
-            image: "https://images.unsplash.com/photo-1586974070045-fa2d5d2c7533?w=400&h=300&fit=crop",
+            description: "The bin near the bus stop has been overflowing for three days. It's causing a foul smell and attracting stray animals. Immediate action is required to clean and empty the bin. The bin near the bus stop has been overflowing for three days. It's causing a foul smell and attracting stray animals. Immediate action is required to clean and empty the bin. The bin near the bus stop has been overflowing for three days. It's causing a foul smell and attracting stray animals. Immediate action is required to clean and empty the bin.",
+            image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=300&fit=crop",
             upvotes: 42,
             downvotes: 8
         },
@@ -149,14 +149,9 @@ function AllTasks() {
         return matchesSearch && matchesDate;
     });
 
-
-
-
     function handleDateSelect(date) {
         setSelectedDate(date);
     }
-
-
 
     function formatDate(date) {
         return date.toLocaleDateString("en-US", {

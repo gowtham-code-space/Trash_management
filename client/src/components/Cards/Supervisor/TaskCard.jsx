@@ -1,10 +1,14 @@
-import {UpArrow,DownArrow,RightArrow} from "../../../assets/icons/icons"
+import {UpArrow,DownArrow,RightArrow, MapPin} from "../../../assets/icons/icons"
 import { useState } from "react";
 import CurrentPriorityModal from "../../../components/Modals/SuperVisor/CurrentPriorityModal";
 import ThemeStore from "../../../store/ThemeStore";
+import { useNavigate } from "react-router-dom";
 
 function TaskCard({ complaint }) {
+
     const { isDarkTheme } = ThemeStore();
+    const navigate = useNavigate();
+
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     function handleCloseModal() {
@@ -37,11 +41,11 @@ function TaskCard({ complaint }) {
             className=" my-3 bg-white rounded-veryLarge border-2 border-secondary hover:border-primaryLight overflow-hidden transition-all duration-200 ease-in-out shadow-sm"
         >
             <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-48 h-48 md:h-auto shrink-0">
+            <div className="w-full md:w-48 h-48 md:h-auto shrink-0 m-3">
                 <img
                 src={complaint.image}
                 alt={complaint.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-medium"
                 />
             </div>
 
@@ -67,8 +71,8 @@ function TaskCard({ complaint }) {
                     <p className="text-sm text-secondaryDark">
                         Reported by <span className="font-semibold text-primary">{complaint.author}</span>
                     </p>
-                    <p className="text-xs text-secondaryDark">
-                        📍 {complaint.location}
+                    <p className="text-xs text-secondaryDark flex flex-row justify-start items-center">
+                        <span className="mr-1"><MapPin size={18} defaultColor="#145B47"/> </span>{complaint.location}
                     </p>
                     </div>
                 </div>
@@ -89,7 +93,7 @@ function TaskCard({ complaint }) {
                     </div>
 
                     <button
-                    onClick={() => handlePriorityClick(complaint)}
+                    onClick={() =>navigate("/assign-task")}
                     className="bg-primary text-white px-5 py-2 rounded-medium text-xs font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out flex items-center gap-2"
                     >
                     <span>View Details</span>

@@ -318,8 +318,8 @@ function SearchWorkers() {
                   setActiveFilter('All'); 
                 }}
                 className="px-4 py-2 bg-primary text-white text-xs font-bold rounded-medium
-                           hover:scale-[0.99] active:scale-[0.99] transition-all duration-200
-                           focus:outline-none focus:ring-2 focus:ring-primary/20"
+                          hover:scale-[0.99] active:scale-[0.99] transition-all duration-200
+                          focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 Clear All
               </button>

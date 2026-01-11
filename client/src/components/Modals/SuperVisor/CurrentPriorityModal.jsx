@@ -151,7 +151,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                 </div>
             </div>
 
-            <div className="bg-secondary rounded-large p-4">
+            <div className="bg-secondary rounded-large p-4 overflow-y-scroll max-h-32">
                 <p className="text-xs text-secondaryDark mb-2">Description</p>
                 <p className="text-sm text-secondaryDark leading-relaxed">
                 {complaint.description}

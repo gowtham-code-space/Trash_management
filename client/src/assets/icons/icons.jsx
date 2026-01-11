@@ -46,6 +46,7 @@ import { RiSubtractLine } from "react-icons/ri";
 import { FaInfo } from "react-icons/fa6";
 
 import { LuCalendarDays } from "react-icons/lu"; //calendar
+import { MdLocationOn } from "react-icons/md"; // map pin
 
 const defaultSize = 25;
 const defaultColor = "black";
@@ -199,4 +200,8 @@ export function Info({ size, isPressed = false, isDarkTheme = false, defaultColo
 }
 export function Calendar({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
     return <Icons Icon={LuCalendarDays} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function MapPin({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdLocationOn} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
