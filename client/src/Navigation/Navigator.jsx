@@ -29,10 +29,14 @@ import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 import SupervisorDashboard from "../pages/Supervisor/SupervisorDashBoard";
 import AllTasks from "../pages/Supervisor/Task/AllTasks";
 import AssignTask from "../pages/Supervisor/Task/AssignTask";
+import Attendance from "../pages/Supervisor/Attendance";
+
 //Id card
 import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
+
 //search workers
 import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
+
 
 
 
@@ -91,7 +95,7 @@ return (
             <>
             <Route index element={<SupervisorDashboard/>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
-            <Route path="attendance" element={<div>Attendance Logs</div>} />
+            <Route path="attendance" element={<Attendance/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
             <Route path="assign-task" element={<AssignTask/>}/>
             <Route path="my-stats" element={<div>Region Statistics</div>} />

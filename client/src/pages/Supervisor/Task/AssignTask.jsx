@@ -9,7 +9,7 @@ import {
   Star,
 } from "../../../assets/icons/icons";
 import { ToastContainer } from "react-toastify";
-import TaskAssignedModal from "../../../components/Modals/SuperVisor/TaskAssignedModal";
+import AssignTaskModal from "../../../components/Modals/SuperVisor/AssignTaskModal";
 
 // Static task data (will be replaced with selected task from AllTasks)
 const selectedTaskDetails = {
@@ -383,7 +383,7 @@ function AssignTask() {
           </div>
         </div>
       </div>
-      {showModal && <TaskAssignedModal onClose={() => setShowModal(false)} />}
+      {showModal && <AssignTaskModal onClose={() => setShowModal(false)} />}
       <ToastContainer/>
     </div>
   );
