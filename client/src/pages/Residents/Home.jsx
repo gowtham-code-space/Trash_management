@@ -88,7 +88,7 @@ function Home() {
 
                     {/* Scan QR Action */}
                     <button 
-                        onClick={() => navigate("feedback")} 
+                        onClick={() => navigate("submit-feedback")} 
                         className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md focus:outline-none focus:ring-2 focus:ring-primary/20"
                     >
                         <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
@@ -167,7 +167,7 @@ function Home() {
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                     </button>
 
-                    <button onClick={()=>navigate("feedback")} className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group">
+                    <button onClick={()=>navigate("submit-feedback")} className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 group">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
                         <QR size={18} isPressed={false} isDarkTheme={true} />

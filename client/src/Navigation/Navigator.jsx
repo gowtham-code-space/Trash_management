@@ -69,7 +69,7 @@ return (
             <Route path="my-stats" element={<ResidentStats/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
-            <Route path="feedback" element={<Feedback/>} />
+            <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="settings" element={<Settings/>} />
             </>
         )}
@@ -82,7 +82,8 @@ return (
             <Route path="immediate-tasks" element={<ImmediateTasks/>} />
             <Route path="upload-attendance" element={<UploadAttendance/>} />
             <Route path="my-stats" element={<TrashmanStats/>} />
-            <Route path="feedback" element={<TrashManFeedBack/>} />
+            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
+            <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<Settings/>} />
@@ -96,11 +97,14 @@ return (
             <Route index element={<SupervisorDashboard/>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="attendance" element={<Attendance/>} />
+            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
+            <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
             <Route path="assign-task" element={<AssignTask/>}/>
             <Route path="my-stats" element={<div>Region Statistics</div>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
+            <Route path="take-quiz" element={<Quiz/>} />
             <Route path="settings" element={<Settings/>} />
             </>
         )}

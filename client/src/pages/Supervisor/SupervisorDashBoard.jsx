@@ -9,7 +9,9 @@ import {
     RightArrow,
     Add,
     Expand,
-    Task
+    Task,
+    Search,
+    FeedBack
 } from "../../assets/icons/icons";
 import ToastNotification from "../../components/Notification/ToastNotification";
 import ThemeStore from "../../store/ThemeStore";
@@ -160,59 +162,101 @@ function SupervisorDashboard() {
                     <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">Quick actions</h2>
                     <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                         
-                        {/* Generate Report */}
+                        {/* Mark attendance */}
                         <div 
-                            onClick={handleGenerateReport}
+                            onClick={()=>navigate("attendance")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                                <Certificate size={22} isPressed={false} defaultColor="#145B47" />
+                                <People size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Generate Report</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Daily zone summary PDF</p>
+                                <p className="text-sm font-bold leading-tight">Mark Attendance</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Trashmen attendance</p>
                             </div>
                         </div>
 
-                        {/* Broadcast Alert */}
+                        {/*Immediate Tasks*/}
                         <div 
-                            onClick={handleBroadcastAlert}
+                            onClick={()=>navigate("all-tasks")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <Notification size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Broadcast Alert</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Message all collectors</p>
+                                <p className="text-sm font-bold leading-tight">Immediate Tasks</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View all complaints</p>
                             </div>
                         </div>
 
-                        {/* Manage Shifts */}
+                        {/*Search Trashmen*/}
                         <div 
-                            onClick={handleManageShifts}
+                            onClick={()=>navigate("search-workers")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <Add size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Manage Shifts</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Update weekly roster</p>
+                                <p className="text-sm font-bold leading-tight">Search Trashmen</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View all Trashmen</p>
                             </div>
                         </div>
 
-                        {/* Emergency Stop */}
+                        {/*create feedback session to trashmen*/}
                         <div 
-                            onClick={handleEmergencyStop}
+                            onClick={()=>navigate("create-feedback-session")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">Create Feedback session</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Feedback session for Trashman</p>
+                            </div>
+                        </div>
+
+                        {/*submit feedback to sanitary inpector*/}
+                        <div 
+                            onClick={()=>navigate("submit-feedback")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">Search Trashmen</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View all Trashmen</p>
+                            </div>
+                        </div>
+
+                        {/*Quiz*/}
+                        <div 
+                            onClick={()=>navigate("take-quiz")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Emergency Stop</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Halt zone operations</p>
+                                <p className="text-sm font-bold leading-tight">Quiz</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Take your Quiz</p>
+                            </div>
+                        </div>
+
+                        {/* My Id card */}
+                        <div 
+                            onClick={()=>navigate("id-card")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <Task size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">ID card</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Checkout your Id card</p>
                             </div>
                         </div>
 
@@ -246,26 +290,26 @@ function SupervisorDashboard() {
                     </div>
                     
                     <div className="space-y-3">
-                        {/* Generate Report */}
+                        {/* Mark Attendance */}
                         <div 
-                            onClick={handleGenerateReport}
+                            onClick={()=>navigate("attendance")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
-                                    <Certificate size={18} isPressed={false} isDarkTheme={true} />
+                                    <People size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Generate Report</p>
-                                    <p className="text-xs text-gray-500 font-medium">Daily zone summary PDF</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Mark Attendance</p>
+                                    <p className="text-xs text-gray-500 font-medium">Trashmen attendance</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* Broadcast Alert */}
+                        {/* Immediate Tasks */}
                         <div 
-                            onClick={handleBroadcastAlert}
+                            onClick={()=>navigate("all-tasks")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -273,33 +317,33 @@ function SupervisorDashboard() {
                                     <Notification size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Broadcast Alert</p>
-                                    <p className="text-xs text-gray-500 font-medium">Message all collectors</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Immediate Tasks</p>
+                                    <p className="text-xs text-gray-500 font-medium">View all complaints</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* Manage Shifts */}
+                        {/* Search Trashmen */}
                         <div 
-                            onClick={handleManageShifts}
+                            onClick={()=>navigate("search-workers")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
-                                    <Add size={18} isPressed={false} isDarkTheme={true} />
+                                    <Search size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Manage Shifts</p>
-                                    <p className="text-xs text-gray-500 font-medium">Update weekly roster</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Search Trashmen</p>
+                                    <p className="text-xs text-gray-500 font-medium">View all Trashmen</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* Emergency Stop */}
+                        {/*create feedback session for trashmen*/}
                         <div 
-                            onClick={handleEmergencyStop}
+                            onClick={()=>navigate("create-feedback-session")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -307,8 +351,42 @@ function SupervisorDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Emergency Stop</p>
-                                    <p className="text-xs text-gray-500 font-medium">Halt zone operations</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Create Feedback session</p>
+                                    <p className="text-xs text-gray-500 font-medium">Feedback for Trashmen</p>
+                                </div>
+                            </div>
+                            <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                        </div>
+
+                        {/*Submit feedback for Sanitary inspector*/}
+                        <div 
+                            onClick={()=>navigate("submit-feedback")}
+                            className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                                    <Task size={18} isPressed={false} isDarkTheme={true} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-black tracking-tight">Submit feedback</p>
+                                    <p className="text-xs text-gray-500 font-medium">Submit feedback for Sanitary inspector</p>
+                                </div>
+                            </div>
+                            <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                        </div>
+
+                        {/* ID Card */}
+                        <div 
+                            onClick={()=>navigate("id-card")}
+                            className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                                    <Certificate size={18} isPressed={false} isDarkTheme={true} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-black tracking-tight">ID Card</p>
+                                    <p className="text-xs text-gray-500 font-medium">Checkout your ID card</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />

@@ -61,29 +61,6 @@ function TrashManDashboard() {
         ToastNotification("Locating your position", "info");
     }
 
-
-    function handleQuickActionClick(actionId) {
-        switch (actionId) {
-        case 1:
-            handleAttendance();
-            break;
-        case 2:
-            handleRoutesTimings();
-            break;
-        case 3:
-            handleImmediateTasks();
-            break;
-        case 4:
-            handleFeedbackSession();
-            break;
-        case 5:
-            handleQuiz();
-            break;
-        default:
-            break;
-        }
-    }
-
     return (
         <div className={isDarkTheme ? "dark" : ""}>
         <div className="min-h-screen bg-background animate-in fade-in duration-700 pb-20 lg:pb-0">
@@ -195,7 +172,7 @@ function TrashManDashboard() {
 
                         {/* Create Feedback Session */}
                         <div 
-                            onClick={()=>navigate("feedback")}
+                            onClick={()=>navigate("create-feedback-session")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
@@ -206,7 +183,20 @@ function TrashManDashboard() {
                                 <p className="text-xs mt-1 font-medium opacity-80">QR/OTP verification</p>
                             </div>
                         </div>
-
+                        
+                        {/* Submit feedback to supervisor  */}
+                        <div 
+                            onClick={()=>navigate("create-feedback-session")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">Submit Feedback</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Feedback for Supervisor</p>
+                            </div>
+                        </div>
                         {/* ID card */}
                         <div 
                             onClick={()=>navigate("id-card")}
@@ -317,7 +307,7 @@ function TrashManDashboard() {
 
                         {/* Create Feedback Session */}
                         <div 
-                            onClick={()=>navigate("feedback")}
+                            onClick={()=>navigate("create-feedback-session")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -327,6 +317,23 @@ function TrashManDashboard() {
                                 <div className="text-left">
                                     <p className="text-xs font-bold text-black tracking-tight">Create Feedback Session</p>
                                     <p className="text-xs text-gray-500 font-medium">QR/OTP verification</p>
+                                </div>
+                            </div>
+                            <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                        </div>
+
+                        {/* submit Feedback for Supervisor */}
+                        <div 
+                            onClick={()=>navigate("submit-feedback")}
+                            className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                                    <FeedBack size={18} isPressed={false} isDarkTheme={true} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-black tracking-tight">Submit Feedback</p>
+                                    <p className="text-xs text-gray-500 font-medium">Give feedback for your supervisor</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
