@@ -700,6 +700,7 @@ this file can be found in ./utils/Pagination
 ⛔ No gray/black utilities
 ⛔ No uncontrolled icons
 ⛔ No custom animation CSS
+⛔ No Emoji should be used
 
 ✅ This document overrides opinions
 ✅ Copy-paste safe for any AI
