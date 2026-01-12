@@ -160,7 +160,9 @@ export default function TrashmanStats() {
                         yearDropDown={['2025', '2026']} 
                         monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
                     />
-                    <Rating 
+                    <Rating
+                    yearDropDown={['2025', '2026']} 
+                        monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
                         averageRating={residentFeedbackData.averageRating}
                         totalReviews={residentFeedbackData.totalReviews}
                         ratingBreakdown={residentFeedbackData.ratingBreakdown}

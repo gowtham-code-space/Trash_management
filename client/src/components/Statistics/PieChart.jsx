@@ -60,7 +60,8 @@ function PieChart({ data , yearDropDown}) {
         : role === "TrashMan" ?
         <p className="text-sm text-secondaryDark mb-6">Attendance for {selectedYear}</p>
         
-        : ""
+        :
+        <p className="text-sm text-secondaryDark mb-6">Attendance for {selectedYear}</p>
         }
 
         <ResponsiveContainer width="100%" height={220}>

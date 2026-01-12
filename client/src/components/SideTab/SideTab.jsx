@@ -109,6 +109,16 @@ SuperVisor: [
     { id: "settings", label: "Settings", icon: Settings, showMobile: true },
     { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
 ],
+SanitaryInspector: [
+    { id: "", label: "Home", icon: Home, showMobile: true },
+    { id: "search-workers", label: "Search", icon: Search, showMobile: true },
+    { id: "attendance", label: "Attendance", icon: People, showMobile: true },
+    { id: "all-tasks", label: "Tasks", icon: Task, showMobile: true },
+    { id: "create-feedback-session", label: "Create feedback", icon:FeedBack, showMobile: true },
+    { id: "submit-feedback", label: "submit feedback", icon: FeedBack, showMobile: true },
+    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
+    { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
+],
 MHO: [
     { id: "", label: "Home", icon: Home, showMobile: true },
     { id: "immediate-tasks", label: "Tasks", icon: Task, showMobile: true },

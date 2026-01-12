@@ -36,6 +36,9 @@ import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
 
 //search workers
 import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
+import SupervisorStats from "../pages/Supervisor/SupervisorStats";
+import InspectorDashboard from "../pages/SanitoryInspector/InspectorDashBoard";
+import FileNotFound from "../pages/Common/404/FileNotFound";
 
 
 
@@ -43,7 +46,7 @@ import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
-const mockUser = { role: "SuperVisor", name: "Alex Rivera" };
+const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -52,8 +55,6 @@ return (
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup/>} />
-        {/* Unauthorized Redirect */}
-        {!mockUser?.role && <Route path="*" element={<Navigate to="/login" replace />} />}
 
         {/* ROLE-BASED PROTECTED ROUTES */}
         <Route path="/" element={<SideTab user={mockUser} />}>
@@ -101,7 +102,7 @@ return (
             <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
             <Route path="assign-task" element={<AssignTask/>}/>
-            <Route path="my-stats" element={<div>Region Statistics</div>} />
+            <Route path="my-stats" element={<SupervisorStats/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
             <Route path="take-quiz" element={<Quiz/>} />
@@ -111,12 +112,13 @@ return (
         {/* SANITARY INSPECTOR */}
         { mockUser?.role === "SanitaryInspector" && (
             <>
-            <Route index element={<div>SI</div>} />
+            <Route index element={<InspectorDashboard/>} />
             <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
             <Route path="attendance" element={<div>Attendance Logs</div>} />
             <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
             <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
             <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
+            <Route path="all-tasks" element={<AllTasks/>}/>
             <Route path="my-stats" element={<div>Region Statistics</div>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
@@ -137,6 +139,9 @@ return (
             </>
         )}
         </Route>
+
+        {/* Catch-all route for 404 - Must be last */}
+        <Route path="*" element={<FileNotFound/>} />
     </Routes>
     </Router>
 );

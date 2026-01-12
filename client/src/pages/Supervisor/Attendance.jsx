@@ -358,7 +358,7 @@ function Attendance() {
               </button>
               <button
                 onClick={() => handleRejectClick(worker)}
-                className="w-full py-2 bg-white border border-error text-error text-sm font-medium rounded-medium
+                className="w-full py-2 bg-secondary border border-background text-primaryLight text-sm font-medium rounded-medium
                         hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                         transition-all duration-200 ease-in-out"
               >
