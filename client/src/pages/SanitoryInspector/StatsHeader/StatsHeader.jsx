@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+//tabs
+import Overview from "./Tabs/Overview";
+import Environment from "./Tabs/Environment";
+
 function StatsHeader() {
     const [activeTab, setActiveTab] = useState("Overview");
 
@@ -84,10 +88,7 @@ function StatsHeader() {
             })}
             </div>
         </div>
-
-        <div className="bg-secondary p-8 rounded-large border border-secondary text-center">
-            <h3 className="text-lg font-bold text-primary">{activeTab}</h3>
-        </div>
+        {activeTab === "Overview" ? <Overview/> :<Environment/>}
         </div>
     );
 }

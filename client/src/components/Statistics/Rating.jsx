@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Star } from "../../assets/icons/icons";
 import ToastNotification from "../Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
-
+import ProgressBar from "./ProgressBar"
 function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [], yearDropDown = [], monthDropDown = [] }) {
     const [selectedYear, setSelectedYear] = useState(yearDropDown[0] || "2025");
     const [selectedMonth, setSelectedMonth] = useState(monthDropDown[0] || "January");
@@ -136,22 +136,9 @@ function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [],
 
             {/* Rating Breakdown Bars */}
             <div className="space-y-3">
-                {breakdown.map(function(item) {
-                    return (
-                        <div key={item.stars} className="flex items-center gap-3">
-                            <span className="text-sm font-semibold text-secondaryDark w-3 text-center">
-                                {item.stars}
-                            </span>
-                            
-                            <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-                                <div 
-                                    className={`h-full ${getBarColor(item.stars)} transition-all duration-500 ease-out rounded-full`}
-                                    style={{ width: `${item.percentage}%` }}
-                                />
-                            </div>
-                        </div>
-                    );
-                })}
+                {breakdown.map((item) => (
+                    <ProgressBar key={item.stars} item={item}/>
+                ))}
             </div>
             <ToastContainer />
         </div>
