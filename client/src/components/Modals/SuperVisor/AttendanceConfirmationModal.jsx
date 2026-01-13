@@ -62,18 +62,18 @@ function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClos
           <button
             onClick={onClose}
             className="flex-1 py-2.5 px-4 bg-secondary text-secondaryDark text-sm font-medium rounded-medium
-                     hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
-                     transition-all duration-200 ease-in-out"
+                    hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
+                    transition-all duration-200 ease-in-out"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             className={`flex-1 py-2.5 px-4 text-white text-sm font-medium rounded-medium
-                     hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
-                     transition-all duration-200 ease-in-out ${
-                       isVerify ? 'bg-success' : 'bg-error'
-                     }`}
+                    hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
+                    transition-all duration-200 ease-in-out ${
+                      isVerify ? 'bg-success' : 'bg-error'
+                    }`}
           >
             {isVerify ? "Verify" : "Reject"}
           </button>

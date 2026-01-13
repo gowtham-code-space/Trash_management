@@ -36,9 +36,15 @@ import IdentityCard from "../pages/Common/IdentityCard/IdentityCard";
 
 //search workers
 import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
+
+// sanitary inspector
 import SupervisorStats from "../pages/Supervisor/SupervisorStats";
 import InspectorDashboard from "../pages/SanitoryInspector/InspectorDashBoard";
+import InspectorAttendance from "../pages/SanitoryInspector/InspectorAttendance";
+
+//404
 import FileNotFound from "../pages/Common/404/FileNotFound";
+import StatsHeader from "../pages/SanitoryInspector/StatsHeader/StatsHeader";
 
 
 
@@ -113,13 +119,12 @@ return (
         { mockUser?.role === "SanitaryInspector" && (
             <>
             <Route index element={<InspectorDashboard/>} />
-            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
-            <Route path="attendance" element={<div>Attendance Logs</div>} />
+            <Route path="attendance" element={<InspectorAttendance/>} />
             <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
-            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
-            <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
+            <Route path="trashman-stats" element={<TrashmanStats/>} />
+            <Route path="supervisor-stats" element={<SupervisorStats/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
-            <Route path="my-stats" element={<div>Region Statistics</div>} />
+            <Route path="overall-stats" element={<StatsHeader/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
             <Route path="settings" element={<Settings/>} />

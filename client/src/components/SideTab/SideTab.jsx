@@ -117,7 +117,7 @@ SanitaryInspector: [
     { id: "create-feedback-session", label: "Create feedback", icon:FeedBack, showMobile: true },
     { id: "submit-feedback", label: "submit feedback", icon: FeedBack, showMobile: true },
     { id: "settings", label: "Settings", icon: Settings, showMobile: true },
-    { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
+    { id: "overall-stats", label: "overall stats", icon: Stats, showMobile: true },
 ],
 MHO: [
     { id: "", label: "Home", icon: Home, showMobile: true },
