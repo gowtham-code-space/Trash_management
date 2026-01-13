@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import TNgovLogo from "../../../assets/TNgov.png";
+import frontSvg from "../../../assets/front.svg";
+import backSvg from "../../../assets/back.svg";
 import ThemeStore from "../../../store/ThemeStore";
 
-// Sample JSON data for the identity card
+// Sample JSON data for the identity card - Make this dynamic
 const cardData = {
-    name: "JHON SMITH",
+    firstName: "JHON",
+    lastName: "SMITH",
     position: "Sanitary Inspector",
     idNo: "000234568",
     joinDate: "11/17/2024",
@@ -60,116 +63,99 @@ export default function IdentityCard() {
                     onClick={handleFlip}
                 >
                 {/* Front Side */}
-                <div className="card-face card-front">
-                {/* Navy Blue Corner Background */}
-                <div className="absolute top-0 left-0 w-full h-full">
-                    <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 340 540" preserveAspectRatio="none">
-                    <path d="M0,0 L140,0 Q80,60 0,120 Z" fill="#1c3a52"/>
-                    </svg>
-                </div>
-
-                {/* Green Wave - Large Flowing Wave */}
-                <div className="absolute top-0 left-0 w-full h-full">
-                    <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 340 540" preserveAspectRatio="none">
-                    <path d="M0,60 Q100,20 200,60 Q300,100 340,80 L340,0 L0,0 Z M50,150 Q150,100 250,150 Q320,180 340,160 L340,80 Q300,100 200,60 Q100,20 0,60 L0,180 Q25,165 50,150 Z" fill="#43A047"/>
-                    </svg>
-                </div>
-
-                {/* Government Logo */}
-                <div className="absolute top-5 left-1/2 transform -translate-x-1/2 z-20">
-                    <div className="w-17 h-17 bg-white rounded-full p-1.75 shadow-lg">
-                    <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
-                    </div>
-                </div>
-
-                {/* Photo Circle */}
-                <div className="absolute top-26.5 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="w-37.5 h-37.5 rounded-full border-[5px] border-[#43A047] overflow-hidden bg-white shadow-xl">
+                <div className="card-face card-front relative overflow-hidden">
+                    {/* SVG Background */}
                     <img 
-                        src={cardData.profileImage} 
-                        alt={cardData.name}
-                        className="w-full h-full object-cover"
+                        src={frontSvg} 
+                        alt="ID Card Front"
+                        className="absolute inset-0 w-full h-full object-cover"
                     />
-                    </div>
-                </div>
+                    
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-start pt-8 px-8">
+                        {/* Government Logo */}
+                        <div className="mb-8">
+                            <div className="w-17 h-17 bg-white rounded-full p-1.75 shadow-lg">
+                                <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
+                            </div>
+                        </div>
 
-                {/* White Content Area */}
-                <div className="absolute top-60 left-0 right-0 bottom-0 bg-white pt-9 px-8 pb-6 rounded-b-[20px]">
-                    {/* Name and Position */}
-                    <div className="text-center mb-6">
-                    <h1 className="text-[19px] font-bold mb-1 leading-tight">
-                        <span className="text-[#37474F]">{cardData.name.split(' ')[0]} </span>
-                        <span className="text-[#43A047]">{cardData.name.split(' ')[1]}</span>
-                    </h1>
-                    <p className="text-[12px] text-[#6B7280] font-normal">{cardData.position}</p>
-                    </div>
+                        {/* Photo Circle */}
+                        <div className="mb-8">
+                            <div className="w-37.5 h-37.5 rounded-full border-[5px] border-[#43A047] overflow-hidden bg-white shadow-xl">
+                                <img 
+                                    src={cardData.profileImage} 
+                                    alt={`${cardData.firstName} ${cardData.lastName}`}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        </div>
 
-                    {/* Details */}
-                    <div className="space-y-2 px-4">
-                    <div className="flex justify-between items-center">
-                        <span className="text-[#43A047] font-semibold text-[12px]">ID no :</span>
-                        <span className="text-[#37474F] font-medium text-[12px]">{cardData.idNo}</span>
+                        {/* Name and Position */}
+                        <div className="text-center mb-6">
+                            <h1 className="text-[19px] font-bold mb-1 leading-tight">
+                                <span className="text-[#37474F]">{cardData.firstName} </span>
+                                <span className="text-[#43A047]">{cardData.lastName}</span>
+                            </h1>
+                            <p className="text-[12px] text-[#6B7280] font-normal">{cardData.position}</p>
+                        </div>
+
+                        {/* Details */}
+                        <div className="space-y-2 px-4 w-full">
+                            <div className="flex justify-between items-center">
+                                <span className="text-[#43A047] font-semibold text-[12px]">ID no :</span>
+                                <span className="text-[#37474F] font-medium text-[12px]">{cardData.idNo}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-[#43A047] font-semibold text-[12px]">Join Date :</span>
+                                <span className="text-[#37474F] font-medium text-[12px]">{cardData.joinDate}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                                <span className="text-[#43A047] font-semibold text-[12px]">Phone :</span>
+                                <span className="text-[#37474F] font-medium text-[12px]">{cardData.phone}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-[#43A047] font-semibold text-[12px]">Join Date :</span>
-                        <span className="text-[#37474F] font-medium text-[12px]">{cardData.joinDate}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-[#43A047] font-semibold text-[12px]">Phone :</span>
-                        <span className="text-[#37474F] font-medium text-[12px]">{cardData.phone}</span>
-                    </div>
-                    </div>
-                </div>
                 </div>
 
                 {/* Back Side */}
-                <div className="card-face card-back">
-                {/* Navy Blue Background */}
-                <div className="absolute inset-0 bg-[#1c3a52]"></div>
+                <div className="card-face card-back relative overflow-hidden">
+                    {/* SVG Background */}
+                    <img 
+                        src={backSvg} 
+                        alt="ID Card Back"
+                        className="absolute inset-0 w-full h-full object-cover"
+                    />
 
-                {/* White Wave Accent Bottom Right Corner */}
-                <div className="absolute bottom-0 right-0 w-full h-full overflow-hidden">
-                    <svg className="absolute bottom-0 right-0 w-full h-full" viewBox="0 0 340 540" preserveAspectRatio="none">
-                    <path d="M340,440 Q280,400 340,340 L340,540 L280,540 Z" fill="rgba(255,255,255,0.06)"/>
-                    </svg>
-                </div>
+                    {/* Content Overlay */}
+                    <div className="relative z-10 h-full flex flex-col px-8 py-10">
+                        {/* Header */}
+                        <div className="mb-5">
+                            <h2 className="text-[16px] font-bold text-[#43A047]">Address:</h2>
+                        </div>
 
-                {/* Green Wave at Bottom */}
-                <div className="absolute bottom-0 left-0 w-full h-full">
-                    <svg className="absolute bottom-0 left-0 w-full h-full" viewBox="0 0 340 540" preserveAspectRatio="none">
-                    <path d="M0,380 Q90,320 180,380 Q270,440 340,380 L340,540 L0,540 Z" fill="#43A047"/>
-                    </svg>
-                </div>
+                        {/* Address */}
+                        <div className="flex-1 mb-8">
+                            <p className="text-[12px] text-[#B0BEC5] leading-relaxed">
+                                {cardData.address}
+                            </p>
+                        </div>
 
-                {/* Content */}
-                <div className="relative z-10 h-full flex flex-col px-8 py-10">
-                    {/* Header */}
-                    <div className="mb-5">
-                    <h2 className="text-[16px] font-bold text-[#43A047]">Address:</h2>
+                        {/* Footer with Logo and QR */}
+                        <div className="flex justify-between items-end">
+                            <div className="w-15 h-15 bg-white rounded-full p-2.5 shadow-xl">
+                                <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
+                            </div>
+                            
+                            <div className="w-21.25 h-21.25 bg-white p-1.5 rounded-md shadow-xl">
+                                <img 
+                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${cardData.qrData}`}
+                                    alt="QR Code"
+                                    className="w-full h-full"
+                                />
+                            </div>
+                        </div>
                     </div>
-
-                    {/* Address */}
-                    <div className="flex-1 mb-8">
-                    <p className="text-[12px] text-[#B0BEC5] leading-relaxed">
-                        {cardData.address}
-                    </p>
-                    </div>
-
-                    {/* Footer with Logo and QR */}
-                    <div className="flex justify-between items-end">
-                    <div className="w-15 h-15 bg-white rounded-full p-2.5 shadow-xl">
-                        <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
-                    </div>
-                    
-                    <div className="w-21.25 h-21.25 bg-white p-1.5 rounded-md shadow-xl">
-                        <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${cardData.qrData}`}
-                        alt="QR Code"
-                        className="w-full h-full"
-                        />
-                    </div>
-                    </div>
-                </div>
                 </div>
             </div>
             </div>
@@ -197,7 +183,7 @@ export default function IdentityCard() {
                 <div className="space-y-3">
                     <div>
                     <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Full Name</p>
-                    <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.name}</p>
+                    <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{`${cardData.firstName} ${cardData.lastName}`}</p>
                     </div>
                     <div>
                     <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Position</p>
@@ -271,7 +257,7 @@ export default function IdentityCard() {
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 20px;
+            border-radius: 36px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             }
@@ -282,10 +268,6 @@ export default function IdentityCard() {
 
             .card-back {
             transform: rotateY(180deg);
-            }
-
-            .card-container:hover {
-            transform: scale(1.02);
             }
 
             .card-container.flipped:hover {
