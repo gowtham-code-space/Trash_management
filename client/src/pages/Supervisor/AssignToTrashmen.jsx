@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import Pagination from "../../../utils/Pagination";
-import ToastNotification from "../../../components/Notification/ToastNotification";
+import Pagination from "../../utils/Pagination";
+import ToastNotification from "../../components/Notification/ToastNotification";
 import {
   Location,
   ZoomIn,
   ZoomOut,
   Search,
   Star,
-} from "../../../assets/icons/icons";
+} from "../../assets/icons/icons";
 import { ToastContainer } from "react-toastify";
-import AssignTaskModal from "../../../components/Modals/SuperVisor/AssignTaskModal";
+import AssignTaskModal from "../../components/Modals/SuperVisor/AssignTaskModal";
 
 // Static task data (will be replaced with selected task from AllTasks)
 const selectedTaskDetails = {
@@ -103,7 +103,7 @@ const allWorkers = [
   },
 ];
 
-function AssignTask() {
+function AssignToTrashmen() {
   const [selectedWorkers, setSelectedWorkers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("nearby"); // "nearby" or "all"
@@ -217,12 +217,10 @@ function AssignTask() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="p-4 sm:p-5 lg:p-6">
-        {/* Task Details Card */}
-        <div className="mb-6 bg-white border border-secondary rounded-large p-5 shadow-sm">
-          <div className="flex flex-col md:flex-row gap-5">
-            {/* Task Image */}
-            <div className="w-full md:w-64 h-48 rounded-medium overflow-hidden shrink-0">
+      <div>
+        <div className="mb-6 bg-white border border-secondary rounded-large p-4 shadow-sm">
+          <div className="flex items-center gap-4">
+            <div className="w-20 h-20 rounded-medium overflow-hidden shrink-0">
               <img
                 src={selectedTaskDetails.image}
                 alt={selectedTaskDetails.title}
@@ -230,10 +228,9 @@ function AssignTask() {
               />
             </div>
 
-            {/* Task Info */}
             <div className="flex-1">
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <h2 className="text-xl font-bold text-primary">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <h2 className="text-lg font-bold text-primary">
                   {selectedTaskDetails.title}
                 </h2>
                 <span
@@ -243,31 +240,25 @@ function AssignTask() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+              <div className="flex flex-wrap gap-4 text-xs">
                 <div>
-                  <p className="text-xs font-semibold text-secondaryDark/60 mb-1">LOCATION</p>
-                  <p className="text-sm text-secondaryDark font-medium">{selectedTaskDetails.location}</p>
+                  <span className="text-secondaryDark/60 font-semibold">Location: </span>
+                  <span className="text-secondaryDark font-medium">{selectedTaskDetails.location}</span>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-secondaryDark/60 mb-1">TRASH TYPE</p>
-                  <p className="text-sm text-secondaryDark font-medium">{selectedTaskDetails.trashType}</p>
+                  <span className="text-secondaryDark/60 font-semibold">Type: </span>
+                  <span className="text-secondaryDark font-medium">{selectedTaskDetails.trashType}</span>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-secondaryDark/60 mb-1">REPORTED BY</p>
-                  <p className="text-sm text-secondaryDark font-medium">{selectedTaskDetails.author} ({selectedTaskDetails.role})</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-secondaryDark/60 mb-1">REPORTED AT</p>
-                  <p className="text-sm text-secondaryDark font-medium">{selectedTaskDetails.date}</p>
+                  <span className="text-secondaryDark/60 font-semibold">Reported: </span>
+                  <span className="text-secondaryDark font-medium">{selectedTaskDetails.date}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content - Map and Workers */}
         <div className="flex flex-col lg:flex-row gap-4">
-          {/* Map Section */}
           <div className="relative flex-1 bg-secondary overflow-hidden min-h-75 lg:h-screen rounded-medium">
             <img
               src="https://tile.openstreetmap.org/14/4824/6156.png"
@@ -294,17 +285,8 @@ function AssignTask() {
             </div>
           </div>
 
-          {/* Workers Section */}
           <div className="w-full lg:w-96 bg-white border border-secondary rounded-medium">
             <div className="p-4 sm:p-5 lg:p-6">
-              {/* Header */}
-              <div className="mb-4">
-                <h2 className="text-base sm:text-lg font-bold text-secondaryDark">Available Workers</h2>
-                <p className="text-xs sm:text-sm text-secondaryDark mt-1">
-                  Select collectors for this task
-                </p>
-              </div>
-
               {/* Search Box */}
               <div className="relative mb-4">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -389,4 +371,4 @@ function AssignTask() {
   );
 }
 
-export default AssignTask;
+export default AssignToTrashmen;

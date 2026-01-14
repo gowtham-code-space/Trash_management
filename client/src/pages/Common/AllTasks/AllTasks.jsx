@@ -171,7 +171,8 @@ function AllTasks() {
                     Level 1
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">Low Priority:</span> Minor issues that can be addressed within 48-72 hours. Examples include routine cleaning, minor littering, or non-urgent maintenance.
+                    <span className="font-semibold text-primary">Resident ⟶ supervisor: </span>
+                    Issues requiring attention within 3 days. failing to complete, will forward to Sanitary inspector (SI)
                     </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -179,7 +180,8 @@ function AllTasks() {
                     Level 2
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">Medium Priority:</span> Moderate issues requiring attention within 24 hours. Examples include overflowing bins, illegal dumping, or broken containers.
+                    <span className="font-semibold text-primary">Sanitary inspector (SI) ⟶ supervisor: </span>
+                    Issues requiring attention within 2 days. failing to complete, will forward to Municipal Health Officer (MHO)
                     </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -187,7 +189,8 @@ function AllTasks() {
                     Level 3
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">High Priority:</span> Critical issues requiring immediate action within 4-6 hours. Examples include medical waste, hazardous materials, or severe health risks.
+                    <span className="font-semibold text-primary">Municipal Health Officer (MHO) ⟶ Sanitary inspector (SI): </span>
+                    Issues requiring attention within 1 day. failing to complete, results in remarks
                     </p>
                 </div>
                 </div>

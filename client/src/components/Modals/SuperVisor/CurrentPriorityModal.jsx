@@ -58,7 +58,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
         onClick={onClose}
         >
         <div
-            className="w-full max-w-xl bg-white rounded-veryLarge shadow-lg overflow-hidden"
+            className="w-full max-h-[99vh] max-w-xl bg-white rounded-veryLarge shadow-lg overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
         >
             <div className="relative">
@@ -151,7 +151,61 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                 </div>
             </div>
 
-            <div className="bg-secondary rounded-large p-4 overflow-y-scroll max-h-32">
+            {/* Escalation Information */}
+            {complaint.priority > 1 && (
+                <div className="bg-linear-to-r from-secondary to-primaryLight/10 rounded-large p-5 border-l-4 border-primary shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                    <div className={`${getPriorityColor(complaint.priority)} w-2 h-2 rounded-full`}></div>
+                    <p className="text-sm font-bold text-primary uppercase tracking-wide">
+                    Escalation History
+                    </p>
+                </div>
+                
+                <div className="space-y-3">
+                    {/* Level 2 - Supervisor Escalation */}
+                    {complaint.priority >= 2 && (
+                    <div className="bg-white rounded-medium p-3 shadow-sm border border-secondary/50">
+                        <div className="flex items-start gap-3">
+                        <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="text-white text-xs font-bold">L2</span>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-xs text-secondaryDark mb-1">Escalated by Supervisor</p>
+                            <p className="text-sm font-semibold text-primary">
+                            {complaint.supervisorName || "John Smith"}
+                            </p>
+                            <p className="text-xs text-primaryLight font-medium mt-0.5">
+                            Supervisor
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                    )}
+
+                    {/* Level 3 - Inspector Escalation */}
+                    {complaint.priority === 3 && (
+                    <div className="bg-white rounded-medium p-3 shadow-sm border border-error/30">
+                        <div className="flex items-start gap-3">
+                        <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="text-white text-xs font-bold">L3</span>
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-xs text-secondaryDark mb-1">Further escalated by Sanitary Inspector</p>
+                            <p className="text-sm font-semibold text-primary">
+                            {complaint.inspectorName || "Dr. Sarah Johnson"}
+                            </p>
+                            <p className="text-xs text-primary font-medium mt-0.5">
+                            Sanitary Inspector
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                    )}
+                </div>
+                </div>
+            )}
+
+            <div className="bg-secondary rounded-large p-4">
                 <p className="text-xs text-secondaryDark mb-2">Description</p>
                 <p className="text-sm text-secondaryDark leading-relaxed">
                 {complaint.description}

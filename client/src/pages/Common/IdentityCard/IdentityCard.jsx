@@ -270,10 +270,6 @@ export default function IdentityCard() {
             transform: rotateY(180deg);
             }
 
-            .card-container.flipped:hover {
-            transform: rotateY(180deg) scale(1.02);
-            }
-
             .card-container:active {
             transform: scale(0.98);
             }

@@ -10,7 +10,6 @@ import Map from "../pages/Residents/Map";
 import ReportTrash from "../pages/Residents/ReportTrash";
 import TrashDetails from "../pages/Residents/TrashDetails"
 import Feedback from "../pages/Residents/Feedback";
-import Settings from "../pages/Residents/Settings";
 import ResidentStats from "../pages/Residents/ResidentStats";
 import RouteTimings from "../pages/Common/RouteTimings/RouteTimings";
 
@@ -27,8 +26,8 @@ import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 
 //Supervisor
 import SupervisorDashboard from "../pages/Supervisor/SupervisorDashBoard";
-import AllTasks from "../pages/Supervisor/Task/AllTasks";
-import AssignTask from "../pages/Supervisor/Task/AssignTask";
+import AllTasks from "../pages/Common/AllTasks/AllTasks";
+import AssignToTrashmen from "../pages/Supervisor/AssignToTrashmen";
 import Attendance from "../pages/Supervisor/Attendance";
 
 //Id card
@@ -41,10 +40,15 @@ import SearchWorkers from "../pages/Common/SearchWorkers/SearchWorkers";
 import SupervisorStats from "../pages/Supervisor/SupervisorStats";
 import InspectorDashboard from "../pages/SanitoryInspector/InspectorDashBoard";
 import InspectorAttendance from "../pages/SanitoryInspector/InspectorAttendance";
+import StatsHeader from "../pages/SanitoryInspector/StatsHeader/StatsHeader";
+import AssignToSupervisor from "../pages/SanitoryInspector/AssignToSupervisor";
 
 //404
 import FileNotFound from "../pages/Common/404/FileNotFound";
-import StatsHeader from "../pages/SanitoryInspector/StatsHeader/StatsHeader";
+
+//settings
+import SettingsHeader from "../pages/Common/Settings/SettingsHeader/SettingsHeader";
+
 
 
 
@@ -52,7 +56,7 @@ import StatsHeader from "../pages/SanitoryInspector/StatsHeader/StatsHeader";
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
-const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
+const mockUser = { role: "MHO", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -77,7 +81,7 @@ return (
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="submit-feedback" element={<Feedback/>} />
-            <Route path="settings" element={<Settings/>} />
+            <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
 
@@ -93,7 +97,7 @@ return (
             <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
-            <Route path="settings" element={<Settings/>} />
+            <Route path="settings" element={<SettingsHeader/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             </>
         )}
@@ -107,12 +111,12 @@ return (
             <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
             <Route path="submit-feedback" element={<Feedback/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
-            <Route path="assign-task" element={<AssignTask/>}/>
+            <Route path="assign-task" element={<AssignToTrashmen/>}/>
             <Route path="my-stats" element={<SupervisorStats/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
             <Route path="take-quiz" element={<Quiz/>} />
-            <Route path="settings" element={<Settings/>} />
+            <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
         {/* SANITARY INSPECTOR */}
@@ -124,10 +128,12 @@ return (
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="supervisor-stats" element={<SupervisorStats/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
+            <Route path="assign-task" element={<AssignToSupervisor/>}/>
             <Route path="overall-stats" element={<StatsHeader/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
-            <Route path="settings" element={<Settings/>} />
+            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
+            <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
         {/* MHO ROUTES */}
@@ -140,7 +146,7 @@ return (
             <Route path="inspector-stats" element={<div>inspector stats</div>} />
             <Route path="my-stats" element={<div>City-wide Analytics</div>} />
             <Route path="zones" element={<div>Zone Management</div>} />
-            <Route path="settings" element={<div>System Settings</div>} />
+            <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
         </Route>
