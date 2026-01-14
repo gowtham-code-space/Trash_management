@@ -43,11 +43,17 @@ import InspectorAttendance from "../pages/SanitoryInspector/InspectorAttendance"
 import StatsHeader from "../pages/SanitoryInspector/StatsHeader/StatsHeader";
 import AssignToSupervisor from "../pages/SanitoryInspector/AssignToSupervisor";
 
+//MHO
+import MHODashboard from "../pages/MHO/MHODashboard";
+import ViewZone from "../pages/MHO/ViewZone";
 //404
 import FileNotFound from "../pages/Common/404/FileNotFound";
 
 //settings
 import SettingsHeader from "../pages/Common/Settings/SettingsHeader/SettingsHeader";
+import DivisionHeader from "../pages/MHO/DivisionHeader";
+import AssignToSI from "../pages/MHO/AssignToSI";
+
 
 
 
@@ -124,7 +130,6 @@ return (
             <>
             <Route index element={<InspectorDashboard/>} />
             <Route path="attendance" element={<InspectorAttendance/>} />
-            <Route path="immediate-tasks" element={<div>Task Assignment</div>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="supervisor-stats" element={<SupervisorStats/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
@@ -139,8 +144,11 @@ return (
         {/* MHO ROUTES */}
         {mockUser?.role === "MHO" && (
             <>
-            <Route index element={<div>Health Officer Dashboard</div>} />
-            <Route path="immediate-tasks" element={<div>Priority Tasks</div>} />
+            <Route index element={<MHODashboard/>} />
+            <Route path="view-zone" element={<ViewZone/>} />
+            <Route path="view-division" element={<DivisionHeader/>} />
+            <Route path="all-tasks" element={<AllTasks/>} />
+            <Route path="assign-task" element={<AssignToSI/>} />
             <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
             <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
             <Route path="inspector-stats" element={<div>inspector stats</div>} />

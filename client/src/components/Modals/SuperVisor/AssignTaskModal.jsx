@@ -3,7 +3,7 @@ import { Info } from "../../../assets/icons/icons";
 import ToastNotification from "../../Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 
-function AssignTaskModal({ onClose }) {
+function AssignTaskModal({ onClose , role }) {
 
 return (
 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -21,7 +21,7 @@ return (
 
     <h2 className="text-xl font-bold text-black mb-2 tracking-tight">Task assignment</h2>
     <p className="text-sm text-black mb-8 leading-relaxed">
-        Are you sure, do you want to assign trashMen
+        Are you sure, do you want to assign {role}
     </p>
 
     <div className="flex gap-3">
@@ -40,6 +40,7 @@ return (
         </button>
     </div>
     </div>
+    <ToastContainer/>
 </div>
 );
 }

@@ -120,7 +120,7 @@ SanitaryInspector: [
 ],
 MHO: [
     { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "immediate-tasks", label: "Tasks", icon: Task, showMobile: true },
+    { id: "all-tasks", label: "Tasks", icon: Task, showMobile: true },
     { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
     { id: "zones", label: "Zones", icon: Map, showMobile: true },
     { id: "settings", label: "Settings", icon: Settings, showMobile: true },

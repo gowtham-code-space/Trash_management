@@ -29,6 +29,7 @@ const allSupervisors = [
   {
     id: 1,
     name: "Vikram Singh",
+    role:"Supervisor",
     supervisorId: "S-001",
     attendance: 98,
     ratings: 4.9,
@@ -42,6 +43,7 @@ const allSupervisors = [
     id: 2,
     name: "Anita Desai",
     supervisorId: "S-002",
+    role:"Supervisor",
     attendance: 96,
     ratings: 4.8,
     tasksCompleted: 234,
@@ -54,6 +56,7 @@ const allSupervisors = [
     id: 3,
     name: "Ramesh Kumar",
     supervisorId: "S-003",
+    role:"Supervisor",
     attendance: 94,
     ratings: 4.7,
     tasksCompleted: 218,
@@ -66,6 +69,7 @@ const allSupervisors = [
     id: 4,
     name: "Kavita Sharma",
     supervisorId: "S-004",
+    role:"Supervisor",
     attendance: 97,
     ratings: 4.9,
     tasksCompleted: 245,
@@ -78,6 +82,7 @@ const allSupervisors = [
     id: 5,
     name: "Suresh Reddy",
     supervisorId: "S-005",
+    role:"Supervisor",
     attendance: 95,
     ratings: 4.6,
     tasksCompleted: 203,
@@ -92,6 +97,7 @@ function AssignToSupervisor() {
   const [selectedSupervisors, setSelectedSupervisors] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [role,setRole] = useState("");
 
   const filteredSupervisors = allSupervisors.filter(function (supervisor) {
     const matchesSearch = 
@@ -176,9 +182,7 @@ function AssignToSupervisor() {
           </div>
 
           <button
-            onClick={function () {
-              handleSupervisorSelect(supervisor.id);
-            }}
+            onClick={() => {setRole(supervisor?.role); handleSupervisorSelect(supervisor.id)}}
             className={`hover:cursor-pointer px-4 py-1.5 rounded-medium text-xs font-bold transition-all duration-200 ease-in-out hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 ${
               isSelected
                 ? 'bg-primaryLight text-white'

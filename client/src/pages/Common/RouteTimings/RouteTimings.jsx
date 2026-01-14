@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import Pagination from "../../../utils/Pagination";
 import {
   Location,
   Add,
@@ -80,6 +81,99 @@ function TrashRoute() {
 
   function getWorkerInitial(name) {
     return name.charAt(0).toUpperCase();
+  }
+
+  function renderRoute(route) {
+    const isExpanded = selectedRoute === route.id;
+    
+    return (
+      <div key={route.id} className="relative mb-4 sm:mb-6">
+        <div className="absolute left-[-1.06rem] sm:left-[-1.56rem] top-4 w-3 sm:w-4 h-0.5 bg-secondary"></div>
+        <div className="absolute left-[-1.31rem] sm:left-[-1.81rem] top-3.5 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-primary border-2 border-white"></div>
+
+        <div
+          className="bg-background rounded-large p-3 sm:p-4 cursor-pointer hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+          onClick={() => handleRouteClick(route.id)}
+          role="button"
+          tabIndex={0}
+        >
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1 min-w-0 pr-2">
+              <h4 className="text-xs sm:text-sm font-semibold text-secondaryDark mb-1 truncate">
+                {route.name}
+              </h4>
+              <p className="text-xs text-secondaryDark">
+                {route.location}
+              </p>
+            </div>
+            <span
+              className={`${route.statusColor} text-white text-xs px-2 sm:px-3 py-1 rounded-medium font-medium whitespace-nowrap`}
+            >
+              {route.status}
+            </span>
+          </div>
+
+          <div>
+            <p className="text-xs text-secondaryDark mb-2 font-medium">
+              Assigned Team
+            </p>
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              {route.team.map(function (member, idx) {
+                return (
+                  <div key={idx} className="flex flex-col items-center gap-1">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold shadow-sm">
+                      {member.image ? (
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : (
+                        getWorkerInitial(member.name)
+                      )}
+                    </div>
+                    <span className="text-xs text-secondaryDark">
+                      {member.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {isExpanded && (
+            <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-secondary">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                <div>
+                  <p className="text-xs text-secondaryDark font-semibold mb-1">
+                    Status
+                  </p>
+                  <p className="text-xs text-secondaryDark">
+                    {route.status}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-secondaryDark font-semibold mb-1">
+                    Time
+                  </p>
+                  <p className="text-xs text-secondaryDark">
+                    {route.time}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-2 sm:mt-3">
+                <p className="text-xs text-secondaryDark font-semibold mb-1">
+                  Route ID
+                </p>
+                <p className="text-xs text-secondaryDark">
+                  {route.id}
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   }
 
   function handleRouteClick(routeId) {
@@ -163,98 +257,12 @@ function TrashRoute() {
                   <div className="relative pl-4 sm:pl-6">
                     <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-secondary"></div>
 
-                    {divisionRoutes.map(function (route, index) {
-                      const isExpanded = selectedRoute === route.id;
-                      
-                      return (
-                        <div key={route.id} className="relative mb-4 sm:mb-6">
-                          <div className="absolute left-[-1.06rem] sm:left-[-1.56rem] top-4 w-3 sm:w-4 h-0.5 bg-secondary"></div>
-                          <div className="absolute left-[-1.31rem] sm:left-[-1.81rem] top-3.5 w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-primary border-2 border-white"></div>
-
-                          <div
-                            className="bg-background rounded-large p-3 sm:p-4 cursor-pointer hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                            onClick={() => handleRouteClick(route.id)}
-                            role="button"
-                            tabIndex={0}
-                          >
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex-1 min-w-0 pr-2">
-                                <h4 className="text-xs sm:text-sm font-semibold text-secondaryDark mb-1 truncate">
-                                  {route.name}
-                                </h4>
-                                <p className="text-xs text-secondaryDark">
-                                  {route.location}
-                                </p>
-                              </div>
-                              <span
-                                className={`${route.statusColor} text-white text-xs px-2 sm:px-3 py-1 rounded-medium font-medium whitespace-nowrap`}
-                              >
-                                {route.status}
-                              </span>
-                            </div>
-
-                            <div>
-                              <p className="text-xs text-secondaryDark mb-2 font-medium">
-                                Assigned Team
-                              </p>
-                              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                                {route.team.map(function (member, idx) {
-                                  return (
-                                    <div key={idx} className="flex flex-col items-center gap-1">
-                                      <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary text-white flex items-center justify-center text-xs font-semibold shadow-sm">
-                                        {member.image ? (
-                                          <img
-                                            src={member.image}
-                                            alt={member.name}
-                                            className="w-full h-full rounded-full object-cover"
-                                          />
-                                        ) : (
-                                          getWorkerInitial(member.name)
-                                        )}
-                                      </div>
-                                      <span className="text-xs text-secondaryDark">
-                                        {member.name}
-                                      </span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            {isExpanded && (
-                              <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-secondary">
-                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                  <div>
-                                    <p className="text-xs text-secondaryDark font-semibold mb-1">
-                                      Status
-                                    </p>
-                                    <p className="text-xs text-secondaryDark">
-                                      {route.status}
-                                    </p>
-                                  </div>
-                                  <div>
-                                    <p className="text-xs text-secondaryDark font-semibold mb-1">
-                                      Time
-                                    </p>
-                                    <p className="text-xs text-secondaryDark">
-                                      {route.time}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="mt-2 sm:mt-3">
-                                  <p className="text-xs text-secondaryDark font-semibold mb-1">
-                                    Route ID
-                                  </p>
-                                  <p className="text-xs text-secondaryDark">
-                                    {route.id}
-                                  </p>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                    <Pagination
+                      data={divisionRoutes}
+                      itemsPerPage={3}
+                      renderItem={renderRoute}
+                      gridDisplay={false}
+                    />
                   </div>
                 </div>
               );
