@@ -3,7 +3,7 @@ import { Search, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import Pagination from "../../../../utils/Pagination";
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import ThemeStore from "../../../../store/ThemeStore";
-import ConfigModal from "../../../../components/Modals/MHO/ConfigModal";
+import ConfigZoneModal from "../../../../components/Modals/MHO/ConfigZoneModal";
 import { ToastContainer } from "react-toastify";
 
 // Main ConfigZone Component
@@ -327,7 +327,7 @@ function ConfigZone() {
         </div>
 
         {/* Delete Confirmation Modal */}
-        <ConfigModal
+        <ConfigZoneModal
           isOpen={showDeleteModal}
           onClose={() => {
             setShowDeleteModal(false);

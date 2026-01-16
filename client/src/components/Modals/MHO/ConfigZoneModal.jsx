@@ -2,7 +2,7 @@ import React from "react";
 import { X } from "../../../assets/icons/icons";
 import ThemeStore from "../../../store/ThemeStore";
 
-function ConfigModal({ isOpen, onClose, mode, data, onSubmit }) {
+function ConfigZoneModal({ isOpen, onClose, mode, data, onSubmit }) {
   const { isDarkTheme } = ThemeStore();
 
   if (!isOpen) return null;
@@ -56,4 +56,4 @@ function ConfigModal({ isOpen, onClose, mode, data, onSubmit }) {
   );
 }
 
-export default ConfigModal;
+export default ConfigZoneModal;

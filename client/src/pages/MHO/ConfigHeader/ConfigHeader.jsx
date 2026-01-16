@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Download } from "../../../assets/icons/icons";
 import ConfigZone from "./Tabs/ConfigZone";
+import ConfigDivision from "./Tabs/ConfigDivision";
 
 function ConfigHeader() {
   const [selectedTab, setSelectedTab] = useState("Zones");
@@ -44,7 +45,7 @@ function ConfigHeader() {
       </div>
 
       <div className="mt-4">
-        {selectedTab === "Zones" ? <ConfigZone/> :""}
+        {selectedTab === "Zones" ? <ConfigZone/> : selectedTab === "Divisions" ? <ConfigDivision/> : ""}
       </div>
     </div>
   );
