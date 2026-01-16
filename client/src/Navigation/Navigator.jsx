@@ -53,6 +53,7 @@ import FileNotFound from "../pages/Common/404/FileNotFound";
 import SettingsHeader from "../pages/Common/Settings/SettingsHeader/SettingsHeader";
 import DivisionHeader from "../pages/MHO/DivisionHeader";
 import AssignToSI from "../pages/MHO/AssignToSI";
+import ConfigHeader from "../pages/MHO/ConfigHeader/ConfigHeader";
 
 
 
@@ -149,6 +150,7 @@ return (
             <Route path="view-division" element={<DivisionHeader/>} />
             <Route path="all-tasks" element={<AllTasks/>} />
             <Route path="assign-task" element={<AssignToSI/>} />
+            <Route path="config-district" element={<ConfigHeader/>} />
             <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
             <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
             <Route path="inspector-stats" element={<div>inspector stats</div>} />

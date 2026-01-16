@@ -48,6 +48,8 @@ import { FaInfo } from "react-icons/fa6";
 import { LuCalendarDays } from "react-icons/lu"; //calendar
 import { MdLocationOn } from "react-icons/md"; // map pin
 import { GoPencil } from "react-icons/go"; //edit --> pencil
+import { LuFilter } from "react-icons/lu"; // filter cone
+import { HiDownload } from "react-icons/hi"; // download
 
 const defaultSize = 25;
 const defaultColor = "black";
@@ -209,4 +211,12 @@ export function MapPin({ size, isPressed = false, isDarkTheme = false, defaultCo
 
 export function Edit({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
     return <Icons Icon={GoPencil} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Filter({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuFilter} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Download({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={HiDownload} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }

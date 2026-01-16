@@ -361,7 +361,9 @@ import {
   ZoomOut,
   Calendar.
   MapPin,
-  Edit
+  Edit.
+  Filter,
+  Download
 } from "../../assets/icons/icons";
 
 🎨 Ⅱ. Icon Prop Priority Logic
