@@ -1,65 +1,84 @@
 import React, { useState, useMemo } from "react";
 import ThemeStore from "../../../../store/ThemeStore";
 import { Search, Filter, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
-import ConfigDivisionModal from "../../../../components/Modals/MHO/ConfigDivision/ConfigDivisionModal";
-import DivisionFilter from "../../../../components/Modals/MHO/ConfigDivision/DivisionFIlterModal";
-import MoveDivisionModal from "../../../../components/Modals/MHO/ConfigDivision/MoveDivisionModal";
+import ConfigStreetModal from "../../../../components/Modals/MHO/ConfigStreet/ConfigStreetModal";
+import StreetFilterModal from "../../../../components/Modals/MHO/ConfigStreet/StreetFilterModal";
+import MoveStreetModal from "../../../../components/Modals/MHO/ConfigStreet/MoveStreetModal";
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
-function ConfigDivision() {
+
+function ConfigStreet() {
     const { isDarkTheme } = ThemeStore();
     
     const [searchVisible, setSearchVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [filterVisible, setFilterVisible] = useState(false);
-    const [selectedZoneFilters, setSelectedZoneFilters] = useState([]);
-    const [selectedZone, setSelectedZone] = useState(null);
-    const [deleteModal, setDeleteModal] = useState({ visible: false, divisionId: null });
-    const [editingDivision, setEditingDivision] = useState(null);
+    const [selectedWardFilters, setSelectedWardFilters] = useState([]);
+    const [selectedWard, setSelectedWard] = useState(null);
+    const [deleteModal, setDeleteModal] = useState({ visible: false, streetId: null });
+    const [editingStreet, setEditingStreet] = useState(null);
     const [editValue, setEditValue] = useState("");
     const [openMenuId, setOpenMenuId] = useState(null);
-    const [moveModal, setMoveModal] = useState({ visible: false, division: null });
+    const [moveModal, setMoveModal] = useState({ visible: false, street: null });
 
-    const [divisions, setDivisions] = useState([
-        { id: 1, name: "Fairlands (Div-01)", wards: 3, streets: 14, zone: "North Zone", isDraft: false },
-        { id: 2, name: "Hasthampatti (Div-02)", wards: 5, streets: 22, zone: "North Zone", isDraft: false },
-        { id: 3, name: "Ammapet Main (Div-05)", wards: 7, streets: 18, zone: "East Zone", isDraft: false },
-        { id: 4, name: "Junction Area (Div-08)", wards: 8, streets: 30, zone: "West Zone", isDraft: false },
-        { id: 5, name: "Seelanaikenpatti", wards: 4, streets: 16, zone: "South Zone", isDraft: false },
-        { id: 6, name: "Dasagapatti", wards: 6, streets: 20, zone: "South Zone", isDraft: false },
-        { id: 7, name: "Gugai", wards: 5, streets: 15, zone: "South Zone", isDraft: false },
-        { id: 8, name: "Linemeds", wards: 3, streets: 12, zone: "South Zone", isDraft: false },
-        { id: 9, name: "Ponnammapet", wards: 6, streets: 19, zone: "East Zone", isDraft: false },
-        { id: 10, name: "Patta Kovil", wards: 4, streets: 14, zone: "East Zone", isDraft: false },
-        { id: 11, name: "Suramangalam", wards: 7, streets: 25, zone: "West Zone", isDraft: false },
-        { id: 12, name: "Reddipatti", wards: 5, streets: 17, zone: "West Zone", isDraft: false },
+    const [streets, setStreets] = useState([
+        { id: 1, street_name: "Main Street", households: 45, ward: "Ward - 1 (Kannankurichi)", isDraft: false },
+        { id: 2, street_name: "Gandhi Road", households: 38, ward: "Ward - 1 (Kannankurichi)", isDraft: false },
+        { id: 3, street_name: "Temple Street", households: 52, ward: "Ward - 1 (Kannankurichi)", isDraft: false },
+        { id: 4, street_name: "Park Avenue", households: 41, ward: "Ward - 2 (Muthunagar)", isDraft: false },
+        { id: 5, street_name: "Lake Road", households: 47, ward: "Ward - 2 (Muthunagar)", isDraft: false },
+        { id: 6, street_name: "School Street", households: 35, ward: "Ward - 2 (Muthunagar)", isDraft: false },
+        { id: 7, street_name: "Market Road", households: 60, ward: "Ward - 3 (Swarnapuri)", isDraft: false },
+        { id: 8, street_name: "Station Road", households: 55, ward: "Ward - 3 (Swarnapuri)", isDraft: false },
+        { id: 9, street_name: "College Street", households: 42, ward: "Ward - 4 (Kollampalayam)", isDraft: false },
+        { id: 10, street_name: "Hospital Road", households: 48, ward: "Ward - 4 (Kollampalayam)", isDraft: false },
+        { id: 11, street_name: "Industrial Street", households: 50, ward: "Ward - 5 (Thottapalayam)", isDraft: false },
+        { id: 12, street_name: "Garden Street", households: 39, ward: "Ward - 5 (Thottapalayam)", isDraft: false },
+        { id: 13, street_name: "North Street", households: 44, ward: "Ward - 6 (Valasaiyur)", isDraft: false },
+        { id: 14, street_name: "South Street", households: 46, ward: "Ward - 6 (Valasaiyur)", isDraft: false },
+        { id: 15, street_name: "East Street", households: 40, ward: "Ward - 7 (Ramalingapuram)", isDraft: false },
     ]);
 
-    const zones = useMemo(function() {
+    const wards = useMemo(function() {
         return [
         { 
             id: 1, 
-            name: "North Zone", 
-            divisions: divisions.filter(function(d) { return d.zone === "North Zone"; })
+            name: "Ward - 1 (Kannankurichi)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 1 (Kannankurichi)"; })
         },
         { 
             id: 2, 
-            name: "South Zone", 
-            divisions: divisions.filter(function(d) { return d.zone === "South Zone"; })
+            name: "Ward - 2 (Muthunagar)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 2 (Muthunagar)"; })
         },
         { 
             id: 3, 
-            name: "East Zone", 
-            divisions: divisions.filter(function(d) { return d.zone === "East Zone"; })
+            name: "Ward - 3 (Swarnapuri)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 3 (Swarnapuri)"; })
         },
         { 
             id: 4, 
-            name: "West Zone", 
-            divisions: divisions.filter(function(d) { return d.zone === "West Zone"; })
+            name: "Ward - 4 (Kollampalayam)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 4 (Kollampalayam)"; })
+        },
+        { 
+            id: 5, 
+            name: "Ward - 5 (Thottapalayam)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 5 (Thottapalayam)"; })
+        },
+        { 
+            id: 6, 
+            name: "Ward - 6 (Valasaiyur)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 6 (Valasaiyur)"; })
+        },
+        { 
+            id: 7, 
+            name: "Ward - 7 (Ramalingapuram)", 
+            streets: streets.filter(function(s) { return s.ward === "Ward - 7 (Ramalingapuram)"; })
         },
         ];
-    }, [divisions]);
+    }, [streets]);
 
     function handleSearchToggle() {
         setSearchVisible(!searchVisible);
@@ -68,95 +87,130 @@ function ConfigDivision() {
         }
     }
 
-    function handleFilterApply(selectedZones) {
-        setSelectedZoneFilters(selectedZones);
+    function handleFilterApply(selectedWards) {
+        setSelectedWardFilters(selectedWards);
         setFilterVisible(false);
         ToastNotification("Filter applied successfully", "success");
     }
 
-    function handleZoneSelect(zoneName) {
-        if (selectedZone === zoneName) {
-        setSelectedZone(null);
+    function handleWardSelect(wardName) {
+        if (selectedWard === wardName) {
+        setSelectedWard(null);
         } else {
-        setSelectedZone(zoneName);
+        setSelectedWard(wardName);
         }
     }
 
-    function handleAddDivision() {
-        if (!selectedZone) {
-        ToastNotification("Please select a zone first", "error");
+    function handleAddStreet() {
+        if (!selectedWard) {
+        ToastNotification("Please select a ward first", "error");
         return;
         }
 
-        const newDivision = {
+        const newStreet = {
         id: Date.now(),
-        name: "New Division (Draft)",
-        wards: 0,
-        streets: 0,
-        zone: selectedZone,
+        street_name: "New Street (Draft)",
+        households: 0,
+        ward: selectedWard,
         isDraft: true
         };
 
-        setDivisions([...divisions, newDivision]);
-        ToastNotification("Draft division added to " + selectedZone, "success");
+        setStreets([...streets, newStreet]);
+        ToastNotification("Draft street added to " + selectedWard, "success");
     }
 
-    function handleEditStart(division) {
-        setEditingDivision(division.id);
-        setEditValue(division.name);
+    function handleEditStart(street) {
+        setEditingStreet(street.id);
+        setEditValue(street.street_name);
     }
 
-    function handleEditSave(divisionId) {
-        setDivisions(divisions.map(function(d) {
-        return d.id === divisionId ? { ...d, name: editValue, isDraft: false } : d;
+    function handleEditSave(streetId) {
+        setStreets(streets.map(function(s) {
+        return s.id === streetId ? { ...s, street_name: editValue, isDraft: false } : s;
         }));
-        setEditingDivision(null);
+        setEditingStreet(null);
         setEditValue("");
-        ToastNotification("Division updated successfully", "success");
+        ToastNotification("Street updated successfully", "success");
     }
 
     function handleEditCancel() {
-        setEditingDivision(null);
+        setEditingStreet(null);
         setEditValue("");
     }
 
-    function handleDeleteConfirm(divisionId) {
-        setDivisions(divisions.filter(function(d) { return d.id !== divisionId; }));
-        setDeleteModal({ visible: false, divisionId: null });
-        ToastNotification("Division deleted successfully", "success");
+    function handleDeleteConfirm(streetId) {
+        setStreets(streets.filter(function(s) { return s.id !== streetId; }));
+        setDeleteModal({ visible: false, streetId: null });
+        ToastNotification("Street deleted successfully", "success");
     }
 
-    function handleMoveDivision(divisionId, newZone) {
-        setDivisions(divisions.map(function(d) {
-            return d.id === divisionId ? { ...d, zone: newZone } : d;
+    function handleMoveStreet(streetId, newWard) {
+        setStreets(streets.map(function(s) {
+        return s.id === streetId ? { ...s, ward: newWard } : s;
         }));
-        setMoveModal({ visible: false, division: null });
-        ToastNotification("Division moved to " + newZone + " successfully", "success");
+        setMoveModal({ visible: false, street: null });
+        ToastNotification("Street moved to " + newWard + " successfully", "success");
     }
 
-    function handleDivisionClick(division, event) {
-        event.stopPropagation();
-        setMoveModal({ visible: true, division: division });
-    }
-
-    const filteredDivisions = divisions.filter(function(division) {
-        const matchesSearch = division.name.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesFilter = selectedZoneFilters.length === 0 || selectedZoneFilters.includes(division.zone);
+    const filteredStreets = streets.filter(function(street) {
+        const matchesSearch = street.street_name.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesFilter = selectedWardFilters.length === 0 || selectedWardFilters.includes(street.ward);
         return matchesSearch && matchesFilter;
     });
 
-    function renderDivisionCard(division) {
-    const isEditing = editingDivision === division.id;
-    const menuOpen = openMenuId === division.id;
+    function renderWardCard(ward) {
+        const totalStreets = ward.streets.length;
+        const draftStreets = ward.streets.filter(function(s) { return s.isDraft; }).length;
+        const regularStreets = totalStreets - draftStreets;
 
         return (
         <div
-            key={division.id}
+            key={ward.id}
+            onClick={() => { handleWardSelect(ward.name); }}
+            className={`p-4 rounded-medium border-2 cursor-pointer
+                        active:scale-[0.99]
+                        focus:outline-none focus:ring-1 focus:ring-primary/20 focus:scale-[0.99]
+                        transition-all duration-200 ease-in-out
+                        ${selectedWard === ward.name 
+                        ? "border-primary bg-secondary" 
+                        : "border-secondary bg-white"}`}
+        >
+            <div className="flex items-center justify-between">
+            <div>
+                <h3 className="text-sm font-bold text-secondaryDark">
+                {ward.name}
+                </h3>
+                <div className="flex items-center gap-2 mt-2">
+                <span className="text-xs px-3 py-1 rounded-small bg-background text-secondaryDark border border-secondary">
+                    {regularStreets} Street{regularStreets !== 1 ? 's' : ''}
+                </span>
+                {draftStreets > 0 && (
+                    <span className="text-xs px-3 py-1 rounded-small bg-warning/20 text-warning font-bold border border-warning">
+                    {draftStreets} Draft{draftStreets !== 1 ? 's' : ''}
+                    </span>
+                )}
+                </div>
+            </div>
+            <span className="text-xs text-secondaryDark font-bold">
+                Total: {totalStreets}
+            </span>
+            </div>
+        </div>
+        );
+    }
+
+    function renderStreetCard(street) {
+        const isEditing = editingStreet === street.id;
+        const menuOpen = openMenuId === street.id;
+
+        return (
+        <div
+            key={street.id}
             className={`bg-white p-4 rounded-medium border border-secondary relative
                     active:scale-[0.99]
                     
                     transition-all duration-200 ease-in-out
-                    ${division.isDraft ? "border-warning" : ""}`}
+                    ${street.isDraft ? "border-warning" : ""}`}
         >
             <div className="flex items-start justify-between">
             <div className="flex items-start gap-3 flex-1">
@@ -180,7 +234,7 @@ function ConfigDivision() {
                         autoFocus
                     />
                     <button
-                        onClick={function() { handleEditSave(division.id); }}
+                        onClick={function() { handleEditSave(street.id); }}
                         className="p-1.5 bg-success text-white rounded-medium
                                 hover:scale-[0.99] active:scale-[0.99]
                                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
@@ -201,15 +255,15 @@ function ConfigDivision() {
                 ) : (
                     <>
                     <h3 className="text-sm font-bold text-secondaryDark">
-                        {division.name}
+                        {street.street_name}
                     </h3>
                     <p className="text-xs text-secondaryDark mt-1">
-                        {division.wards} Wards • {division.streets} Streets
+                        {street.households} Households
                     </p>
                     <p className="text-xs text-primary font-bold mt-1">
-                        {division.zone}
+                        {street.ward}
                     </p>
-                    {division.isDraft && (
+                    {street.isDraft && (
                         <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
                         Draft
                         </span>
@@ -222,7 +276,7 @@ function ConfigDivision() {
             {!isEditing && (
                 <div className="relative">
                 <button
-                    onClick={function() { setOpenMenuId(menuOpen ? null : division.id); }}
+                    onClick={function() { setOpenMenuId(menuOpen ? null : street.id); }}
                     className="p-1 hover:bg-secondary rounded-medium active:scale-[0.99]
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             transition-all duration-200 ease-in-out"
@@ -238,7 +292,7 @@ function ConfigDivision() {
                     <div className="absolute right-5 top-0 mt-1 bg-white border border-secondary rounded-medium shadow-lg z-10 w-32">
                     <button
                         onClick={function() {
-                        handleEditStart(division);
+                        handleEditStart(street);
                         setOpenMenuId(null);
                         }}
                         className="w-full px-4 py-2 text-left text-sm text-secondaryDark hover:bg-secondary
@@ -252,7 +306,21 @@ function ConfigDivision() {
                     </button>
                     <button
                         onClick={function() {
-                        setDeleteModal({ visible: true, divisionId: division.id });
+                        setMoveModal({ visible: true, street: street });
+                        setOpenMenuId(null);
+                        }}
+                        className="w-full px-4 py-2 text-left text-sm text-secondaryDark hover:bg-secondary
+                                flex items-center gap-2
+                                hover:scale-[0.99] active:scale-[0.99]
+                                focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
+                                transition-all duration-200 ease-in-out"
+                    >
+                        <span>↔</span>
+                        <span>Move</span>
+                    </button>
+                    <button
+                        onClick={function() {
+                        setDeleteModal({ visible: true, streetId: street.id });
                         setOpenMenuId(null);
                         }}
                         className="w-full px-4 py-2 text-left text-sm text-error hover:bg-secondary
@@ -277,18 +345,19 @@ function ConfigDivision() {
         <div className={isDarkTheme ? "dark" : ""}>
         <div className="min-h-screen bg-background">
             <div className="max-w-7xl mx-auto">
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ALL DIVISIONS ({filteredDivisions.length})
+                    ALL STREETS ({filteredStreets.length})
                     </h2>
                     
                     <div className="flex items-center gap-2">
                     {searchVisible && (
                         <input
                         type="text"
-                        placeholder="Search divisions..."
+                        placeholder="Search streets..."
                         value={searchQuery}
                         onChange={function(e) { setSearchQuery(e.target.value); }}
                         className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -314,18 +383,18 @@ function ConfigDivision() {
                                 hover:scale-[0.99] active:scale-[0.99]
                                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                                 transition-all duration-200 ease-in-out
-                                ${selectedZoneFilters.length > 0 ? "bg-primary" : "bg-white"}`}
+                                ${selectedWardFilters.length > 0 ? "bg-primary" : "bg-white"}`}
                     >
-                        <Filter size={18} isDarkTheme={selectedZoneFilters.length > 0} />
+                        <Filter size={18} isDarkTheme={selectedWardFilters.length > 0} />
                     </button>
                     </div>
                 </div>
 
                 <div className="space-y-3">
                     <Pagination
-                    data={filteredDivisions}
+                    data={filteredStreets}
                     itemsPerPage={5}
-                    renderItem={renderDivisionCard}
+                    renderItem={renderStreetCard}
                     />
                 </div>
                 </div>
@@ -333,94 +402,55 @@ function ConfigDivision() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    TARGET ZONES ({zones.length})
+                    TARGET WARDS ({wards.length})
                     </h2>
                     
                     <button
-                    onClick={handleAddDivision}
+                    onClick={handleAddStreet}
                     className="px-4 py-2 bg-primary text-white text-sm font-bold rounded-medium
                             hover:scale-[0.99] active:scale-[0.99]
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             transition-all duration-200 ease-in-out"
                     >
-                    Add Division
+                    Add Street
                     </button>
                 </div>
 
                 <div className="space-y-4">
-                    {zones.map(function(zone) {
-                    return (
-                        <div
-                        key={zone.id}
-                        onClick={function() { handleZoneSelect(zone.name); }}
-                        className={`p-4 rounded-medium border-2 cursor-pointer
-                                hover:scale-[0.99] active:scale-[0.99]
-                                focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
-                                transition-all duration-200 ease-in-out
-                                ${selectedZone === zone.name 
-                                    ? "border-primary bg-secondary" 
-                                    : "border-secondary bg-white"}`}
-                        >
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-sm font-bold text-secondaryDark">
-                            {zone.name}
-                            </h3>
-                            <span className="text-xs text-secondaryDark">
-                            {zone.divisions.length} Divisions
-                            </span>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                            {zone.divisions.map(function(division) {
-                            return (
-                                <button
-                                key={division.id}
-                                onClick={function(e) { handleDivisionClick(division, e); }}
-                                className={`px-3 py-1 text-xs rounded-small border border-secondary
-                                        hover:scale-[0.99] active:scale-[0.99]
-                                        focus:outline-none focus:ring-2 focus:ring-primary/20
-                                        transition-all duration-200 ease-in-out
-                                        ${division.isDraft 
-                                            ? "bg-warning/20 text-warning font-bold hover:bg-warning/30" 
-                                            : "bg-background text-secondaryDark hover:bg-secondary"}`}
-                                >
-                                {division.name.split("(")[0].trim()}
-                                </button>
-                            );
-                            })}
-                        </div>
-                        </div>
-                    );
-                    })}
+                    <Pagination
+                    data={wards}
+                    itemsPerPage={5}
+                    renderItem={renderWardCard}
+                    />
                 </div>
                 </div>
             </div>
             </div>
 
             {filterVisible && (
-            <DivisionFilter
-                zones={zones.map(function(z) { return z.name; })}
-                selectedZones={selectedZoneFilters}
+            <StreetFilterModal
+                wards={wards.map(function(w) { return w.name; })}
+                selectedWards={selectedWardFilters}
                 onClose={function() { setFilterVisible(false); }}
                 onApply={handleFilterApply}
             />
             )}
 
             {deleteModal.visible && (
-            <ConfigDivisionModal
-                title="Delete Division"
-                message="Are you sure you want to delete this division? This action cannot be undone."
-                onConfirm={function() { handleDeleteConfirm(deleteModal.divisionId); }}
-                onCancel={function() { setDeleteModal({ visible: false, divisionId: null }); }}
+            <ConfigStreetModal
+                title="Delete Street"
+                message="Are you sure you want to delete this street? This action cannot be undone."
+                onConfirm={function() { handleDeleteConfirm(deleteModal.streetId); }}
+                onCancel={function() { setDeleteModal({ visible: false, streetId: null }); }}
             />
             )}
 
-            {moveModal.visible && moveModal.division && (
-            <MoveDivisionModal
-                division={moveModal.division}
-                zones={zones}
-                onConfirm={handleMoveDivision}
-                onCancel={function() { setMoveModal({ visible: false, division: null }); }}
+            {moveModal.visible && moveModal.street && (
+            <MoveStreetModal
+                street={moveModal.street}
+                wards={wards}
+                onConfirm={handleMoveStreet}
+                onCancel={function() { setMoveModal({ visible: false, street: null }); }}
             />
             )}
         </div>
@@ -429,4 +459,4 @@ function ConfigDivision() {
     );
 }
 
-export default ConfigDivision;
+export default ConfigStreet;

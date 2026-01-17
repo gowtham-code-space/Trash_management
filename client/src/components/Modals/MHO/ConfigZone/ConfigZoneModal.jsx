@@ -1,6 +1,6 @@
 import React from "react";
-import { X } from "../../../assets/icons/icons";
-import ThemeStore from "../../../store/ThemeStore";
+import { X } from "../../../../assets/icons/icons";
+import ThemeStore from "../../../../store/ThemeStore";
 
 function ConfigZoneModal({ isOpen, onClose, mode, data, onSubmit }) {
   const { isDarkTheme } = ThemeStore();
@@ -13,9 +13,8 @@ function ConfigZoneModal({ isOpen, onClose, mode, data, onSubmit }) {
 
   return (
     <div className={isDarkTheme ? "dark" : ""}>
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-large w-full max-w-md shadow-lg">
-          {/* Modal Header */}
+      <div  onClick={onClose} className="fixed inset-0 bg-primary/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div onClick={(e)=>e.stopPropagation()}  className="bg-white rounded-large w-full max-w-md shadow-lg">
           <div className="flex items-center justify-between p-6 border-b border-secondary">
             <h2 className="text-lg font-bold text-secondaryDark">
               Delete Zone

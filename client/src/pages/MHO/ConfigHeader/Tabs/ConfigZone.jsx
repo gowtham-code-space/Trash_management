@@ -3,7 +3,7 @@ import { Search, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import Pagination from "../../../../utils/Pagination";
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import ThemeStore from "../../../../store/ThemeStore";
-import ConfigZoneModal from "../../../../components/Modals/MHO/ConfigZoneModal";
+import ConfigZoneModal from "../../../../components/Modals/MHO/ConfigZone/ConfigZoneModal";
 import { ToastContainer } from "react-toastify";
 
 // Main ConfigZone Component
@@ -215,7 +215,7 @@ function ConfigZone() {
 
   return (
     <div className={isDarkTheme ? "dark" : ""}>
-      <div className="min-h-screen bg-background p-6">
+      <div className="min-h-screen bg-background">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Side - Available Zones */}
           <div className="bg-white rounded-large p-6 border border-secondary">
