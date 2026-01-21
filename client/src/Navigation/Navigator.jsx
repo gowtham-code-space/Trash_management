@@ -63,7 +63,7 @@ import ConfigHeader from "../pages/MHO/ConfigHeader/ConfigHeader";
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
-const mockUser = { role: "MHO", name: "Alex Rivera" };
+const mockUser = { role: "TrashMan", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -80,7 +80,7 @@ return (
         {mockUser?.role === "Resident" && (
             <>
             <Route index element={<Home/>} />
-            <Route path="map" element={<Map/>} />
+            <Route path="map" element={<Map/>}/>
             <Route path="report-trash" element={<ReportTrash/>} />
             <Route path="route-timings" element={<RouteTimings/>} />
             <Route path="trash-details" element={<TrashDetails/>} />
@@ -157,6 +157,7 @@ return (
             <Route path="my-stats" element={<div>City-wide Analytics</div>} />
             <Route path="zones" element={<div>Zone Management</div>} />
             <Route path="settings" element={<SettingsHeader/>} />
+            <Route path="id-card" element={<IdentityCard/>} />
             </>
         )}
         </Route>

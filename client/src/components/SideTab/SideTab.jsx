@@ -14,7 +14,8 @@ People,
 Certificate,
 Notification,
 Search,
-TrashRoute
+TrashRoute,
+QR
 } from "../../assets/icons/icons";
 import ThemeStore from "../../store/ThemeStore";
 
@@ -38,28 +39,46 @@ navigate(path === "" ? "/" : `/${path}`);
 }
 
 return (
-<nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-secondary shadow-[0_-8px_30px_rgba(0,0,0,0.08)] h-20 px-4 flex items-center justify-around z-50">
+<nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-darkSurface border-t border-secondary dark:border-darkBorder shadow-[0_-8px_30px_rgba(0,0,0,0.08)] h-20 px-4 flex items-center justify-around z-50">
     {mobileMenuItems.map(function(item) {
     const active = isActive(item.id);
+    const isHighlighted = item.isHighlighted || false;
     const Icon = item.icon;
 
     return (
         <button
         key={item.label}
         onClick={function() { handleNavigation(item.id); }}
-        className="flex flex-col items-center justify-center gap-1.5 transition-all duration-200 active:scale-90 relative"
+        className={`flex flex-col items-center justify-center gap-1.5 transition-all duration-300 active:scale-90 relative ${
+            isHighlighted ? "-translate-y-4" : ""
+        }`}
         >
-        <div className={`transition-colors duration-300 ${active ? "text-primaryLight" : "text-primary"}`}>
-            <Icon 
-            isPressed={active} 
-            isDarkTheme={false} 
-            defaultColor={active ? "#1E8E54" : "#145B47"} 
-            />
+        <div className={`transition-all duration-300 ${
+            isHighlighted 
+            ? "w-16 h-16 bg-primaryLight rounded-full flex items-center justify-center shadow-lg shadow-primaryLight/30 scale-110" 
+            : active 
+            ? "text-primaryLight" 
+            : "text-primary dark:text-darkTextSecondary"
+        }`}>
+            <div className={isHighlighted ? "text-white scale-125" : ""}>
+                <Icon 
+                isPressed={active || isHighlighted} 
+                isDarkTheme={false} 
+                defaultColor={isHighlighted ? "white" : active ? "#1E8E54" : "#145B47"}
+                OnpressColor={isHighlighted ? "white" : "#1E8E54"}
+                />
+            </div>
         </div>
-        <span className={`text-[10px] font-bold  tracking-widest transition-colors duration-300 ${active ? "text-primaryLight" : "text-gray-400"}`}>
-            {item.label}
+        <span className={`text-[10px] font-bold tracking-widest transition-colors duration-300 ${
+            isHighlighted 
+            ? "text-primaryLight" 
+            : active 
+            ? "text-primaryLight" 
+            : "text-gray-400 dark:text-darkTextSecondary"
+        }`}>
+            {item.mobileLabel || item.label}
         </span>
-        {active && (
+        {active && !isHighlighted && (
             <div className="absolute -top-2.5 w-5 h-1 bg-primaryLight rounded-full" />
         )}
         </button>
@@ -79,51 +98,51 @@ const { isDarkTheme } = ThemeStore();
 
 const menuConfig = {
 Resident: [
-    { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "map", label: "Map", icon: Map, showMobile: true },
-    { id: "route-timings", label: "Routes & timings", icon: TrashRoute, showMobile: false },
-    { id: "report-trash", label: "Report", icon: Camera, showMobile: true },
-    { id: "my-stats", label: "Statistics", icon: Stats, showMobile: true },
-    { id: "quiz", label: "Quiz", icon: Certificate, showMobile: true },
-    { id: "submit-feedback", label: "Feedback", icon: FeedBack, showMobile: false },
-    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "map", label: "Map", mobileLabel: "Map", icon: Map, showMobile: true, isHighlighted: false },
+    { id: "submit-feedback", label: "Feedback", mobileLabel: "Feedback", icon: QR, showMobile: true, isHighlighted: true },
+    { id: "route-timings", label: "Routes & Timings", mobileLabel: "Routes", icon: TrashRoute, showMobile: false, isHighlighted: false },
+    { id: "report-trash", label: "Report", mobileLabel: "Report", icon: Camera, showMobile: false, isHighlighted: false },
+    { id: "my-stats", label: "Statistics", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: false, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
 ],
 TrashMan: [
-    { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "upload-attendance", label: "Attendance", icon: People, showMobile: true },
-    { id: "create-feedback-session", label: "Create Feedback session", icon: FeedBack, showMobile: true },
-    { id: "submit-feedback", label: "Submit Feedback", icon: FeedBack, showMobile: true },
-    { id: "immediate-tasks", label: "Immediate tasks", icon: Task, showMobile: true },
-    { id: "route-timings", label: "Routes & timings", icon: Map, showMobile: true },
-    { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
-    { id: "quiz", label: "Quiz", icon:Certificate, showMobile: false },
-    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "upload-attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: true, isHighlighted: false },
+    { id: "create-feedback-session", label: "Create Feedback Session", mobileLabel: "Create", icon: FeedBack, showMobile: true, isHighlighted: true },
+    { id: "submit-feedback", label: "Submit Feedback", mobileLabel: "Feedback", icon: FeedBack, showMobile: false, isHighlighted: false },
+    { id: "immediate-tasks", label: "Immediate Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: false },
+    { id: "route-timings", label: "Routes & Timings", mobileLabel: "Routes", icon: Map, showMobile: true, isHighlighted: false },
+    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon:Certificate, showMobile: false, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: false, isHighlighted: false },
 ],
 SuperVisor: [
-    { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "search-workers", label: "Search", icon: Search, showMobile: true },
-    { id: "attendance", label: "Attendance", icon: People, showMobile: true },
-    { id: "all-tasks", label: "Tasks", icon: Task, showMobile: true },
-    { id: "create-feedback-session", label: "Create feedback", icon:FeedBack, showMobile: true },
-    { id: "submit-feedback", label: "submit feedback", icon: FeedBack, showMobile: true },
-    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
-    { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "search-workers", label: "Search", mobileLabel: "Search", icon: Search, showMobile: true, isHighlighted: false },
+    { id: "attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: true, isHighlighted: false },
+    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: true },
+    { id: "create-feedback-session", label: "Create Feedback", mobileLabel: "Create", icon:FeedBack, showMobile: true, isHighlighted: false },
+    { id: "submit-feedback", label: "Submit Feedback", mobileLabel: "Feedback", icon: FeedBack, showMobile: false, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: false, isHighlighted: false },
+    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
 ],
 SanitaryInspector: [
-    { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "search-workers", label: "Search", icon: Search, showMobile: true },
-    { id: "attendance", label: "Attendance", icon: People, showMobile: true },
-    { id: "all-tasks", label: "Tasks", icon: Task, showMobile: true },
-    { id: "create-feedback-session", label: "Create feedback", icon:FeedBack, showMobile: true },
-    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
-    { id: "overall-stats", label: "overall stats", icon: Stats, showMobile: true },
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "search-workers", label: "Search", mobileLabel: "Search", icon: Search, showMobile: true, isHighlighted: false },
+    { id: "attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: true, isHighlighted: false },
+    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: true },
+    { id: "create-feedback-session", label: "Create Feedback", mobileLabel: "Create", icon:FeedBack, showMobile: true, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: false, isHighlighted: false },
+    { id: "overall-stats", label: "Overall Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
 ],
 MHO: [
-    { id: "", label: "Home", icon: Home, showMobile: true },
-    { id: "all-tasks", label: "Tasks", icon: Task, showMobile: true },
-    { id: "my-stats", label: "Stats", icon: Stats, showMobile: true },
-    { id: "zones", label: "Zones", icon: Map, showMobile: true },
-    { id: "settings", label: "Settings", icon: Settings, showMobile: true },
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: true },
+    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "zones", label: "Zones", mobileLabel: "Zones", icon: Map, showMobile: true, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: false, isHighlighted: false },
 ]
 };
 
