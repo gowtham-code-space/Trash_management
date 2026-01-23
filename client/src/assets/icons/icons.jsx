@@ -50,6 +50,8 @@ import { MdLocationOn } from "react-icons/md"; // map pin
 import { GoPencil } from "react-icons/go"; //edit --> pencil
 import { LuFilter } from "react-icons/lu"; // filter cone
 import { HiDownload } from "react-icons/hi"; // download
+import { GrConfigure } from "react-icons/gr"; // configure
+import { IoMdMore } from "react-icons/io"; // ... more
 
 const defaultSize = 25;
 const defaultColor = "black";
@@ -219,4 +221,11 @@ export function Filter({ size, isPressed = false, isDarkTheme = false, defaultCo
 
 export function Download({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
     return <Icons Icon={HiDownload} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Configure({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={GrConfigure} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function More({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoMdMore} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }

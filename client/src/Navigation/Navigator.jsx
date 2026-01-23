@@ -54,6 +54,7 @@ import SettingsHeader from "../pages/Common/Settings/SettingsHeader/SettingsHead
 import DivisionHeader from "../pages/MHO/DivisionHeader";
 import AssignToSI from "../pages/MHO/AssignToSI";
 import ConfigHeader from "../pages/MHO/ConfigHeader/ConfigHeader";
+import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/RouteConfigHeader";
 
 
 
@@ -63,7 +64,7 @@ import ConfigHeader from "../pages/MHO/ConfigHeader/ConfigHeader";
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
-const mockUser = { role: "TrashMan", name: "Alex Rivera" };
+const mockUser = { role: "MHO", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -139,6 +140,7 @@ return (
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
             <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
+            <Route path="config-route" element={<RouteConfigHeader/>} />
             <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}

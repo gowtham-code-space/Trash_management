@@ -11,7 +11,9 @@ import {
     Expand,
     Task,
     Search,
-    FeedBack
+    FeedBack,
+    Stats,
+    Configure
 } from "../../assets/icons/icons";
 import ToastNotification from "../../components/Notification/ToastNotification";
 import ThemeStore from "../../store/ThemeStore";
@@ -230,64 +232,92 @@ function InspectorDashboard() {
                                 <Search size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Search Workers</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View all workers</p>
+                                <p className="text-sm font-bold leading-tight">Search</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Find workers</p>
                             </div>
                         </div>
 
-                        {/* View Reports */}
+                        {/* Attendance */}
                         <div 
-                            onClick={()=>navigate("view-reports")}
+                            onClick={()=>navigate("attendance")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <People size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">Attendance</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Track attendance</p>
+                            </div>
+                        </div>
+
+                        {/* Tasks */}
+                        <div 
+                            onClick={()=>navigate("all-tasks")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">View Reports</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Check all reports</p>
+                                <p className="text-sm font-bold leading-tight">Tasks</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View all tasks</p>
                             </div>
                         </div>
 
-                        {/* Feedback Management */}
+                        {/* Create Feedback */}
                         <div 
-                            onClick={()=>navigate("feedback-management")}
+                            onClick={()=>navigate("create-feedback-session")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Feedback Management</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Manage feedback</p>
+                                <p className="text-sm font-bold leading-tight">Create Feedback</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">New feedback</p>
                             </div>
                         </div>
 
-                        {/* Zone Analytics */}
+                        {/* Configure Route */}
                         <div 
-                            onClick={()=>navigate("zone-analytics")}
+                            onClick={()=>navigate("config-route")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                                <Notification size={22} isPressed={false} defaultColor="#145B47" />
+                                <Configure size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Zone Analytics</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View zone stats</p>
+                                <p className="text-sm font-bold leading-tight">Configure Route</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">Manage routes</p>
                             </div>
                         </div>
 
-                        {/* My Id card */}
+                        {/* Overall Stats */}
                         <div 
-                            onClick={()=>navigate("id-card")}
+                            onClick={()=>navigate("overall-stats")}
+                            className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
+                        >
+                            <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
+                                <Stats size={22} isPressed={false} defaultColor="#145B47" />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm font-bold leading-tight">Overall Stats</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View statistics</p>
+                            </div>
+                        </div>
+
+                        {/* ID Card */}
+                        <div 
+                            onClick={()=>navigate("identity-card")}
                             className="hover:bg-primary hover:text-white bg-white shrink-0 w-40 h-36 rounded-large p-4 flex flex-col justify-center items-center text-left snap-start transition-all duration-200 hover:scale-[0.99] active:scale-[0.99] shadow-md cursor-pointer"
                         >
                             <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">ID card</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Checkout your Id card</p>
+                                <p className="text-sm font-bold leading-tight">ID Card</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">View your ID</p>
                             </div>
                         </div>
 
@@ -331,16 +361,33 @@ function InspectorDashboard() {
                                     <Search size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Search Workers</p>
-                                    <p className="text-xs text-gray-500 font-medium">Trashmen & Supervisors</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Search</p>
+                                    <p className="text-xs text-gray-500 font-medium">Find workers</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* View Reports */}
+                        {/* Attendance */}
                         <div 
-                            onClick={()=>navigate("view-reports")}
+                            onClick={()=>navigate("attendance")}
+                            className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                                    <People size={18} isPressed={false} isDarkTheme={true} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-black tracking-tight">Attendance</p>
+                                    <p className="text-xs text-gray-500 font-medium">Track attendance</p>
+                                </div>
+                            </div>
+                            <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                        </div>
+
+                        {/* Tasks */}
+                        <div 
+                            onClick={()=>navigate("all-tasks")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -348,16 +395,16 @@ function InspectorDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">View Reports</p>
-                                    <p className="text-xs text-gray-500 font-medium">Check all reports</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Tasks</p>
+                                    <p className="text-xs text-gray-500 font-medium">View all tasks</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* Feedback Management */}
+                        {/* Create Feedback */}
                         <div 
-                            onClick={()=>navigate("feedback-management")}
+                            onClick={()=>navigate("create-feedback-session")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -365,25 +412,42 @@ function InspectorDashboard() {
                                     <FeedBack size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Feedback Management</p>
-                                    <p className="text-xs text-gray-500 font-medium">Manage all feedback</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Create Feedback</p>
+                                    <p className="text-xs text-gray-500 font-medium">New feedback session</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </div>
 
-                        {/* Zone Analytics */}
+                        {/* Configure Route */}
                         <div 
-                            onClick={()=>navigate("zone-analytics")}
+                            onClick={()=>navigate("config-route")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
-                                    <Notification size={18} isPressed={false} isDarkTheme={true} />
+                                    <Configure size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Zone Analytics</p>
-                                    <p className="text-xs text-gray-500 font-medium">Detailed zone statistics</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">Configure Route</p>
+                                    <p className="text-xs text-gray-500 font-medium">Manage routes</p>
+                                </div>
+                            </div>
+                            <RightArrow size={14} isPressed={false} isDarkTheme={false} />
+                        </div>
+
+                        {/* Overall Stats */}
+                        <div 
+                            onClick={()=>navigate("overall-stats")}
+                            className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-primary rounded-large shadow-sm group-hover:bg-primaryLight transition-colors">
+                                    <Stats size={18} isPressed={false} isDarkTheme={true} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs font-bold text-black tracking-tight">Overall Stats</p>
+                                    <p className="text-xs text-gray-500 font-medium">View statistics</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -391,7 +455,7 @@ function InspectorDashboard() {
 
                         {/* ID Card */}
                         <div 
-                            onClick={()=>navigate("id-card")}
+                            onClick={()=>navigate("identity-card")}
                             className="w-full flex items-center justify-between p-3.5 bg-white border border-secondary rounded-large hover:border-primaryLight hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 cursor-pointer group"
                         >
                             <div className="flex items-center gap-3">
@@ -400,7 +464,7 @@ function InspectorDashboard() {
                                 </div>
                                 <div className="text-left">
                                     <p className="text-xs font-bold text-black tracking-tight">ID Card</p>
-                                    <p className="text-xs text-gray-500 font-medium">Checkout your ID card</p>
+                                    <p className="text-xs text-gray-500 font-medium">View your ID card</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
