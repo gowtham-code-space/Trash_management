@@ -103,7 +103,7 @@ function DivisionHeader() {
                 </div>
             </div>
 
-            {activeTab === "Overview" ? <TrashRoute/> : activeTab === "Workers" ? <SearchWorkers/> : <StatsHeader/> }
+            {activeTab === "Overview" ? <TrashRoute/> : activeTab === "Workers" ? <SearchWorkers/> : <StatsHeader ShowInspectorDetails={false}/> }
 
         </div>
     );

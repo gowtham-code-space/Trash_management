@@ -51,9 +51,10 @@ import FileNotFound from "../pages/Common/404/FileNotFound";
 
 //settings
 import SettingsHeader from "../pages/Common/Settings/SettingsHeader/SettingsHeader";
+
 import DivisionHeader from "../pages/MHO/DivisionHeader";
 import AssignToSI from "../pages/MHO/AssignToSI";
-import ConfigHeader from "../pages/MHO/ConfigHeader/ConfigHeader";
+import ConfigHeader from "../pages/Commissioner/ConfigHeader/ConfigHeader";
 import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/RouteConfigHeader";
 
 
@@ -63,8 +64,8 @@ import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/Rout
 
 
 
-// Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO"
-const mockUser = { role: "MHO", name: "Alex Rivera" };
+// Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO" , "Commissioner"
+const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -123,7 +124,8 @@ return (
             <Route path="my-stats" element={<SupervisorStats/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
-            <Route path="take-quiz" element={<Quiz/>} />
+            <Route path="quiz" element={<Quiz/>} />
+            <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
@@ -141,6 +143,8 @@ return (
             <Route path="search-workers" element={<SearchWorkers/>} />
             <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
             <Route path="config-route" element={<RouteConfigHeader/>} />
+            <Route path="quiz" element={<Quiz/>} />
+            <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
@@ -152,16 +156,33 @@ return (
             <Route path="view-division" element={<DivisionHeader/>} />
             <Route path="all-tasks" element={<AllTasks/>} />
             <Route path="assign-task" element={<AssignToSI/>} />
-            <Route path="config-district" element={<ConfigHeader/>} />
-            <Route path="trashman-stats" element={<div>Attendance Logs</div>} />
-            <Route path="supervisor-stats" element={<div>Attendance Logs</div>} />
-            <Route path="inspector-stats" element={<div>inspector stats</div>} />
-            <Route path="my-stats" element={<div>City-wide Analytics</div>} />
-            <Route path="zones" element={<div>Zone Management</div>} />
+            <Route path="search-workers" element={<SearchWorkers/>} />
+            <Route path="trashman-stats" element={<TrashmanStats/>} />
+            <Route path="supervisor-stats" element={<SupervisorStats/>} />
+            <Route path="inspector-stats" element={<StatsHeader/>} />
+            <Route path="quiz" element={<Quiz/>} />
+            <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<SettingsHeader/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             </>
+            
         )}
+        {mockUser?.role === "Commissioner" && (
+            <>
+            <Route index element={<MHODashboard/>} />
+            <Route path="view-zone" element={<ViewZone/>} />
+            <Route path="view-division" element={<DivisionHeader/>} />
+            <Route path="config-district" element={<ConfigHeader/>} />
+            <Route path="trashman-stats" element={<TrashmanStats/>} />
+            <Route path="supervisor-stats" element={<SupervisorStats/>} />
+            <Route path="inspector-stats" element={<StatsHeader/>} />
+            <Route path="appoint-employees" element={<div>edit employee</div>} />
+            <Route path="quiz" element={<Quiz/>} />
+            <Route path="take-quiz" element={<TakeQuiz/>} />
+            <Route path="settings" element={<SettingsHeader/>} />
+            <Route path="id-card" element={<IdentityCard/>} />
+            </>)
+            }
         </Route>
 
         {/* Catch-all route for 404 - Must be last */}

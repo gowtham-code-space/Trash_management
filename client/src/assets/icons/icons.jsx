@@ -52,7 +52,7 @@ import { LuFilter } from "react-icons/lu"; // filter cone
 import { HiDownload } from "react-icons/hi"; // download
 import { GrConfigure } from "react-icons/gr"; // configure
 import { IoMdMore } from "react-icons/io"; // ... more
-
+import { AiOutlineIdcard } from "react-icons/ai"; // Id card
 const defaultSize = 25;
 const defaultColor = "black";
 const DarkThemeColor = "#fff";
@@ -229,3 +229,8 @@ export function Configure({ size, isPressed = false, isDarkTheme = false, defaul
 export function More({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
     return <Icons Icon={IoMdMore} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
+
+export function IdCard({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={AiOutlineIdcard} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+

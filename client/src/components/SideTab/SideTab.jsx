@@ -17,7 +17,8 @@ Search,
 TrashRoute,
 QR,
 ZoomIn,
-Configure
+Configure,
+IdCard
 } from "../../assets/icons/icons";
 import ThemeStore from "../../store/ThemeStore";
 
@@ -140,11 +141,21 @@ SanitaryInspector: [
 ],
 MHO: [
     { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: true },
-    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    { id: "zones", label: "Zones", mobileLabel: "Zones", icon: Map, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: false, isHighlighted: false },
-]
+    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: false },
+    //{ id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
+    //{ id: "zones", label: "Zones", mobileLabel: "Zones", icon: Map, showMobile: true, isHighlighted: false },
+    { id: "id-card", label: "Id Card", mobileLabel: "Id card", icon: IdCard, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+],
+Commissioner:[
+    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "config-district", label: "Configure district", mobileLabel: "config", icon: Configure, showMobile: true, isHighlighted: false },
+    { id: "appoint-employees", label: "Appoint employees", mobileLabel: "Appoint", icon: People, showMobile: true, isHighlighted: false },
+    { id: "id-card", label: "Id Card", mobileLabel: "Id card", icon: IdCard, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
+    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+],
 };
 
 const menuItems = menuConfig[user?.role] || [];

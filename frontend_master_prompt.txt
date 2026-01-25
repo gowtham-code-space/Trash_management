@@ -365,7 +365,8 @@ import {
   Filter,
   Download,
   Configure,
-  More
+  More,
+  IdCard
 } from "../../assets/icons/icons";
 
 🎨 Ⅱ. Icon Prop Priority Logic
