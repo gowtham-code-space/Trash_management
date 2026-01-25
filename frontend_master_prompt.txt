@@ -366,7 +366,10 @@ import {
   Download,
   Configure,
   More,
-  IdCard
+  IdCard,
+  Excel,
+  Upload,
+  Transfer
 } from "../../assets/icons/icons";
 
 🎨 Ⅱ. Icon Prop Priority Logic

@@ -56,6 +56,7 @@ import DivisionHeader from "../pages/MHO/DivisionHeader";
 import AssignToSI from "../pages/MHO/AssignToSI";
 import ConfigHeader from "../pages/Commissioner/ConfigHeader/ConfigHeader";
 import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/RouteConfigHeader";
+import EmployeesOverview from "../pages/Commissioner/ManageEmployees/EmployeesOverview";
 
 
 
@@ -65,7 +66,7 @@ import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/Rout
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO" , "Commissioner"
-const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
+const mockUser = { role: "Commissioner", name: "Alex Rivera" };
 
 function Navigator() {
 return (
@@ -176,7 +177,7 @@ return (
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="supervisor-stats" element={<SupervisorStats/>} />
             <Route path="inspector-stats" element={<StatsHeader/>} />
-            <Route path="appoint-employees" element={<div>edit employee</div>} />
+            <Route path="appoint-employees" element={<EmployeesOverview/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<SettingsHeader/>} />

@@ -53,6 +53,10 @@ import { HiDownload } from "react-icons/hi"; // download
 import { GrConfigure } from "react-icons/gr"; // configure
 import { IoMdMore } from "react-icons/io"; // ... more
 import { AiOutlineIdcard } from "react-icons/ai"; // Id card
+import { PiMicrosoftExcelLogoDuotone } from "react-icons/pi"; // Excel
+import { HiUpload } from "react-icons/hi"; // upload
+import { BiTransfer } from "react-icons/bi"; // transfer
+
 const defaultSize = 25;
 const defaultColor = "black";
 const DarkThemeColor = "#fff";
@@ -234,3 +238,14 @@ export function IdCard({ size, isPressed = false, isDarkTheme = false, defaultCo
     return <Icons Icon={AiOutlineIdcard} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
+export function Excel({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={PiMicrosoftExcelLogoDuotone} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Upload({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={HiUpload} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Transfer({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BiTransfer} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
