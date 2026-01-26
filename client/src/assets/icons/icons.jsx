@@ -21,138 +21,231 @@ import { ImEarth } from "react-icons/im"; // near language swithing
 import { MdBrightnessMedium } from "react-icons/md"; // dark/light
 import { GrCertificate } from "react-icons/gr"; //certificate
 import { IoSearch } from "react-icons/io5";
-
+import { IoIosQrScanner } from "react-icons/io";
+import { IoCloseSharp } from "react-icons/io5"; // X
+import { RiExpandDiagonalLine } from "react-icons/ri" // for expanding screen
 // arrows
 import { FaChevronRight } from "react-icons/fa";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 
-
 // trashman
 import { FaStar } from "react-icons/fa"; //ratings
 import { MdQrCodeScanner } from "react-icons/md"; //QR
 
-const size = 25;
+// trash routes
+import { BsTruck } from "react-icons/bs";
+import { TbRouteSquare } from "react-icons/tb";
+
+//map zoom
+import { MdAdd } from "react-icons/md";
+import { RiSubtractLine } from "react-icons/ri";
+
+//info
+import { FaInfo } from "react-icons/fa6";
+
+import { LuCalendarDays } from "react-icons/lu"; //calendar
+import { MdLocationOn } from "react-icons/md"; // map pin
+import { GoPencil } from "react-icons/go"; //edit --> pencil
+import { LuFilter } from "react-icons/lu"; // filter cone
+import { HiDownload } from "react-icons/hi"; // download
+import { GrConfigure } from "react-icons/gr"; // configure
+import { IoMdMore } from "react-icons/io"; // ... more
+import { AiOutlineIdcard } from "react-icons/ai"; // Id card
+import { PiMicrosoftExcelLogoDuotone } from "react-icons/pi"; // Excel
+import { HiUpload } from "react-icons/hi"; // upload
+import { BiTransfer } from "react-icons/bi"; // transfer
+
+const defaultSize = 25;
 const defaultColor = "black";
 const DarkThemeColor = "#fff";
 const OnpressColor = "#1E8E54";
 
-// reusable functions
-
-//pressable
+// reusable function
 function Icons(props) {
-var IconComponent = props.Icon;
+    var IconComponent = props.Icon;
+    var size = props.size || defaultSize;
     var color = props.isPressed
-    ? OnpressColor
-    : props.isDarkTheme
-    ? DarkThemeColor
-    : defaultColor;
-return <IconComponent size={size} color={color} />;
+        ? props.OnpressColor || OnpressColor
+        : props.isDarkTheme
+        ? props.DarkThemeColor || DarkThemeColor
+        : props.defaultColor || defaultColor;
+    
+    return <IconComponent size={size} color={color} />;
 }
 
-export function Home({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={BiHomeAlt} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Home({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BiHomeAlt} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Map({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={LuMap} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Map({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuMap} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Add({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={BiPlusCircle} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Add({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BiPlusCircle} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Settings({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={LuSettings} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Settings({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuSettings} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function FeedBack({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={RiChat1Line} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function FeedBack({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={RiChat1Line} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Task({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaTasks} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Task({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaTasks} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Stats({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={ImStatsBars} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Stats({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={ImStatsBars} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Notification({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={IoMdNotificationsOutline} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Notification({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoMdNotificationsOutline} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function LogOut({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FiLogOut} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function LogOut({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FiLogOut} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Mobile({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={AiOutlineMobile} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Mobile({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={AiOutlineMobile} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Email({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={MdOutlineEmail} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Email({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdOutlineEmail} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Camera({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={MdOutlineCameraAlt} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Camera({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdOutlineCameraAlt} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function People({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={MdOutlinePeople} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function People({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdOutlinePeople} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Language({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={ImEarth} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Language({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={ImEarth} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Brightness({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={MdBrightnessMedium} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Brightness({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdBrightnessMedium} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Certificate({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={GrCertificate} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Certificate({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={GrCertificate} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Search({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={IoSearch} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Search({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoSearch} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Location({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FiCrosshair} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Location({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FiCrosshair} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Trash({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FiTrash2} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Trash({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FiTrash2} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Check({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaCheck} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Check({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaCheck} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function Star({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaStar} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function Star({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaStar} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function QR({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={MdQrCodeScanner} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function QR({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdQrCodeScanner} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
-
 
 // arrows
-export function ChevronRight({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaChevronRight} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function RightArrow({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaChevronRight} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function ChevronLeft({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaChevronLeft} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function LeftArrow({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaChevronLeft} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function ChevronUp({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaChevronUp} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function UpArrow({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaChevronUp} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }
 
-export function ChevronDown({ isPressed = false, isDarkTheme = false }) {
-    return <Icons Icon={FaChevronDown} isPressed={isPressed} isDarkTheme={isDarkTheme} />;
+export function DownArrow({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaChevronDown} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function QRScanner({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoIosQrScanner} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function X({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoCloseSharp} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Expand({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={RiExpandDiagonalLine} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function TrashVehicle({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BsTruck} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function TrashRoute({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={TbRouteSquare} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function ZoomIn({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdAdd} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function ZoomOut({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={RiSubtractLine} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function Info({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={FaInfo} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function Calendar({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuCalendarDays} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function MapPin({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={MdLocationOn} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Edit({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={GoPencil} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Filter({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={LuFilter} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Download({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={HiDownload} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Configure({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={GrConfigure} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+export function More({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={IoMdMore} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function IdCard({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={AiOutlineIdcard} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Excel({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={PiMicrosoftExcelLogoDuotone} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Upload({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={HiUpload} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
+}
+
+export function Transfer({ size, isPressed = false, isDarkTheme = false, defaultColor = "black", DarkThemeColor = "#fff", OnpressColor = "#1E8E54" }) {
+    return <Icons Icon={BiTransfer} size={size} isPressed={isPressed} isDarkTheme={isDarkTheme} defaultColor={defaultColor} DarkThemeColor={DarkThemeColor} OnpressColor={OnpressColor} />;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Certificate } from "../../assets/icons/icons";
-import ToastNotification from "../../components/Notification/ToastNotification";
+import { Certificate } from "../../../assets/icons/icons";
+import ToastNotification from "../../Notification/ToastNotification";
 
 function OtpVerificationModal({ phoneNumber, method, userEmail, onClose }) {
 const [otp, setOtp] = useState(["", "", "", ""]);
@@ -77,7 +77,7 @@ return (
 /* Outer Backdrop - handles onClose on click */
 <div 
     onClick={onClose}
-    className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-all duration-300"
+    className="fixed inset-0 bg-primary/40 backdrop-blur-sm animate-in fade-in duration-300 flex items-center justify-center p-4 z-50 transition-all"
 >
     {/* Modal Content - e.stopPropagation prevents closing when clicking inside */}
     <div 

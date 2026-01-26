@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { Settings, Mobile, Email } from "../../assets/icons/icons";
-import ToastNotification from "../../components/Notification/ToastNotification";
+import { Settings, Mobile, Email } from "../../../assets/icons/icons";
+import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
-import OtpVerificationModal from "../../components/Modals/OtpVerificationModal";
+import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
+
+//Themeprovider
+import ThemeStore from "../../../store/ThemeStore";
 
 // Mock database declared at the top level
 const mockUsers = [
@@ -19,6 +22,8 @@ const mockUsers = [
 ];
 
 function Login() {
+  const {isDarkTheme , toggleTheme} = ThemeStore();
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("SMS");
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -59,15 +64,15 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className={isDarkTheme ? "dark" : ""}>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl p-10 w-full max-w-md">
         {/* Header Icon */}
         <div className="flex justify-center mb-6">
           <div className="bg-secondary p-3 rounded-xl">
-            <Settings isPressed={false} isDarkTheme={false} />
+            <Settings isPressed={false} isDarkTheme={isDarkTheme} />
           </div>
         </div>
-
         {/* Titles */}
         <div className="text-center mb-10">
           <h1 className="text-2xl font-bold text-black mb-3">Welcome Back</h1>
@@ -84,7 +89,7 @@ function Login() {
               selectedMethod === "SMS" ? "bg-white text-black shadow-sm" : "text-gray-400"
             }`}
           >
-            <Mobile isPressed={selectedMethod === "SMS"} isDarkTheme={false} />
+            <Mobile isPressed={selectedMethod === "SMS"} isDarkTheme={isDarkTheme} />
             SMS
           </button>
           <button
@@ -93,7 +98,7 @@ function Login() {
               selectedMethod === "Gmail" ? "bg-white text-black shadow-sm" : "text-gray-400"
             }`}
           >
-            <Email isPressed={selectedMethod === "Gmail"} isDarkTheme={false} />
+            <Email isPressed={selectedMethod === "Gmail"} isDarkTheme={isDarkTheme} />
             Gmail
           </button>
         </div>
@@ -139,6 +144,7 @@ function Login() {
       )}
 
       <ToastContainer/>
+      </div>
     </div>
   );
 }
