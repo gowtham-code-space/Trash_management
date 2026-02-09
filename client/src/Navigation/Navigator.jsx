@@ -66,7 +66,7 @@ import EmployeesOverview from "../pages/Commissioner/ManageEmployees/EmployeesOv
 
 
 // Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO" , "Commissioner"
-const mockUser = { role: "Commissioner", name: "Alex Rivera" };
+const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
 
 function Navigator() {
 return (

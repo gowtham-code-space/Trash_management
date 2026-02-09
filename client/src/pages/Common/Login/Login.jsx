@@ -23,7 +23,6 @@ const mockUsers = [
 
 function Login() {
   const {isDarkTheme , toggleTheme} = ThemeStore();
-
   const [phoneNumber, setPhoneNumber] = useState("");
   const [selectedMethod, setSelectedMethod] = useState("SMS");
   const [showOtpModal, setShowOtpModal] = useState(false);
