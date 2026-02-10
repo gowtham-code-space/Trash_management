@@ -2,14 +2,14 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
@@ -19,5 +19,8 @@
     "mysql2": "^3.16.2",
     "nodemailer": "^7.0.13",
     "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7"
   }
 }
