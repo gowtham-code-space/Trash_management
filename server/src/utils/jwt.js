@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -40,4 +41,15 @@ export const decodeToken = (token) => {
     } catch (error) {
         return null;
     }
+};
+
+// Hash refresh token for DB storage (SHA256)
+export const hashRefreshToken = (token) => {
+    return crypto.createHash('sha256').update(token).digest('hex');
+};
+
+// Compare refresh token with stored hash
+export const compareRefreshToken = (token, hash) => {
+    const tokenHash = hashRefreshToken(token);
+    return tokenHash === hash;
 };

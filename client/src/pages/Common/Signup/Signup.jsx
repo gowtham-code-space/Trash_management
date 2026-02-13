@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Camera, Mobile, Email, Location, Home, People, Check } from "../../../assets/icons/icons";
+import { Camera, Mobile, Email, Location, Home, People, Check, Settings } from "../../../assets/icons/icons";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import ThemeStore from "../../../store/ThemeStore";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
+import { api } from "../../../services/apiMethods";
+import { getUser } from "../../../services/session";
 
 function SignUp() {
   const { isDarkTheme } = ThemeStore();
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     profilePic: null,
     firstName: "",
@@ -23,6 +26,12 @@ function SignUp() {
   
   const [previewImage, setPreviewImage] = useState(null);
   const [completedSteps, setCompletedSteps] = useState([]);
+  const [selectedMethod, setSelectedMethod] = useState("SMS");
+  const [phoneNumberInput, setPhoneNumberInput] = useState("");
+  const [emailInputVerify, setEmailInputVerify] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
 
   const districts = [
     "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya",
@@ -46,10 +55,77 @@ function SignUp() {
   ];
 
   const steps = [
+    { id: 0, title: "Verify Identity", description: "Verify your phone or email" },
     { id: 1, title: "Tell me about yourself", description: "Basic information" },
     { id: 2, title: "Contact", description: "Communication details" },
     { id: 3, title: "Where do you live", description: "Address information" }
   ];
+
+  function handlePhoneInputVerify(value) {
+    const cleaned = value.replace(/\D/g, "");
+    if (cleaned.length <= 10) {
+      setPhoneNumberInput(cleaned);
+    }
+  }
+
+  async function handleSendOtp() {
+    if (selectedMethod === "SMS") {
+      ToastNotification("OTP via phone is under construction", "info");
+      return;
+    }
+
+    let identifier = "";
+    
+    if (selectedMethod === "SMS") {
+      if (!phoneNumberInput || phoneNumberInput.length !== 10) {
+        ToastNotification("Please enter a valid 10-digit phone number", "error");
+        return;
+      }
+      identifier = phoneNumberInput;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInputVerify || !emailRegex.test(emailInputVerify)) {
+        ToastNotification("Please enter a valid email address", "error");
+        return;
+      }
+      identifier = emailInputVerify;
+    }
+
+    try {
+      const response = await api.post("/auth/request-otp", {
+        email: identifier,
+        isSignup: true
+      });
+
+      if (response.data.shouldRedirect === 'login') {
+        ToastNotification(response.message || "Account already exists. Please login instead.", "info");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+        return;
+      }
+
+      setUserEmail(identifier);
+      setIsOtpSent(true);
+      ToastNotification(response.message || `OTP sent to ${identifier}`, "success");
+      setShowOtpModal(true);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      const errorMsg = error.response?.data?.message || error.message || "Failed to send OTP";
+      ToastNotification(errorMsg, "error");
+    }
+  }
+
+  function handleOtpVerified(data) {
+    // Called when OTP is verified successfully
+    if (!completedSteps.includes(0)) {
+      setCompletedSteps([...completedSteps, 0]);
+    }
+    setShowOtpModal(false);
+    setCurrentStep(1);
+    setIsOtpSent(false); // Reset OTP sent state for potential re-verification
+    ToastNotification("Verification successful! Please complete your profile.", "success");
+  }
 
   function handleImageUpload(e) {
     const file = e.target.files[0];
@@ -68,23 +144,22 @@ function SignUp() {
   }
 
   function validateStep(step) {
-    if (step === 1) {
+    if (step === 0) {
+      // Verify step - handled by OTP modal
+      return false; // Don't allow next from verify screen, must use OTP
+    } else if (step === 1) {
       if (!formData.firstName || !formData.lastName) {
         ToastNotification("Please enter your first and last name", "error");
         return false;
       }
     } else if (step === 2) {
-      if (!formData.phoneNumber || !formData.email) {
-        ToastNotification("Please enter your phone number and email", "error");
+      // Contact step - Phone number is required
+      if (!formData.phoneNumber) {
+        ToastNotification("Please enter your phone number", "error");
         return false;
       }
       if (formData.phoneNumber.length < 10) {
-        ToastNotification("Please enter a valid phone number", "error");
-        return false;
-      }
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        ToastNotification("Please enter a valid email address", "error");
+        ToastNotification("Please enter a valid phone number (at least 10 digits)", "error");
         return false;
       }
     } else if (step === 3) {
@@ -96,7 +171,7 @@ function SignUp() {
     return true;
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (validateStep(currentStep)) {
       if (!completedSteps.includes(currentStep)) {
         setCompletedSteps([...completedSteps, currentStep]);
@@ -105,30 +180,58 @@ function SignUp() {
       if (currentStep < 3) {
         setCurrentStep(currentStep + 1);
       } else {
-        ToastNotification("Account created successfully! Welcome aboard.", "success");
-        setTimeout(function() {
-          setFormData({
-            profilePic: null,
-            firstName: "",
-            lastName: "",
-            phoneNumber: "",
-            email: "",
-            district: "",
-            wardName: "",
-            streetName: "",
-            houseNumber: ""
-          });
-          setPreviewImage(null);
-          setCurrentStep(1);
-          setCompletedSteps([]);
-          navigate("/");
-        }, 1500);
+        // Final step - complete signup
+        try {
+          const user = getUser();
+          if (!user || !user.user_id) {
+            ToastNotification("Session expired. Please start again.", "error");
+            navigate("/signup");
+            return;
+          }
+
+          const signupData = {
+            userId: user.user_id,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: userEmail, // Primary verified email from step 0
+            phoneNumber: formData.phoneNumber,
+            district: formData.district,
+            wardName: formData.wardName,
+            streetName: formData.streetName,
+            houseNumber: formData.houseNumber,
+            profilePic: formData.profilePic ? "uploaded_pic_url" : null // Handle file upload separately if needed
+          };
+
+          const response = await api.post("/auth/complete-signup", signupData);
+
+          ToastNotification(response.message || "Account created successfully! Welcome aboard.", "success");
+          setTimeout(function() {
+            setFormData({
+              profilePic: null,
+              firstName: "",
+              lastName: "",
+              phoneNumber: "",
+              email: "",
+              district: "",
+              wardName: "",
+              streetName: "",
+              houseNumber: ""
+            });
+            setPreviewImage(null);
+            setCurrentStep(0);
+            setCompletedSteps([]);
+            navigate("/");
+          }, 1500);
+        } catch (error) {
+          console.error("Error completing signup:", error);
+          ToastNotification(error.response?.data?.message || "Failed to complete signup. Please try again.", "error");
+        }
       }
     }
   }
 
   function handleBack() {
-    if (currentStep > 1) {
+    if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   }
@@ -177,7 +280,91 @@ function SignUp() {
   }
 
   function renderStepContent() {
-    if (currentStep === 1) {
+    if (currentStep === 0) {
+      // Verify step - similar to Login page
+      return (
+        <div className="space-y-6">
+          {/* Header Icon */}
+          <div className="flex justify-center">
+            <div className="bg-secondary p-3 rounded-xl">
+              <Settings isPressed={false} isDarkTheme={isDarkTheme} />
+            </div>
+          </div>
+          
+          {/* Titles */}
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-black mb-3">Create Account</h1>
+            <p className="text-sm text-gray-400 px-8">
+              {selectedMethod === "SMS" ? "Enter your mobile number to verify your identity." : "Enter your email address to verify your identity."}
+            </p>
+          </div>
+
+          {/* Method Toggle */}
+          <div className="bg-secondary p-1 rounded-lg flex">
+            <button
+              onClick={function() { setSelectedMethod("SMS"); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all duration-200 hover:cursor-pointer ${
+                selectedMethod === "SMS" ? "bg-white text-black shadow-sm" : "text-gray-400"
+              }`}
+            >
+              <Mobile isPressed={selectedMethod === "SMS"} isDarkTheme={isDarkTheme} />
+              SMS
+            </button>
+            <button
+              onClick={function() { setSelectedMethod("Gmail"); }}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:cursor-pointer ${
+                selectedMethod === "Gmail" ? "bg-white text-black shadow-sm" : "text-gray-400"
+              }`}
+            >
+              <Email isPressed={selectedMethod === "Gmail"} isDarkTheme={isDarkTheme} />
+              Gmail
+            </button>
+          </div>
+
+          {/* Input Field */}
+          <div>
+            <label className="block text-sm font-semibold text-black mb-2">
+              {selectedMethod === "SMS" ? "Mobile Number" : "Email Address"}
+            </label>
+            {selectedMethod === "SMS" ? (
+              <div className="flex bg-background border border-gray-100 rounded-lg overflow-hidden focus-within:border-primary transition-colors">
+                <span className="px-4 py-4 text-gray-400 border-r border-gray-100 text-base font-medium">
+                  +91
+                </span>
+                <input
+                  type="text"
+                  value={phoneNumberInput}
+                  onChange={function(e) { handlePhoneInputVerify(e.target.value); }}
+                  placeholder="98765 43210"
+                  className="w-full px-4 py-4 bg-transparent outline-none text-base font-medium placeholder:text-gray-300"
+                />
+              </div>
+            ) : (
+              <input
+                type="email"
+                value={emailInputVerify}
+                onChange={function(e) { setEmailInputVerify(e.target.value); }}
+                placeholder="yourname@gmail.com"
+                className="w-full px-4 py-4 bg-background border border-gray-100 rounded-lg outline-none text-base font-medium placeholder:text-gray-300 focus-within:border-primary transition-colors"
+              />
+            )}
+          </div>
+
+          {/* Action Button */}
+          <button
+            onClick={handleSendOtp}
+            disabled={isOtpSent}
+            className={`w-full bg-primaryLight text-white font-medium py-3 rounded-lg transition-all duration-200 ${
+              isOtpSent 
+                ? 'opacity-50 cursor-not-allowed' 
+                : 'hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
+            }`}
+          >
+            {isOtpSent ? 'OTP Sent' : 'Send Secure OTP'}
+          </button>
+        </div>
+      );
+    } else if (currentStep === 1) {
       return (
         <div className="space-y-6">
           <div className="flex flex-col items-center space-y-4">
@@ -242,6 +429,20 @@ function SignUp() {
         <div className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
+              <Email size={16} defaultColor="#316F5D" />
+              Primary Contact (Verified)
+            </label>
+            <input 
+              type="text"
+              value={userEmail}
+              disabled
+              className="w-full px-4 py-3 bg-gray-100 rounded-medium text-sm text-gray-500 border border-gray-200 cursor-not-allowed"
+            />
+            <p className="text-xs text-gray-400 mt-1">This is your verified contact from step 1</p>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               <Mobile size={16} defaultColor="#316F5D" />
               Phone Number
             </label>
@@ -250,20 +451,6 @@ function SignUp() {
               value={formData.phoneNumber}
               onChange={function(e) { handleInputChange("phoneNumber", e.target.value); }}
               placeholder="Enter phone number"
-              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
-              <Email size={16} defaultColor="#316F5D" />
-              Email Address
-            </label>
-            <input 
-              type="email"
-              value={formData.email}
-              onChange={function(e) { handleInputChange("email", e.target.value); }}
-              placeholder="Enter email address"
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
             />
           </div>
@@ -357,39 +544,41 @@ function SignUp() {
           <div className="p-6 pt-12 max-w-md mx-auto">
             <div className="mb-8 text-center">
               <h1 className="text-xl font-bold text-primary mb-2">
-                {steps[currentStep - 1].title}
+                {steps[currentStep].title}
               </h1>
               <p className="text-sm text-secondaryDark">
-                {steps[currentStep - 1].description}
+                {steps[currentStep].description}
               </p>
             </div>
 
             <div className="bg-white rounded-veryLarge p-6 space-y-6">
               {renderStepContent()}
 
-              <div className="flex gap-3">
-                {currentStep > 1 && (
+              {currentStep > 0 && (
+                <div className="flex gap-3">
+                  {currentStep > 1 && (
+                    <button
+                      type="button"
+                      onClick={handleBack}
+                      className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                    >
+                      Back
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={handleBack}
-                    className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                    onClick={handleNext}
+                    className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                   >
-                    Back
+                    {currentStep === 3 ? "Create Account" : "Continue"}
                   </button>
-                )}
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
-                >
-                  {currentStep === 3 ? "Create Account" : "Continue"}
-                </button>
-              </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-6 text-center">
               <p className="text-xs text-secondaryDark">
-                Step {currentStep} of 3
+                Step {currentStep + 1} of 4
               </p>
             </div>
           </div>
@@ -421,38 +610,51 @@ function SignUp() {
               <div className="bg-white rounded-veryLarge p-8 space-y-6">
                 <div className="text-center">
                   <h1 className="text-xl font-bold text-primary mb-2">
-                    {steps[currentStep - 1].title}
+                    {steps[currentStep].title}
                   </h1>
                   <p className="text-sm text-secondaryDark">
-                    {steps[currentStep - 1].description}
+                    {steps[currentStep].description}
                   </p>
                 </div>
 
                 {renderStepContent()}
 
-                <div className="flex gap-3 pt-4">
-                  {currentStep > 1 && (
+                {currentStep > 0 && (
+                  <div className="flex gap-3 pt-4">
+                    {currentStep > 1 && (
+                      <button
+                        type="button"
+                        onClick={handleBack}
+                        className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                      >
+                        Back
+                      </button>
+                    )}
                     <button
                       type="button"
-                      onClick={handleBack}
-                      className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                      onClick={handleNext}
+                      className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                     >
-                      Back
+                      {currentStep === 3 ? "Create Account" : "Continue"}
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
-                  >
-                    {currentStep === 3 ? "Create Account" : "Continue"}
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {showOtpModal && (
+        <OtpVerificationModal
+          identifier={userEmail}
+          method={selectedMethod}
+          isLogin={false}
+          onClose={function() { setShowOtpModal(false); }}
+          onVerified={handleOtpVerified}
+        />
+      )}
+
       <ToastContainer/>
     </div>
   );

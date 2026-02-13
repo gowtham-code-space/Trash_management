@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { 
 Home, 
@@ -21,12 +21,21 @@ Configure,
 IdCard
 } from "../../assets/icons/icons";
 import ThemeStore from "../../store/ThemeStore";
+import { clearSession } from "../../services/session";
+import { api } from "../../services/apiMethods";
 
-// Mock Data for Profile
-const mockProfile = {
-avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-notifications: 3
-};
+// Role ID to Role Name mapping
+function getRoleNameFromId(roleId) {
+    const roleMap = {
+        1: "Resident",
+        2: "TrashMan",
+        3: "SuperVisor",
+        4: "SanitaryInspector",
+        5: "MHO",
+        6: "Commissioner"
+    };
+    return roleMap[roleId] || "Resident";
+}
 
 /**
  * Internal Mobile Bottom Navigation Component
@@ -98,6 +107,29 @@ function SideTab({ user }) {
 const navigate = useNavigate();
 const location = useLocation();
 const { isDarkTheme } = ThemeStore();
+const [userDetails, setUserDetails] = useState(null);
+const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+// Fetch user details on mount
+useEffect(function() {
+    async function fetchUserDetails() {
+        if (!user || !user.user_id) {
+            setIsLoadingUser(false);
+            return;
+        }
+        
+        try {
+            const response = await api.get(`/auth/user/${user.user_id}`);
+            setUserDetails(response.data);
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        } finally {
+            setIsLoadingUser(false);
+        }
+    }
+    
+    fetchUserDetails();
+}, [user?.user_id]);
 
 const menuConfig = {
 Resident: [
@@ -158,7 +190,9 @@ Commissioner:[
 ],
 };
 
-const menuItems = menuConfig[user?.role] || [];
+// Get role name from role_id
+const roleName = user?.role_id ? getRoleNameFromId(user.role_id) : (user?.role || "Resident");
+const menuItems = menuConfig[roleName] || [];
 
 function handleNavigation(path) {
 navigate(path === "" ? "/" : `/${path}`);
@@ -223,7 +257,18 @@ return (
     {/* BOTTOM LOGOUT */}
     <div className="w-full py-5 border-t border-primaryLight flex justify-baseline items-center shrink-0">
         <button 
-        onClick={function() { navigate("/login"); }}
+        onClick={async function() { 
+            try {
+                // Call backend to clear HttpOnly refresh token cookie
+                await api.post("/auth/logout");
+            } catch (error) {
+                console.error("Logout error:", error);
+            } finally {
+                // Clear memory state regardless of backend response
+                clearSession();
+                navigate("/login"); 
+            }
+        }}
         className="flex items-center gap-3 px-8 py-2 rounded-xl text-error hover:cursor-pointer transition-colors"
         >
         <LogOut 
@@ -247,18 +292,13 @@ return (
         </h2>
         <div className="h-6 w-0.5 bg-secondary mx-1 md:mx-2" />
         <span className="text-[10px] md:text-xs font-bold text-primaryLight bg-secondary px-3 py-1 rounded-full uppercase tracking-wider">
-            {user?.role}
+            {roleName}
         </span>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6">
         <button className="p-2 hover:bg-secondary rounded-full transition-colors relative">
             <Notification isPressed={false} isDarkTheme={isDarkTheme} defaultColor="black" />
-            {mockProfile.notifications > 0 && (
-            <span className="absolute top-1 right-1 w-4 h-4 bg-error text-white text-[10px] flex items-center justify-center rounded-full font-bold border-2 border-white">
-                {mockProfile.notifications}
-            </span>
-            )}
         </button>
 
         <div 
@@ -266,12 +306,16 @@ return (
             className="flex items-center gap-3 pl-2 md:pl-4 border-l border-secondaryLight hover:cursor-pointer"
         >
             <div className="hidden sm:block text-right">
-            <p className="text-sm font-bold text-primary leading-none mb-1">{user?.name}</p>
+            <p className="text-sm font-bold text-primary leading-none mb-1">
+                {isLoadingUser ? 'Loading...' : (
+                    userDetails?.first_name ? `${userDetails.first_name} ${userDetails.last_name || ''}`.trim() : userDetails?.email || 'User'
+                )}
+            </p>
             <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">View Profile</p>
             </div>
             <div className="relative group cursor-pointer transition-transform active:scale-95">
             <img 
-                src={mockProfile.avatar} 
+                src={userDetails?.profile_pic || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.user_id || 'user'}`} 
                 alt="Avatar" 
                 className="w-10 h-10 rounded-full border-2 border-primaryLight p-0.5"
             />

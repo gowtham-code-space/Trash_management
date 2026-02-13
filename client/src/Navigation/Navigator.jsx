@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import SideTab from "../components/SideTab/SideTab";
 import Login from "../pages/Common/Login/Login";
 import Signup from "../pages/Common/Signup/Signup";
+import { useAuthStore } from "../store/authStore";
 
 //residents
 import Home from "../pages/Residents/Home";
@@ -65,10 +66,14 @@ import EmployeesOverview from "../pages/Commissioner/ManageEmployees/EmployeesOv
 
 
 
-// Mock User - Change role to test: "Resident", "TrashMan", "SuperVisor", "SanitaryInspector", "MHO" , "Commissioner"
-const mockUser = { role: "SanitaryInspector", name: "Alex Rivera" };
+// Mock User - Change role_id to test: 1=RESIDENT, 2=TRASHMAN, 3=SUPERVISOR, 4=SI, 5=MHO, 6=COMMISSIONER
+// const mockUser = { role_id: 4, name: "Alex Rivera" };
 
 function Navigator() {
+    // Subscribe to Zustand state changes (re-renders when user state updates)
+    const user = useAuthStore((state) => state.user);
+    const accessToken = useAuthStore((state) => state.accessToken);
+
 return (
     <Router>
     <Routes>
@@ -77,10 +82,10 @@ return (
         <Route path="/signup" element={<Signup/>} />
 
         {/* ROLE-BASED PROTECTED ROUTES */}
-        <Route path="/" element={<SideTab user={mockUser} />}>
+        <Route path="/" element={user ? <SideTab user={user} /> : <Navigate to="/login" />}>
         
         {/* RESIDENT ROUTES */}
-        {mockUser?.role === "Resident" && (
+        {Number(user?.role_id) === 1 && (
             <>
             <Route index element={<Home/>} />
             <Route path="map" element={<Map/>}/>
@@ -96,7 +101,7 @@ return (
         )}
 
         {/* TRASH MAN ROUTES */}
-        {mockUser?.role === "TrashMan" && (
+        {Number(user?.role_id) === 2 && (
             <>
             <Route index element={<TrashManDashboard/>} />
             <Route path="route-timings" element={<RouteTimings/>} />
@@ -113,7 +118,7 @@ return (
         )}
 
         {/* SUPERVISOR */}
-        {mockUser?.role === "SuperVisor" && (
+        {Number(user?.role_id) === 3 && (
             <>
             <Route index element={<SupervisorDashboard/>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
@@ -131,7 +136,7 @@ return (
             </>
         )}
         {/* SANITARY INSPECTOR */}
-        { mockUser?.role === "SanitaryInspector" && (
+        {Number(user?.role_id) === 4 && (
             <>
             <Route index element={<InspectorDashboard/>} />
             <Route path="attendance" element={<InspectorAttendance/>} />
@@ -150,7 +155,7 @@ return (
             </>
         )}
         {/* MHO ROUTES */}
-        {mockUser?.role === "MHO" && (
+        {Number(user?.role_id) === 5 && (
             <>
             <Route index element={<MHODashboard/>} />
             <Route path="view-zone" element={<ViewZone/>} />
@@ -168,7 +173,7 @@ return (
             </>
             
         )}
-        {mockUser?.role === "Commissioner" && (
+        {Number(user?.role_id) === 6 && (
             <>
             <Route index element={<MHODashboard/>} />
             <Route path="view-zone" element={<ViewZone/>} />
