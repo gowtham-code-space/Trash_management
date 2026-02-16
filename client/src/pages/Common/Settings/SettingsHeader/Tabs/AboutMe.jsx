@@ -146,7 +146,6 @@ function AboutMe() {
                 </div>
                 <div>
                     <p className="text-sm font-bold text-primary">Change Picture</p>
-                    <p className="text-xs text-secondaryDark/60">JPG, GIF or PNG</p>
                 </div>
                 </div>
 

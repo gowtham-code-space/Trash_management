@@ -189,20 +189,28 @@ function SignUp() {
             return;
           }
 
-          const signupData = {
-            userId: user.user_id,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: userEmail, // Primary verified email from step 0
-            phoneNumber: formData.phoneNumber,
-            district: formData.district,
-            wardName: formData.wardName,
-            streetName: formData.streetName,
-            houseNumber: formData.houseNumber,
-            profilePic: formData.profilePic ? "uploaded_pic_url" : null // Handle file upload separately if needed
-          };
+          // Create FormData to handle file upload
+          const formDataToSend = new FormData();
+          formDataToSend.append('userId', user.user_id);
+          formDataToSend.append('firstName', formData.firstName);
+          formDataToSend.append('lastName', formData.lastName);
+          formDataToSend.append('email', userEmail); // Primary verified email from step 0
+          formDataToSend.append('phoneNumber', formData.phoneNumber);
+          formDataToSend.append('district', formData.district);
+          formDataToSend.append('wardName', formData.wardName);
+          formDataToSend.append('streetName', formData.streetName);
+          formDataToSend.append('houseNumber', formData.houseNumber);
+          
+          // Append profile picture file if exists
+          if (formData.profilePic) {
+            formDataToSend.append('profilePic', formData.profilePic);
+          }
 
-          const response = await api.post("/auth/complete-signup", signupData);
+          const response = await api.post("/auth/complete-signup", formDataToSend, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
 
           ToastNotification(response.message || "Account created successfully! Welcome aboard.", "success");
           setTimeout(function() {

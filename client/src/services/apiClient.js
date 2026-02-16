@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken, saveAccessToken, clearSession } from './session';
+import { getAccessToken, refreshAccessToken, clearSession } from './session';
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
@@ -26,25 +26,16 @@ apiClient.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                // Call refresh endpoint (sends HttpOnly cookie automatically)
-                const refreshResponse = await axios.post(
-                    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'}/auth/refresh`,
-                    {},
-                    { withCredentials: true }
-                );
-
-                const { accessToken } = refreshResponse.data.data;
+                // Use shared refresh function (prevents race conditions)
+                const accessToken = await refreshAccessToken();
                 
                 if (accessToken) {
-                    saveAccessToken(accessToken);
-                    
                     // Retry original request with new token
                     originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                     return apiClient(originalRequest);
                 }
             } catch (refreshError) {
-                // Refresh failed → clear session and redirect to login
-                clearSession();
+                // Refresh failed → redirect to login (session already cleared by refreshAccessToken)
                 window.location.href = '/login';
                 return Promise.reject(refreshError);
             }

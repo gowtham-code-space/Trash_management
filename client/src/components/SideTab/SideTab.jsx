@@ -315,7 +315,7 @@ return (
             </div>
             <div className="relative group cursor-pointer transition-transform active:scale-95">
             <img 
-                src={userDetails?.profile_pic || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.user_id || 'user'}`} 
+                src={userDetails?.profile_pic || "https://res.cloudinary.com/do7fy5b0l/image/upload/v1771158049/avator_placeholder_ijsokb.png"} 
                 alt="Avatar" 
                 className="w-10 h-10 rounded-full border-2 border-primaryLight p-0.5"
             />

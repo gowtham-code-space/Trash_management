@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { 
     Notification, 
     Camera, 
@@ -8,12 +8,17 @@ import {
     Add,
     RightArrow,
     Check,
-    TrashRoute
+    TrashRoute,
+    ZoomIn,
+    ZoomOut,
+    Expand
 } from "../../assets/icons/icons";
 import MyReports from "../../components/Cards/Residents/MyReports";
 import Pagination from "../../utils/Pagination";
 import { useNavigate } from "react-router-dom";
 import ThemeStore from "../../store/ThemeStore";
+import ToastNotification from "../../components/Notification/ToastNotification";
+import { ToastContainer } from "react-toastify";
 
 // Mock Data declared at component top level
 const mockReports = [
@@ -29,6 +34,20 @@ const mockReports = [
 function Home() {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
+    const [isMapExpanded, setIsMapExpanded] = useState(false);
+
+    function handleZoomIn() {
+        ToastNotification("Zooming in", "info");
+    }
+
+    function handleZoomOut() {
+        ToastNotification("Zooming out", "info");
+    }
+
+    function handleExpandMap() {
+        setIsMapExpanded(!isMapExpanded);
+        ToastNotification(isMapExpanded ? "Map view minimized" : "Map view expanded", "info");
+    }
 
     return (
         <div className={isDarkTheme ? "dark" : ""}>
@@ -37,26 +56,8 @@ function Home() {
             
             {/* LEFT COLUMN: Main Feed */}
             <div className="lg:col-span-2 space-y-6">
-            
-            {/* Header Card */}
-            <header className="bg-primary p-5 rounded-veryLarge flex items-center justify-between text-white shadow-sm transition-all duration-200 hover:scale-[0.99]">
-                <div>
-                <h1 className="text-base md:text-lg font-bold tracking-tight">Good morning, Alex</h1>
-                <p className="text-xs opacity-80 mt-1 font-medium">Your vigilance keeps the neighborhood clean and healthy.</p>
-                </div>
-                <div className="flex items-center gap-3">
-                <div className="bg-white/10 px-3 py-2 rounded-large flex items-center gap-2 border border-white/20">
-                    <Star size={18} defaultColor="#F2C94C"/>
-                    <span className="text-xs font-bold whitespace-nowrap">420 Points</span>
-                </div>
-                <button className="p-2 bg-white/10 rounded-large hover:bg-white/20 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20">
-                    <Notification size={20} isPressed={false} isDarkTheme={true} />
-                </button>
-                </div>
-            </header>
-
             {/* Map View Section */}
-            <div className="w-full h-64 rounded-veryLarge border border-secondary overflow-hidden shadow-sm relative group">
+            <div className="w-full h-80 rounded-veryLarge border border-secondary overflow-hidden shadow-sm relative group">
                 <img 
                 src="https://tile.openstreetmap.org/14/4824/6156.png" 
                 className="bg-white w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
@@ -64,6 +65,31 @@ function Home() {
                 />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-2 py-1 rounded-medium border border-secondary text-xs font-bold text-primary uppercase tracking-tight">
                 San Francisco District
+                </div>
+                
+                {/* Expand Button */}
+                <button
+                    onClick={handleExpandMap}
+                    className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                >
+                    <Expand size={14} defaultColor="#145B47" />
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Expand</p>
+                </button>
+                
+                {/* Map Controls */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 flex flex-col gap-1.5 sm:gap-2">
+                    <button
+                    onClick={handleZoomIn}
+                    className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-medium shadow-md flex items-center justify-center hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                    >
+                    <ZoomIn size={18} defaultColor="#145B47" />
+                    </button>
+                    <button
+                    onClick={handleZoomOut}
+                    className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-medium shadow-md flex items-center justify-center hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                    >
+                    <ZoomOut size={18} defaultColor="#145B47" />
+                    </button>
                 </div>
             </div>
 
@@ -229,6 +255,7 @@ function Home() {
 
         </div>
         </div>
+        <ToastContainer />
         </div>
     );
     }

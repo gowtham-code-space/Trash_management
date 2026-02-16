@@ -2,6 +2,7 @@ import { badRequestResponse, successResponse, unauthorizedResponse, internalServ
 import { requestOtp, verifyOtp, refreshAccessToken, completeSignup, logout } from './auth.services.js';
 import { verifyRefreshToken } from '../utils/jwt.js';
 import { getUserById } from './auth.model.js';
+import { getPublicUrl } from '../utils/publicUrlService.js';
 
 export const requestOtpHandler = async (req, res) => {
     try {
@@ -142,10 +143,16 @@ export const logoutHandler = async (req, res) => {
 
 export const completeSignupHandler = async (req, res) => {
     try {
-        const { userId, firstName, lastName, email, phoneNumber, district, wardName, streetName, houseNumber, profilePic } = req.body;
+        const { userId, firstName, lastName, email, phoneNumber, district, wardName, streetName, houseNumber } = req.body;
         
         if (!userId || !firstName || !lastName || !email || !phoneNumber || !district || !wardName || !streetName || !houseNumber) {
             return badRequestResponse(res, 'All fields are required');
+        }
+        
+        // Handle profile picture upload
+        let profilePicUrl = null;
+        if (req.file) {
+            profilePicUrl = req.file.path || getPublicUrl(req.file.filename);
         }
         
         const userData = {
@@ -157,7 +164,7 @@ export const completeSignupHandler = async (req, res) => {
             wardName,
             streetName,
             houseNumber,
-            profilePic
+            profilePic: profilePicUrl
         };
         
         const result = await completeSignup(userId, userData);
