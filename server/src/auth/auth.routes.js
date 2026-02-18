@@ -1,5 +1,5 @@
 import express from 'express';
-import { requestOtpHandler, verifyOtpHandler, refreshTokenHandler, logoutHandler, completeSignupHandler, getUserDetailsHandler } from './auth.controller.js';
+import { requestOtpHandler, verifyOtpHandler, refreshTokenHandler, logoutHandler, completeSignupHandler, getUserDetailsHandler, getDistrictsHandler, getWardsHandler, getStreetsHandler, checkContactHandler } from './auth.controller.js';
 import upload, { handleMulterError } from '../middleware/multer.middleware.js';
 
 const router = express.Router();
@@ -10,5 +10,10 @@ router.post('/complete-signup', upload.single('profilePic'), handleMulterError, 
 router.post('/refresh', refreshTokenHandler);
 router.post('/logout', logoutHandler);
 router.get('/user/:userId', getUserDetailsHandler);
+
+router.get('/districts', getDistrictsHandler);
+router.get('/wards/:districtId', getWardsHandler);
+router.get('/streets/:wardId', getStreetsHandler);
+router.post('/check-contact', checkContactHandler);
 
 export default router;

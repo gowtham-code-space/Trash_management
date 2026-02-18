@@ -7,7 +7,8 @@ import { badRequestResponse } from '../utils/response.js';
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: (req, file) => {
-        const userId = req.body.userId || 'unknown';
+        // Use authenticated user's ID if available, otherwise fallback
+        const userId = req.user?.user_id || req.body.userId || 'unknown';
         return {
             folder: `trash_management/${userId}`,
             allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],

@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 
 // Import routes
 import authRoutes from './auth/auth.routes.js';
+import settingsRoutes from './features/common/settings/settings.routes.js';
 
 const app = express();
 
@@ -29,6 +30,8 @@ app.get('/health', (req, res) => {
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/settings', settingsRoutes);
+
 // Global error handler
 app.use((err, req, res, next) => {
     console.error('Global error:', err);

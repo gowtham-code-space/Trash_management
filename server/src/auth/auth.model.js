@@ -169,6 +169,7 @@ export const completeUserSignup = async (userId, userData) => {
                 email = ?,
                 phone_number = ?,
                 district = ?,
+                ward_number = ?,
                 ward_name = ?,
                 street_name = ?,
                 house_number = ?,
@@ -184,6 +185,7 @@ export const completeUserSignup = async (userId, userData) => {
             userData.email,
             userData.phoneNumber,
             userData.district,
+            userData.wardNumber,
             userData.wardName,
             userData.streetName,
             userData.houseNumber,
@@ -241,6 +243,78 @@ export const clearRefreshTokenHash = async (userId) => {
         return result.affectedRows > 0;
     } catch (error) {
         console.error('Error clearing refresh token hash:', error);
+        throw error;
+    }
+};
+
+export const getAllDistricts = async () => {
+    try {
+        const query = `SELECT district_id, district_name FROM district ORDER BY district_name`;
+        
+        const conn = await pool.getConnection();
+        const [rows] = await conn.execute(query);
+        conn.release();
+        
+        return rows;
+    } catch (error) {
+        console.error('Error fetching districts:', error);
+        throw error;
+    }
+};
+
+export const getWardsByDistrictId = async (districtId) => {
+    try {
+        const query = `
+            SELECT w.ward_id, w.ward_number, w.ward_name 
+            FROM ward w
+            JOIN zone z ON w.zone_id = z.zone_id
+            WHERE z.district_id = ?
+            ORDER BY w.ward_number
+        `;
+        
+        const conn = await pool.getConnection();
+        const [rows] = await conn.execute(query, [districtId]);
+        conn.release();
+        
+        return rows;
+    } catch (error) {
+        console.error('Error fetching wards:', error);
+        throw error;
+    }
+};
+
+export const getStreetsByWardId = async (wardId) => {
+    try {
+        const query = `
+            SELECT street_id, street_name 
+            FROM street 
+            WHERE ward_id = ?
+            ORDER BY street_name
+        `;
+        
+        const conn = await pool.getConnection();
+        const [rows] = await conn.execute(query, [wardId]);
+        conn.release();
+        
+        return rows;
+    } catch (error) {
+        console.error('Error fetching streets:', error);
+        throw error;
+    }
+};
+
+export const checkContactExists = async (contact, type) => {
+    try {
+        const column = type === 'email' ? 'email' : 'phone_number';
+        const query = `SELECT user_id FROM users WHERE ${column} = ?`;
+        
+        const conn = await pool.getConnection();
+        const [rows] = await conn.execute(query, [contact]);
+        conn.release();
+        
+        return rows.length > 0;
+    } catch (error) {
+        console.error('Error checking contact exists:', error);
         throw error;
     }
 };

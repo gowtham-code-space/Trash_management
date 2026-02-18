@@ -239,3 +239,43 @@ export const logout = async (userId) => {
         throw error;
     }
 };
+
+export const getDistricts = async () => {
+    try {
+        const districts = await authModel.getAllDistricts();
+        return { success: true, data: districts };
+    } catch (error) {
+        console.error('Error fetching districts:', error);
+        throw error;
+    }
+};
+
+export const getWards = async (districtId) => {
+    try {
+        const wards = await authModel.getWardsByDistrictId(districtId);
+        return { success: true, data: wards };
+    } catch (error) {
+        console.error('Error fetching wards:', error);
+        throw error;
+    }
+};
+
+export const getStreets = async (wardId) => {
+    try {
+        const streets = await authModel.getStreetsByWardId(wardId);
+        return { success: true, data: streets };
+    } catch (error) {
+        console.error('Error fetching streets:', error);
+        throw error;
+    }
+};
+
+export const checkContact = async (contact, type) => {
+    try {
+        const exists = await authModel.checkContactExists(contact, type);
+        return { exists };
+    } catch (error) {
+        console.error('Error checking contact:', error);
+        throw error;
+    }
+};

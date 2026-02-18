@@ -16,6 +16,11 @@ export const api = {
         return res.data;
     },
 
+    patch: async (url, data, config) => {
+        const res = await apiClient.patch(url, data, config);
+        return res.data;
+    },
+
     delete: async (url, config) => {
         const res = await apiClient.delete(url, config);
         return res.data;

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Camera, Mobile, Email, Location, Home, People, Check, Settings } from "../../../assets/icons/icons";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import ThemeStore from "../../../store/ThemeStore";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
-import { api } from "../../../services/apiMethods";
-import { getUser } from "../../../services/session";
+import { requestOtp, completeSignup, checkContact, getDistricts, getWardsByDistrict, getStreetsByWard } from "../../../services/features/authService";
+import { getUser } from "../../../services/core/session";
 
 function SignUp() {
   const { isDarkTheme } = ThemeStore();
@@ -19,6 +19,7 @@ function SignUp() {
     phoneNumber: "",
     email: "",
     district: "",
+    wardNumber: "",
     wardName: "",
     streetName: "",
     houseNumber: ""
@@ -32,27 +33,14 @@ function SignUp() {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const districts = [
-    "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya",
-    "Galle", "Matara", "Hambantota", "Jaffna", "Kilinochchi", "Mannar",
-    "Vavuniya", "Mullaitivu", "Batticaloa", "Ampara", "Trincomalee",
-    "Kurunegala", "Puttalam", "Anuradhapura", "Polonnaruwa", "Badulla",
-    "Monaragala", "Ratnapura", "Kegalle"
-  ];
-
-  const wards = [
-    "Ward 1 - Central", "Ward 2 - North", "Ward 3 - South",
-    "Ward 4 - East", "Ward 5 - West", "Ward 6 - Northeast",
-    "Ward 7 - Southeast", "Ward 8 - Northwest", "Ward 9 - Southwest",
-    "Ward 10 - Downtown"
-  ];
-
-  const streets = [
-    "Main Street", "First Street", "Second Street", "Third Street",
-    "Park Avenue", "Lake Road", "Hill Street", "Station Road",
-    "Temple Road", "School Lane"
-  ];
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [streets, setStreets] = useState([]);
+  const [selectedDistrictId, setSelectedDistrictId] = useState("");
+  const [selectedWardId, setSelectedWardId] = useState();
 
   const steps = [
     { id: 0, title: "Verify Identity", description: "Verify your phone or email" },
@@ -60,6 +48,53 @@ function SignUp() {
     { id: 2, title: "Contact", description: "Communication details" },
     { id: 3, title: "Where do you live", description: "Address information" }
   ];
+
+  useEffect(function() {
+    async function fetchDistricts() {
+      try {
+        const response = await getDistricts();
+        setDistricts(response.data || []);
+      } catch (error) {
+        console.error("Error fetching districts:", error);
+        ToastNotification("Failed to load districts", "error");
+      }
+    }
+    fetchDistricts();
+  }, []);
+
+  async function handleDistrictChange(districtId, districtName) {
+    setSelectedDistrictId(districtId);
+    setFormData({ ...formData, district: districtName, wardName: "", wardNumber: "", streetName: "" });
+    setWards([]);
+    setStreets([]);
+    setSelectedWardId("");
+    
+    if (districtId) {
+      try {
+        const response = await getWardsByDistrict(districtId);
+        setWards(response.data || []);
+      } catch (error) {
+        console.error("Error fetching wards:", error);
+        ToastNotification("Failed to load wards", "error");
+      }
+    }
+  }
+
+  async function handleWardChange(wardId, wardNumber, wardName) {
+    setSelectedWardId(wardId);
+    setFormData({ ...formData, wardNumber, wardName, streetName: "" });
+    setStreets([]);
+    
+    if (wardId) {
+      try {
+        const response = await getStreetsByWard(wardId);
+        setStreets(response.data || []);
+      } catch (error) {
+        console.error("Error fetching streets:", error);
+        ToastNotification("Failed to load streets", "error");
+      }
+    }
+  }
 
   function handlePhoneInputVerify(value) {
     const cleaned = value.replace(/\D/g, "");
@@ -69,6 +104,8 @@ function SignUp() {
   }
 
   async function handleSendOtp() {
+    if (isSendingOtp) return;
+
     if (selectedMethod === "SMS") {
       ToastNotification("OTP via phone is under construction", "info");
       return;
@@ -92,7 +129,8 @@ function SignUp() {
     }
 
     try {
-      const response = await api.post("/auth/request-otp", {
+      setIsSendingOtp(true);
+      const response = await requestOtp({
         email: identifier,
         isSignup: true
       });
@@ -113,17 +151,19 @@ function SignUp() {
       console.error("Error sending OTP:", error);
       const errorMsg = error.response?.data?.message || error.message || "Failed to send OTP";
       ToastNotification(errorMsg, "error");
+    } finally {
+      setIsSendingOtp(false);
     }
   }
 
   function handleOtpVerified(data) {
-    // Called when OTP is verified successfully
     if (!completedSteps.includes(0)) {
       setCompletedSteps([...completedSteps, 0]);
     }
     setShowOtpModal(false);
     setCurrentStep(1);
-    setIsOtpSent(false); // Reset OTP sent state for potential re-verification
+    setIsOtpSent(false);
+    setIsSendingOtp(false);
     ToastNotification("Verification successful! Please complete your profile.", "success");
   }
 
@@ -143,27 +183,63 @@ function SignUp() {
     setFormData({ ...formData, [field]: value });
   }
 
-  function validateStep(step) {
+  async function validateStep(step) {
     if (step === 0) {
-      // Verify step - handled by OTP modal
-      return false; // Don't allow next from verify screen, must use OTP
+      return false;
     } else if (step === 1) {
       if (!formData.firstName || !formData.lastName) {
         ToastNotification("Please enter your first and last name", "error");
         return false;
       }
     } else if (step === 2) {
-      // Contact step - Phone number is required
-      if (!formData.phoneNumber) {
-        ToastNotification("Please enter your phone number", "error");
-        return false;
-      }
-      if (formData.phoneNumber.length < 10) {
-        ToastNotification("Please enter a valid phone number (at least 10 digits)", "error");
-        return false;
+      const isEmailSignup = userEmail.includes('@');
+      
+      if (isEmailSignup) {
+        if (!formData.phoneNumber) {
+          ToastNotification("Please enter your phone number", "error");
+          return false;
+        }
+        if (formData.phoneNumber.length < 10) {
+          ToastNotification("Please enter a valid phone number (at least 10 digits)", "error");
+          return false;
+        }
+        
+        try {
+          const response = await checkContact(formData.phoneNumber, 'phone');
+          if (response.data.exists) {
+            ToastNotification("Phone number already exists", "info");
+            return false;
+          }
+        } catch (error) {
+          console.error("Error checking phone:", error);
+          ToastNotification("Failed to verify phone number", "error");
+          return false;
+        }
+      } else {
+        if (!formData.email) {
+          ToastNotification("Please enter your email address", "error");
+          return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+          ToastNotification("Please enter a valid email address", "error");
+          return false;
+        }
+        
+        try {
+          const response = await checkContact(formData.email, 'email');
+          if (response.data.exists) {
+            ToastNotification("Email already exists", "info");
+            return false;
+          }
+        } catch (error) {
+          console.error("Error checking email:", error);
+          ToastNotification("Failed to verify email address", "error");
+          return false;
+        }
       }
     } else if (step === 3) {
-      if (!formData.district || !formData.wardName || !formData.streetName || !formData.houseNumber) {
+      if (!formData.district || !formData.wardNumber || !formData.wardName || !formData.streetName || !formData.houseNumber) {
         ToastNotification("Please fill in all address fields", "error");
         return false;
       }
@@ -172,16 +248,21 @@ function SignUp() {
   }
 
   async function handleNext() {
-    if (validateStep(currentStep)) {
-      if (!completedSteps.includes(currentStep)) {
-        setCompletedSteps([...completedSteps, currentStep]);
-      }
-      
-      if (currentStep < 3) {
-        setCurrentStep(currentStep + 1);
-      } else {
-        // Final step - complete signup
-        try {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    try {
+      const isValid = await validateStep(currentStep);
+      if (isValid) {
+        if (!completedSteps.includes(currentStep)) {
+          setCompletedSteps([...completedSteps, currentStep]);
+        }
+        
+        if (currentStep < 3) {
+          setCurrentStep(currentStep + 1);
+        } else {
+          // Final step - complete signup
+          try {
           const user = getUser();
           if (!user || !user.user_id) {
             ToastNotification("Session expired. Please start again.", "error");
@@ -194,9 +275,18 @@ function SignUp() {
           formDataToSend.append('userId', user.user_id);
           formDataToSend.append('firstName', formData.firstName);
           formDataToSend.append('lastName', formData.lastName);
-          formDataToSend.append('email', userEmail); // Primary verified email from step 0
-          formDataToSend.append('phoneNumber', formData.phoneNumber);
+          
+          const isEmailSignup = userEmail.includes('@');
+          if (isEmailSignup) {
+            formDataToSend.append('email', userEmail);
+            formDataToSend.append('phoneNumber', formData.phoneNumber);
+          } else {
+            formDataToSend.append('phoneNumber', userEmail);
+            formDataToSend.append('email', formData.email);
+          }
+          
           formDataToSend.append('district', formData.district);
+          formDataToSend.append('wardNumber', formData.wardNumber);
           formDataToSend.append('wardName', formData.wardName);
           formDataToSend.append('streetName', formData.streetName);
           formDataToSend.append('houseNumber', formData.houseNumber);
@@ -206,7 +296,7 @@ function SignUp() {
             formDataToSend.append('profilePic', formData.profilePic);
           }
 
-          const response = await api.post("/auth/complete-signup", formDataToSend, {
+          const response = await completeSignup(formDataToSend, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -221,6 +311,7 @@ function SignUp() {
               phoneNumber: "",
               email: "",
               district: "",
+              wardNumber: "",
               wardName: "",
               streetName: "",
               houseNumber: ""
@@ -230,11 +321,14 @@ function SignUp() {
             setCompletedSteps([]);
             navigate("/");
           }, 1500);
-        } catch (error) {
-          console.error("Error completing signup:", error);
-          ToastNotification(error.response?.data?.message || "Failed to complete signup. Please try again.", "error");
+          } catch (error) {
+            console.error("Error completing signup:", error);
+            ToastNotification(error.response?.data?.message || "Failed to complete signup. Please try again.", "error");
+          }
         }
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -361,14 +455,14 @@ function SignUp() {
           {/* Action Button */}
           <button
             onClick={handleSendOtp}
-            disabled={isOtpSent}
-            className={`w-full bg-primaryLight text-white font-medium py-3 rounded-lg transition-all duration-200 ${
-              isOtpSent 
-                ? 'opacity-50 cursor-not-allowed' 
-                : 'hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
+            disabled={isOtpSent || isSendingOtp}
+            className={`w-full font-medium py-3 rounded-lg transition-all duration-200 ${
+              isOtpSent || isSendingOtp
+                ? 'bg-primaryLight/60 text-white cursor-not-allowed' 
+                : 'bg-primaryLight text-white hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
             }`}
           >
-            {isOtpSent ? 'OTP Sent' : 'Send Secure OTP'}
+            {isSendingOtp ? 'Sending...' : isOtpSent ? 'OTP Sent' : 'Send OTP'}
           </button>
         </div>
       );
@@ -433,11 +527,13 @@ function SignUp() {
         </div>
       );
     } else if (currentStep === 2) {
+      const isEmailSignup = userEmail.includes('@');
+      
       return (
         <div className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
-              <Email size={16} defaultColor="#316F5D" />
+              {isEmailSignup ? <Email size={16} defaultColor="#316F5D" /> : <Mobile size={16} defaultColor="#316F5D" />}
               Primary Contact (Verified)
             </label>
             <input 
@@ -449,19 +545,35 @@ function SignUp() {
             <p className="text-xs text-gray-400 mt-1">This is your verified contact from step 1</p>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
-              <Mobile size={16} defaultColor="#316F5D" />
-              Phone Number
-            </label>
-            <input 
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={function(e) { handleInputChange("phoneNumber", e.target.value); }}
-              placeholder="Enter phone number"
-              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
-            />
-          </div>
+          {isEmailSignup ? (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
+                <Mobile size={16} defaultColor="#316F5D" />
+                Phone Number
+              </label>
+              <input 
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={function(e) { handleInputChange("phoneNumber", e.target.value); }}
+                placeholder="Enter phone number"
+                className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+              />
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
+                <Email size={16} defaultColor="#316F5D" />
+                Email Address
+              </label>
+              <input 
+                type="email"
+                value={formData.email}
+                onChange={function(e) { handleInputChange("email", e.target.value); }}
+                placeholder="Enter email address"
+                className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+              />
+            </div>
+          )}
         </div>
       );
     } else {
@@ -472,14 +584,19 @@ function SignUp() {
               <Location size={16} defaultColor="#316F5D" />
               District
             </label>
-            <select
-              value={formData.district}
-              onChange={function(e) { handleInputChange("district", e.target.value); }}
+<select
+              value={selectedDistrictId}
+              onChange={function(e) { 
+                const selected = districts.find(d => d.district_id == e.target.value);
+                if (selected) {
+                  handleDistrictChange(selected.district_id, selected.district_name);
+                }
+              }}
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none"
             >
               <option value="">Select district</option>
               {districts.map(function(district) {
-                return <option key={district} value={district}>{district}</option>;
+                return <option key={district.district_id} value={district.district_id}>{district.district_name}</option>;
               })}
             </select>
           </div>
@@ -489,14 +606,20 @@ function SignUp() {
               <Location size={16} defaultColor="#316F5D" />
               Ward Name
             </label>
-            <select
-              value={formData.wardName}
-              onChange={function(e) { handleInputChange("wardName", e.target.value); }}
-              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none"
+<select
+              value={selectedWardId}
+              onChange={function(e) { 
+                const selected = wards.find(w => w.ward_id == e.target.value);
+                if (selected) {
+                  handleWardChange(selected.ward_id, selected.ward_number, selected.ward_name);
+                }
+              }}
+              disabled={!selectedDistrictId}
+              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">Select ward</option>
               {wards.map(function(ward) {
-                return <option key={ward} value={ward}>{ward}</option>;
+                return <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>;
               })}
             </select>
           </div>
@@ -506,14 +629,15 @@ function SignUp() {
               <Location size={16} defaultColor="#316F5D" />
               Street Name
             </label>
-            <select
+<select
               value={formData.streetName}
               onChange={function(e) { handleInputChange("streetName", e.target.value); }}
-              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none"
+              disabled={!selectedWardId}
+              className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <option value="">Select street</option>
               {streets.map(function(street) {
-                return <option key={street} value={street}>{street}</option>;
+                return <option key={street.street_id} value={street.street_name}>{street.street_name}</option>;
               })}
             </select>
           </div>
@@ -576,9 +700,14 @@ function SignUp() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                    disabled={isLoading}
+                    className={`flex-1 py-3 rounded-medium text-sm font-medium transition-all duration-200 ease-in-out ${
+                      isLoading
+                        ? 'bg-primary/60 text-white cursor-not-allowed'
+                        : 'bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]'
+                    }`}
                   >
-                    {currentStep === 3 ? "Create Account" : "Continue"}
+                    {isLoading ? "Loading..." : (currentStep === 3 ? "Create Account" : "Continue")}
                   </button>
                 </div>
               )}
@@ -641,9 +770,14 @@ function SignUp() {
                     <button
                       type="button"
                       onClick={handleNext}
-                      className="flex-1 bg-primary text-white py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
+                      disabled={isLoading}
+                      className={`flex-1 py-3 rounded-medium text-sm font-medium transition-all duration-200 ease-in-out ${
+                        isLoading
+                          ? 'bg-primary/60 text-white cursor-not-allowed'
+                          : 'bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]'
+                      }`}
                     >
-                      {currentStep === 3 ? "Create Account" : "Continue"}
+                      {isLoading ? "Loading..." : (currentStep === 3 ? "Create Account" : "Continue")}
                     </button>
                   </div>
                 )}

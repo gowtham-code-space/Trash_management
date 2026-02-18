@@ -1,5 +1,5 @@
 import { badRequestResponse, successResponse, unauthorizedResponse, internalServerErrorResponse, createdResponse } from '../utils/response.js';
-import { requestOtp, verifyOtp, refreshAccessToken, completeSignup, logout } from './auth.services.js';
+import { requestOtp, verifyOtp, refreshAccessToken, completeSignup, logout, getDistricts, getWards, getStreets, checkContact } from './auth.services.js';
 import { verifyRefreshToken } from '../utils/jwt.js';
 import { getUserById } from './auth.model.js';
 import { getPublicUrl } from '../utils/publicUrlService.js';
@@ -143,13 +143,12 @@ export const logoutHandler = async (req, res) => {
 
 export const completeSignupHandler = async (req, res) => {
     try {
-        const { userId, firstName, lastName, email, phoneNumber, district, wardName, streetName, houseNumber } = req.body;
+        const { userId, firstName, lastName, email, phoneNumber, district, wardNumber, wardName, streetName, houseNumber } = req.body;
         
-        if (!userId || !firstName || !lastName || !email || !phoneNumber || !district || !wardName || !streetName || !houseNumber) {
-            return badRequestResponse(res, 'All fields are required');
+        if (!userId || !firstName || !lastName || !email || !phoneNumber || !district || !wardNumber || !wardName || !streetName || !houseNumber) {
+            return badRequestResponse(res, 'All fields are required: First name, Last name, Email, Phone number, District, Ward, Street, and House/Flat number');
         }
         
-        // Handle profile picture upload
         let profilePicUrl = null;
         if (req.file) {
             profilePicUrl = req.file.path || getPublicUrl(req.file.filename);
@@ -161,6 +160,7 @@ export const completeSignupHandler = async (req, res) => {
             email,
             phoneNumber,
             district,
+            wardNumber,
             wardName,
             streetName,
             houseNumber,
@@ -192,7 +192,6 @@ export const getUserDetailsHandler = async (req, res) => {
             return badRequestResponse(res, 'User not found');
         }
         
-        // Return user details without sensitive data
         return successResponse(res, 'User details fetched successfully', {
             user_id: user.user_id,
             first_name: user.first_name || null,
@@ -208,5 +207,72 @@ export const getUserDetailsHandler = async (req, res) => {
     } catch (error) {
         console.error('Error in getUserDetailsHandler:', error);
         return internalServerErrorResponse(res, error.message || 'Failed to fetch user details');
+    }
+};
+
+export const getDistrictsHandler = async (req, res) => {
+    try {
+        const result = await getDistricts();
+        return successResponse(res, 'Districts fetched successfully', result.data);
+    } catch (error) {
+        console.error('Error in getDistrictsHandler:', error);
+        return internalServerErrorResponse(res, 'Failed to fetch districts');
+    }
+};
+
+export const getWardsHandler = async (req, res) => {
+    try {
+        const { districtId } = req.params;
+        
+        if (!districtId) {
+            return badRequestResponse(res, 'District ID is required');
+        }
+        
+        const result = await getWards(districtId);
+        return successResponse(res, 'Wards fetched successfully', result.data);
+    } catch (error) {
+        console.error('Error in getWardsHandler:', error);
+        return internalServerErrorResponse(res, 'Failed to fetch wards');
+    }
+};
+
+export const getStreetsHandler = async (req, res) => {
+    try {
+        const { wardId } = req.params;
+        
+        if (!wardId) {
+            return badRequestResponse(res, 'Ward ID is required');
+        }
+        
+        const result = await getStreets(wardId);
+        return successResponse(res, 'Streets fetched successfully', result.data);
+    } catch (error) {
+        console.error('Error in getStreetsHandler:', error);
+        return internalServerErrorResponse(res, 'Failed to fetch streets');
+    }
+};
+
+export const checkContactHandler = async (req, res) => {
+    try {
+        const { contact, type } = req.body;
+        
+        if (!contact || !type) {
+            return badRequestResponse(res, 'Contact and type are required');
+        }
+        
+        if (type !== 'email' && type !== 'phone') {
+            return badRequestResponse(res, 'Type must be either "email" or "phone"');
+        }
+        
+        const result = await checkContact(contact, type);
+        
+        if (result.exists) {
+            return successResponse(res, `${type === 'email' ? 'Email' : 'Phone number'} already exists`, { exists: true });
+        }
+        
+        return successResponse(res, `${type === 'email' ? 'Email' : 'Phone number'} is available`, { exists: false });
+    } catch (error) {
+        console.error('Error in checkContactHandler:', error);
+        return internalServerErrorResponse(res, 'Failed to check contact');
     }
 };

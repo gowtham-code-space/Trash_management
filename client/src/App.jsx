@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navigator from './Navigation/Navigator'
-import { silentRefresh } from './services/session'
+import { silentRefresh } from './services/core/session'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

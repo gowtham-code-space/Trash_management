@@ -1,45 +1,113 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Camera, Certificate, Check, RightArrow, Edit, X } from "../../../../../assets/icons/icons";
+import { Camera, Certificate, Check, RightArrow, Edit, X, Trash } from "../../../../../assets/icons/icons";
 import ToastNotification from "../../../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import UpdateContactInfo from "../../../../../components/Modals/Settings/UpdateContactInfo";
+import ViewProfileModal from "../../../../../components/Modals/Settings/ViewProfileModal";
+import { getProfile, updateProfile, requestPhoneOtp, requestEmailOtp, verifyEmailOtp, deleteProfilePic } from "../../../../../services/features/settingsService";
 
 function AboutMe() {
     const navigate = useNavigate();
     const [showModal, setShowModal] = useState(false);
+    const [showProfileModal, setShowProfileModal] = useState(false);
     const [modalType, setModalType] = useState("");
     const [isEditMode, setIsEditMode] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [isTogglingEdit, setIsTogglingEdit] = useState(false);
+    const [profilePicFile, setProfilePicFile] = useState(null);
+    
+    // Track original values to check for changes
+    const [originalData, setOriginalData] = useState({
+        firstName: "",
+        lastName: ""
+    });
+    
     const [userData, setUserData] = useState({
-        firstName: "Arjun",
-        lastName: "Kumar",
-        phone: "+91 98765 43210",
-        email: "arjun.k@greencity.in",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
         profilePic: null,
         certificate: "View your certifications"
     });
 
     const [editingField, setEditingField] = useState(null);
-    const [tempFirstName, setTempFirstName] = useState(userData.firstName);
-    const [tempLastName, setTempLastName] = useState(userData.lastName);
-    const [tempPhone, setTempPhone] = useState(userData.phone);
-    const [tempEmail, setTempEmail] = useState(userData.email);
+    const [tempFirstName, setTempFirstName] = useState("");
+    const [tempLastName, setTempLastName] = useState("");
+    const [tempPhone, setTempPhone] = useState("");
+    const [tempEmail, setTempEmail] = useState("");
+
+    useEffect(function () {
+        async function fetchProfile() {
+            try {
+                const response = await getProfile();
+                const profile = response.data.profile;
+                
+                const profileData = {
+                    firstName: profile.first_name || "",
+                    lastName: profile.last_name || "",
+                    phone: profile.phone_number || "",
+                    email: profile.email || "",
+                    profilePic: profile.profile_pic || null,
+                    certificate: "View your certifications"
+                };
+                
+                setUserData(profileData);
+                setOriginalData({
+                    firstName: profile.first_name || "",
+                    lastName: profile.last_name || ""
+                });
+                
+                setTempFirstName(profile.first_name || "");
+                setTempLastName(profile.last_name || "");
+                setTempPhone(profile.phone_number || "");
+                setTempEmail(profile.email || "");
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                ToastNotification("Failed to load profile", "error");
+            } finally {
+                setLoading(false);
+            }
+        }
+        
+        fetchProfile();
+    }, []);
 
     function handleProfilePicChange(e) {
         const file = e.target.files[0];
         if (file) {
-        if (!file.type.startsWith('image/')) {
-            ToastNotification("Please select a valid image file", "error");
-            return;
+            if (!file.type.startsWith('image/')) {
+                ToastNotification("Please select a valid image file", "error");
+                return;
+            }
+            setProfilePicFile(file);
+
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                setUserData(function (prev) {
+                    return { ...prev, profilePic: reader.result };
+                });
+            };
+            reader.readAsDataURL(file);
         }
-        const reader = new FileReader();
-        reader.onloadend = function () {
-            setUserData(function (prev) {
-            return { ...prev, profilePic: reader.result };
-            });
-            ToastNotification("Profile picture updated successfully", "success");
-        };
-        reader.readAsDataURL(file);
+    }
+
+    async function handleDeleteProfilePic() {
+        if (!userData.profilePic) return;
+        
+        try {
+            const response = await deleteProfilePic();
+            if (response.success) {
+                setUserData(function (prev) {
+                    return { ...prev, profilePic: null };
+                });
+                setProfilePicFile(null);
+                ToastNotification("Profile picture deleted successfully", "success");
+            }
+        } catch (error) {
+            console.error('Error deleting profile picture:', error);
+            ToastNotification(error.response?.data?.message || "Failed to delete profile picture", "error");
         }
     }
 
@@ -51,23 +119,49 @@ function AboutMe() {
         if (field === "email") setTempEmail(userData.email);
     }
 
-    function handleSaveClick(field) {
+    async function handleSaveClick(field) {
         if (field === "firstName" || field === "lastName") {
-        setUserData(function (prev) {
-            return {
-            ...prev,
-            firstName: field === "firstName" ? tempFirstName : prev.firstName,
-            lastName: field === "lastName" ? tempLastName : prev.lastName
-            };
-        });
-        setEditingField(null);
-        ToastNotification("Name updated successfully", "success");
+            setUserData(function (prev) {
+                return {
+                    ...prev,
+                    firstName: field === "firstName" ? tempFirstName : prev.firstName,
+                    lastName: field === "lastName" ? tempLastName : prev.lastName
+                };
+            });
+            setEditingField(null);
         } else if (field === "phone") {
-        setModalType("phone");
-        setShowModal(true);
+            try {
+                const response = await requestPhoneOtp(tempPhone);
+                
+                if (response.data?.sameAsPrevious) {
+                    ToastNotification(response.message, "info");
+                    setEditingField(null);
+                } else if (response.data?.underConstruction) {
+                    ToastNotification(response.message, "info");
+                    setEditingField(null);
+                } else {
+                    setModalType("phone");
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error requesting phone OTP:', error);
+                ToastNotification(error.response?.data?.message || "Failed to process phone change", "error");
+            }
         } else if (field === "email") {
-        setModalType("email");
-        setShowModal(true);
+            try {
+                const response = await requestEmailOtp(tempEmail);
+                
+                if (response.data?.sameAsPrevious) {
+                    ToastNotification(response.message, "info");
+                    setEditingField(null);
+                } else {
+                    setModalType("email");
+                    setShowModal(true);
+                }
+            } catch (error) {
+                console.error('Error requesting email OTP:', error);
+                ToastNotification(error.response?.data?.message || "Failed to send email OTP", "error");
+            }
         }
     }
 
@@ -79,36 +173,92 @@ function AboutMe() {
         if (field === "email") setTempEmail(userData.email);
     }
 
-    function handleModalConfirm() {
-        if (modalType === "phone") {
-        setUserData(function (prev) {
-            return { ...prev, phone: tempPhone };
-        });
-        ToastNotification("Phone number updated successfully", "success");
-        } else if (modalType === "email") {
-        setUserData(function (prev) {
-            return { ...prev, email: tempEmail };
-        });
-        ToastNotification("Email address updated successfully", "success");
+    async function handleModalConfirm(otpCode) {
+        if (modalType === "email") {
+            try {
+                const response = await verifyEmailOtp(tempEmail, otpCode);
+                
+                setUserData(function (prev) {
+                    return { ...prev, email: tempEmail };
+                });
+                ToastNotification(response.message || "Email updated successfully", "success");
+                setShowModal(false);
+                setEditingField(null);
+            } catch (error) {
+                console.error('Error verifying email OTP:', error);
+                ToastNotification(error.response?.data?.message || "Invalid OTP", "error");
+                throw error; 
+            }
         }
-        setShowModal(false);
-        setEditingField(null);
-        setIsEditMode(false);
     }
 
     function getUserInitial() {
-        return userData.firstName.charAt(0).toUpperCase();
+        return userData.firstName?.charAt(0)?.toUpperCase() || "U";
     }
 
-    function toggleEditMode() {
-        setIsEditMode(function (prev) {
-        return !prev;
-        });
-        setEditingField(null);
+    async function toggleEditMode() {
+        if (isEditMode) {
+            const firstNameChanged = userData.firstName !== originalData.firstName;
+            const lastNameChanged = userData.lastName !== originalData.lastName;
+            const hasProfilePicFile = profilePicFile !== null;
+            
+            if (!firstNameChanged && !lastNameChanged && !hasProfilePicFile) {
+                setIsEditMode(false);
+                setEditingField(null);
+                return;
+            }
+            
+            setIsTogglingEdit(true);
+            try {
+                const formData = new FormData();
+                formData.append('firstName', userData.firstName);
+                formData.append('lastName', userData.lastName);
+                
+                if (profilePicFile) {
+                    formData.append('profilePic', profilePicFile);
+                }
+                
+                const response = await updateProfile(formData);
+                
+                ToastNotification(response.message || "Profile updated successfully", "success");
+                setProfilePicFile(null);
+                
+                setOriginalData({
+                    firstName: userData.firstName,
+                    lastName: userData.lastName
+                });
+                
+                const profileResponse = await getProfile();
+                const profile = profileResponse.data.profile;
+                setUserData(prev => ({
+                    ...prev,
+                    profilePic: profile.profile_pic || prev.profilePic
+                }));
+                
+                setIsEditMode(false);
+                setEditingField(null);
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                ToastNotification(error.response?.data?.message || "Failed to update profile", "error");
+            } finally {
+                setIsTogglingEdit(false);
+            }
+        } else {
+            setIsEditMode(true);
+        }
     }
 
     return (
         <div className="bg-background py-5">
+        {loading ? (
+            <div className="max-w-2xl mx-auto">
+                <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
+                    <div className="flex items-center justify-center py-20">
+                        <p className="text-secondaryDark">Loading profile...</p>
+                    </div>
+                </div>
+            </div>
+        ) : (
         <div className="max-w-2xl mx-auto">
             <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
             <div className="flex items-start justify-between mb-6">
@@ -118,7 +268,8 @@ function AboutMe() {
                     <img
                         src={userData.profilePic}
                         alt="Profile"
-                        className="w-20 h-20 rounded-full object-cover border-2 border-secondary"
+                        onClick={(e) => { e.stopPropagation(); setShowProfileModal(true); }}
+                        className="w-20 h-20 rounded-full object-cover border-2 border-secondary cursor-pointer hover:opacity-90 transition-opacity"
                     />
                     ) : (
                     <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center border-2 border-secondary">
@@ -128,12 +279,24 @@ function AboutMe() {
                     </div>
                     )}
                     {isEditMode && (
-                    <label
-                        htmlFor="profile-pic-input"
-                        className="absolute bottom-0 right-0 w-7 h-7 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out shadow-md"
-                    >
-                        <Camera size={14} isDarkTheme={true} />
-                    </label>
+                    <>
+                        <label
+                            htmlFor="profile-pic-input"
+                            className="absolute bottom-0 right-0 w-7 h-7 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out shadow-md"
+                        >
+                            <Camera size={14} isDarkTheme={true} />
+                        </label>
+                        {userData.profilePic && (
+                            <button
+                                type="button"
+                                onClick={handleDeleteProfilePic}
+                                className="absolute top-0 right-0 w-7 h-7 bg-red-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-600 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all duration-200 ease-in-out shadow-md"
+                                title="Delete profile picture"
+                            >
+                                <Trash size={14} isDarkTheme={true} />
+                            </button>
+                        )}
+                    </>
                     )}
                     <input
                     id="profile-pic-input"
@@ -151,14 +314,15 @@ function AboutMe() {
 
                 <button
                 onClick={toggleEditMode}
-                className={`px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out ${
+                disabled={isTogglingEdit}
+                className={`px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed ${
                     isEditMode 
                     ? 'bg-secondary text-primary' 
                     : 'bg-primary text-white'
                 }`}
                 >
                 <Edit size={16} isDarkTheme={!isEditMode} />
-                {isEditMode ? 'Done' : 'Edit'}
+                {isTogglingEdit ? 'Saving...' : (isEditMode ? 'Done' : 'Edit')}
                 </button>
             </div>
 
@@ -373,6 +537,7 @@ function AboutMe() {
             </div>
             </div>
         </div>
+        )}
 
         {showModal && (
             <UpdateContactInfo
@@ -385,6 +550,14 @@ function AboutMe() {
             onConfirm={handleModalConfirm}
             />
         )}
+
+        {showProfileModal && userData.profilePic && (
+            <ViewProfileModal
+                imageUrl={userData.profilePic}
+                onClose={() => setShowProfileModal(false)}
+            />
+        )}
+        
         <ToastContainer />
         </div>
     );

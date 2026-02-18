@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Certificate, Email } from "../../../assets/icons/icons";
 import ToastNotification from "../../Notification/ToastNotification";
-import { api } from "../../../services/apiMethods";
-import { saveAccessToken } from "../../../services/session";
+import { requestOtp, verifyOtp } from "../../../services/features/authService";
+import { saveAccessToken } from "../../../services/core/session";
 
 function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified, onSuccess }) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -63,7 +63,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
         try {
             setIsVerifying(true);
 
-            const response = await api.post("/auth/verify-otp", {
+            const response = await verifyOtp({
                 email: identifier,
                 otp_code: fullOtp
             });
@@ -104,7 +104,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
         if (!canResend) return;
 
         try {
-            const response = await api.post("/auth/request-otp", {
+            const response = await requestOtp({
                 email: identifier,
                 isSignup: !isLogin
             });

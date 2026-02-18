@@ -1,73 +1,208 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Location, Home, MapPin, Edit, Check, X } from "../../../../../assets/icons/icons";
 import ToastNotification from "../../../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import UpdateAddressInfo from "../../../../../components/Modals/Settings/UpdateAddressInfo";
+import { getAddress, updateAddress } from "../../../../../services/features/settingsService";
+import { getDistricts, getWardsByDistrict, getStreetsByWard } from "../../../../../services/features/authService";
 
 function Address() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [canEdit, setCanEdit] = useState(true);
+    const [nextEditDate, setNextEditDate] = useState(null);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isLoadingEdit, setIsLoadingEdit] = useState(false);
     
     const [addressData, setAddressData] = useState({
-        district: "Chennai Central",
-        wardNumber: "142 - T. Nagar",
-        streetName: "North Usman Road",
-        houseNumber: "No. 45/2, Green Apartments"
+        districtId: null,
+        districtName: "",
+        wardId: null,
+        wardName: "",
+        streetId: null,
+        streetName: "",
+        houseNumber: ""
     });
 
-    const [tempDistrict, setTempDistrict] = useState(addressData.district);
-    const [tempWardNumber, setTempWardNumber] = useState(addressData.wardNumber);
-    const [tempStreetName, setTempStreetName] = useState(addressData.streetName);
-    const [tempHouseNumber, setTempHouseNumber] = useState(addressData.houseNumber);
+    const [tempDistrictId, setTempDistrictId] = useState(null);
+    const [tempWardId, setTempWardId] = useState(null);
+    const [tempStreetId, setTempStreetId] = useState(null);
+    const [tempHouseNumber, setTempHouseNumber] = useState("");
 
-    const districts = [
-        "Chennai Central", "Chennai North", "Chennai South", "Tambaram",
-        "Ambattur", "Alandur", "Pallavaram", "Sholinganallur"
-    ];
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+    const [streets, setStreets] = useState([]);
 
-    const wardNumbers = [
-        "142 - T. Nagar", "143 - Kodambakkam", "144 - Nungambakkam",
-        "145 - Anna Nagar", "146 - Vadapalani", "147 - Ashok Nagar",
-        "148 - KK Nagar", "149 - Saidapet", "150 - Guindy"
-    ];
+    useEffect(function () {
+        fetchAddress();
+    }, []);
 
-    const streets = [
-        "North Usman Road", "South Usman Road", "Rangarajapuram Main Road",
-        "GN Chetty Road", "Habibullah Road", "Venkatanarayana Road",
-        "Natesan Street", "Thanikachalam Road", "Duraisamy Street",
-        "Bazullah Road"
-    ];
+    async function fetchAddress() {
+        try {
+            const response = await getAddress();
+            if (response.success) {
+                const addr = response.data;
+                setAddressData({
+                    districtId: addr.district_id,
+                    districtName: addr.district || "",
+                    wardId: addr.ward_id,
+                    wardName: addr.ward_number && addr.ward_name ? `${addr.ward_number} - ${addr.ward_name}` : "",
+                    streetId: addr.street_id,
+                    streetName: addr.street_name || "",
+                    houseNumber: addr.house_number || ""
+                });
+                
+                if (addr.last_address_change) {
+                    const lastChange = new Date(addr.last_address_change);
+                    const nextAllowed = new Date(lastChange);
+                    nextAllowed.setMonth(nextAllowed.getMonth() + 1);
+                    
+                    if (new Date() < nextAllowed) {
+                        setCanEdit(false);
+                        setNextEditDate(nextAllowed);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching address:', error);
+            ToastNotification(error.response?.data?.message || "Failed to load address", "error");
+        } finally {
+            setLoading(false);
+        }
+    }
 
-    function handleEditButtonClick() {
+    async function handleEditButtonClick() {
+        if (!canEdit) return;
         setShowModal(true);
     }
 
-    function handleModalConfirm() {
+    async function handleModalConfirm() {
         setShowModal(false);
-        setIsEditMode(true);
+        setIsLoadingEdit(true);
+        
+        setTempDistrictId(addressData.districtId);
+        setTempWardId(addressData.wardId);
+        setTempStreetId(addressData.streetId);
+        setTempHouseNumber(addressData.houseNumber);
+        
+        try {
+            const districtsData = await getDistricts();
+            if (districtsData.success) {
+                setDistricts(districtsData.data);
+            }
+            
+            if (addressData.districtId) {
+                const wardsData = await getWardsByDistrict(addressData.districtId);
+                if (wardsData.success) {
+                    setWards(wardsData.data);
+                }
+            }
+            
+            if (addressData.wardId) {
+                const streetsData = await getStreetsByWard(addressData.wardId);
+                if (streetsData.success) {
+                    setStreets(streetsData.data);
+                }
+            }
+            
+            setIsEditMode(true);
+        } catch (error) {
+            console.error('Error loading dropdowns:', error);
+        } finally {
+            setIsLoadingEdit(false);
+        }
     }
 
     function handleModalClose() {
         setShowModal(false);
     }
 
-    function handleDoneClick() {
-        setAddressData({
-        district: tempDistrict,
-        wardNumber: tempWardNumber,
-        streetName: tempStreetName,
-        houseNumber: tempHouseNumber
-        });
-        setIsEditMode(false);
-        ToastNotification("Address updated successfully", "success");
+    async function handleDistrictChange(e) {
+        const districtId = parseInt(e.target.value);
+        setTempDistrictId(districtId);
+        setTempWardId(null);
+        setTempStreetId(null);
+        setWards([]);
+        setStreets([]);
+        
+        if (districtId) {
+            try {
+                const wardsData = await getWardsByDistrict(districtId);
+                if (wardsData.success) {
+                    setWards(wardsData.data);
+                }
+            } catch (error) {
+                console.error('Error fetching wards:', error);
+            }
+        }
+    }
+
+    async function handleWardChange(e) {
+        const wardId = parseInt(e.target.value);
+        setTempWardId(wardId);
+        setTempStreetId(null);
+        setStreets([]);
+        
+        if (wardId) {
+            try {
+                const streetsData = await getStreetsByWard(wardId);
+                if (streetsData.success) {
+                    setStreets(streetsData.data);
+                }
+            } catch (error) {
+                console.error('Error fetching streets:', error);
+            }
+        }
+    }
+
+    async function handleDoneClick() {
+        setIsUpdating(true);
+        try {
+            const response = await updateAddress({
+                district_id: tempDistrictId,
+                ward_id: tempWardId,
+                street_id: tempStreetId,
+                house_number: tempHouseNumber
+            });
+            
+            if (response.sameAsPrevious) {
+                ToastNotification(response.message || "Fields same as previous values", "info");
+                setIsEditMode(false);
+            } else if (response.success) {
+                ToastNotification("Address updated successfully", "success");
+                setIsEditMode(false);
+                await fetchAddress();
+            }
+        } catch (error) {
+            console.error('Error updating address:', error);
+            ToastNotification(error.response?.data?.message || "Failed to update address", "error");
+        } finally {
+            setIsUpdating(false);
+        }
     }
 
     function handleCancelEdit() {
-        setTempDistrict(addressData.district);
-        setTempWardNumber(addressData.wardNumber);
-        setTempStreetName(addressData.streetName);
+        setTempDistrictId(addressData.districtId);
+        setTempWardId(addressData.wardId);
+        setTempStreetId(addressData.streetId);
         setTempHouseNumber(addressData.houseNumber);
         setIsEditMode(false);
+        setDistricts([]);
+        setWards([]);
+        setStreets([]);
+    }
+
+    if (loading) {
+        return (
+            <div className="bg-background py-5">
+                <div className="max-w-2xl mx-auto">
+                    <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
+                        <p className="text-center text-secondaryDark/60">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -79,26 +214,29 @@ function Address() {
                 {!isEditMode ? (
                 <button
                     onClick={handleEditButtonClick}
-                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                    disabled={isLoadingEdit || !canEdit}
+                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Edit size={16} isDarkTheme={true} />
-                    Edit
+                    {isLoadingEdit ? 'Loading...' : (!canEdit && nextEditDate ? `Can edit on ${nextEditDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : 'Edit')}
                 </button>
                 ) : (
                 <div className="flex items-center gap-2">
                     <button
                     onClick={handleCancelEdit}
-                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-secondary text-primary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                    disabled={isUpdating}
+                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-secondary text-primary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                     <X size={16} defaultColor="#145B47" />
                     Cancel
                     </button>
                     <button
                     onClick={handleDoneClick}
-                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                    disabled={isUpdating || !tempDistrictId || !tempWardId || !tempStreetId || !tempHouseNumber}
+                    className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                     <Check size={16} isDarkTheme={true} />
-                    Done
+                    {isUpdating ? "Saving..." : "Done"}
                     </button>
                 </div>
                 )}
@@ -111,19 +249,18 @@ function Address() {
                 </label>
                 {isEditMode ? (
                     <select
-                    value={tempDistrict}
-                    onChange={function (e) {
-                        setTempDistrict(e.target.value);
-                    }}
+                    value={tempDistrictId || ""}
+                    onChange={handleDistrictChange}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer"
                     >
+                    <option value="">Select District</option>
                     {districts.map(function(district) {
-                        return <option key={district} value={district}>{district}</option>;
+                        return <option key={district.district_id} value={district.district_id}>{district.district_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.district}
+                    {addressData.districtName || "Not set"}
                     </div>
                 )}
                 </div>
@@ -134,19 +271,19 @@ function Address() {
                 </label>
                 {isEditMode ? (
                     <select
-                    value={tempWardNumber}
-                    onChange={function (e) {
-                        setTempWardNumber(e.target.value);
-                    }}
-                    className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer"
+                    value={tempWardId || ""}
+                    onChange={handleWardChange}
+                    disabled={!tempDistrictId}
+                    className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                    {wardNumbers.map(function(ward) {
-                        return <option key={ward} value={ward}>{ward}</option>;
+                    <option value="">Select Ward</option>
+                    {wards.map(function(ward) {
+                        return <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_number} - {ward.ward_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.wardNumber}
+                    {addressData.wardName || "Not set"}
                     </div>
                 )}
                 </div>
@@ -157,19 +294,19 @@ function Address() {
                 </label>
                 {isEditMode ? (
                     <select
-                    value={tempStreetName}
-                    onChange={function (e) {
-                        setTempStreetName(e.target.value);
-                    }}
-                    className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer"
+                    value={tempStreetId || ""}
+                    onChange={function(e) { setTempStreetId(parseInt(e.target.value)); }}
+                    disabled={!tempWardId}
+                    className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
+                    <option value="">Select Street</option>
                     {streets.map(function(street) {
-                        return <option key={street} value={street}>{street}</option>;
+                        return <option key={street.street_id} value={street.street_id}>{street.street_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.streetName}
+                    {addressData.streetName || "Not set"}
                     </div>
                 )}
                 </div>
@@ -186,10 +323,11 @@ function Address() {
                         setTempHouseNumber(e.target.value);
                     }}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
+                    placeholder="Enter house/flat number"
                     />
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.houseNumber}
+                    {addressData.houseNumber || "Not set"}
                     </div>
                 )}
                 </div>

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { X, Check ,Mobile ,Email } from "../../../assets/icons/icons";
+import ToastNotification from "../../Notification/ToastNotification";
 
 function UpdateContactInfo({ type, value, onClose, onConfirm }) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const inputRefs = [
         useRef(null),
         useRef(null),
@@ -65,12 +67,18 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
     }
     }
 
-    function handleConfirm() {
+    async function handleConfirm() {
         const otpValue = otp.join("");
         if (!otpValue || otpValue.length < 6) {
             return;
         }
-        onConfirm();
+        
+        setIsSubmitting(true);
+        try {
+            await onConfirm(otpValue);
+        } catch (error) {
+            setIsSubmitting(false);
+        }
     }
 
     const otpValue = otp.join("");
@@ -154,15 +162,15 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
                 </button>
                 <button
                 onClick={handleConfirm}
-                disabled={!isComplete}
+                disabled={!isComplete || isSubmitting}
                 className={`flex-1 py-3.5 rounded-large text-sm font-bold flex items-center justify-center gap-2 transition-all duration-200 ease-in-out ${
-                    isComplete
+                    isComplete && !isSubmitting
                     ? "bg-primary text-white hover:bg-primaryLight hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"
                     : "bg-secondary text-secondaryDark/40 cursor-not-allowed"
                 }`}
                 >
-                <Check size={16} isDarkTheme={isComplete} defaultColor={isComplete ? "#fff" : "#316F5D"} />
-                Verify & Continue
+                <Check size={16} isDarkTheme={isComplete && !isSubmitting} defaultColor={isComplete && !isSubmitting ? "#fff" : "#316F5D"} />
+                {isSubmitting ? "Verifying..." : "Verify & Continue"}
                 </button>
             </div>
             </div>

@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import axios from 'axios';
 
 // Shared promise to prevent multiple simultaneous refresh calls

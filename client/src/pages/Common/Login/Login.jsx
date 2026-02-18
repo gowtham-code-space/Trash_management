@@ -4,7 +4,7 @@ import ToastNotification from "../../../components/Notification/ToastNotificatio
 import { ToastContainer } from "react-toastify";
 import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../services/apiMethods";
+import { requestOtp } from "../../../services/features/authService";
 
 //Themeprovider
 import ThemeStore from "../../../store/ThemeStore";
@@ -57,7 +57,7 @@ function Login() {
       setIsLoading(true);
       setShowNewUser(false);
 
-      const response = await api.post("/auth/request-otp", {
+      const response = await requestOtp({
         email: identifier,
         isSignup: false
       });
@@ -163,7 +163,11 @@ function Login() {
         <button
           onClick={handleSendOtp}
           disabled={isLoading}
-          className="w-full bg-primaryLight text-white font-medium py-3 rounded-lg mb-6 hover:bg-primary hover:cursor-pointer active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`w-full font-medium py-3 rounded-lg mb-6 transition-all duration-200 ${
+            isLoading
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-primaryLight text-white hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
+          }`}
         >
           {isLoading ? "Sending..." : "Send Secure OTP"}
         </button>

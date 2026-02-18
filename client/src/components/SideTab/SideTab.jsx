@@ -21,8 +21,9 @@ Configure,
 IdCard
 } from "../../assets/icons/icons";
 import ThemeStore from "../../store/ThemeStore";
-import { clearSession } from "../../services/session";
-import { api } from "../../services/apiMethods";
+import { clearSession } from "../../services/core/session";
+import { logout } from "../../services/features/authService";
+import { api } from "../../services/core/apiMethods";
 
 // Role ID to Role Name mapping
 function getRoleNameFromId(roleId) {
@@ -259,12 +260,10 @@ return (
         <button 
         onClick={async function() { 
             try {
-                // Call backend to clear HttpOnly refresh token cookie
-                await api.post("/auth/logout");
+                await logout();
             } catch (error) {
                 console.error("Logout error:", error);
             } finally {
-                // Clear memory state regardless of backend response
                 clearSession();
                 navigate("/login"); 
             }
