@@ -2,7 +2,7 @@ import { badRequestResponse, successResponse, unauthorizedResponse, internalServ
 import { requestOtp, verifyOtp, refreshAccessToken, completeSignup, logout, getDistricts, getWards, getStreets, checkContact } from './auth.services.js';
 import { verifyRefreshToken } from '../utils/jwt.js';
 import { getUserById } from './auth.model.js';
-import { getPublicUrl } from '../utils/publicUrlService.js';
+import { uploadUserProfilePicture } from '../utils/publicUrlService.js';
 
 export const requestOtpHandler = async (req, res) => {
     try {
@@ -151,7 +151,7 @@ export const completeSignupHandler = async (req, res) => {
         
         let profilePicUrl = null;
         if (req.file) {
-            profilePicUrl = req.file.path || getPublicUrl(req.file.filename);
+            profilePicUrl = await uploadUserProfilePicture(req.file.buffer, userId);
         }
         
         const userData = {

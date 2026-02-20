@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import { generateAccessToken, generateRefreshToken, hashRefreshToken, compareRefreshToken } from '../utils/jwt.js';
 import { hashOtp, unhashOtp, generateOtpCode } from '../utils/otpCrypto.js';
+import { getPublicUrl } from '../utils/publicUrlService.js';
 import * as authModel from './auth.model.js';
 
 dotenv.config();
@@ -161,7 +162,7 @@ export const verifyOtp = async (email, otpCode) => {
                 phone_number: user.phone_number || null,
                 role_id: user.role_id,
                 role_name: user.role_name,
-                profile_pic: user.profile_pic || null
+                profile_pic: user.profile_pic ? getPublicUrl(user.profile_pic) : null
             }
         };
     } catch (error) {

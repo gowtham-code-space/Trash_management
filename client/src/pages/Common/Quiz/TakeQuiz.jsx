@@ -1,97 +1,174 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ThemeStore from "../../../store/ThemeStore";
 import QuizResultModal from "../../../components/Modals/Quiz/QuizResultModal";
+import ConfirmModal from "../../../components/Modals/Quiz/ConfirmModal";
 import { RightArrow, LeftArrow } from "../../../assets/icons/icons";
-
-// Mock quiz questions
-const quizQuestions = [
-    {
-    id: 1,
-    question: "Which of the following color-coded bins is the correct designated disposal container for hazardous electronic waste (e-waste) such as old batteries and circuit boards?",
-    options: [
-        { id: "A", text: "A) Green Bin" },
-        { id: "B", text: "B) Red Bin" },
-        { id: "C", text: "C) Blue Bin" },
-        { id: "D", text: "D) Black Bin" }
-    ],
-    correctAnswer: "C"
-    },
-    {
-    id: 2,
-    question: "What is the recommended frequency for emptying residential waste bins in urban areas?",
-    options: [
-        { id: "A", text: "A) Daily" },
-        { id: "B", text: "B) Twice a week" },
-        { id: "C", text: "C) Weekly" },
-        { id: "D", text: "D) Bi-weekly" }
-    ],
-    correctAnswer: "B"
-    },
-    {
-    id: 3,
-    question: "Which waste management hierarchy principle should be prioritized first?",
-    options: [
-        { id: "A", text: "A) Recycling" },
-        { id: "B", text: "B) Disposal" },
-        { id: "C", text: "C) Prevention" },
-        { id: "D", text: "D) Energy recovery" }
-    ],
-    correctAnswer: "C"
-    },
-    {
-    id: 4,
-    question: "What protective equipment is mandatory when handling medical waste?",
-    options: [
-        { id: "A", text: "A) Gloves only" },
-        { id: "B", text: "B) Mask only" },
-        { id: "C", text: "C) Full PPE including gloves, mask, and protective clothing" },
-        { id: "D", text: "D) Safety glasses only" }
-    ],
-    correctAnswer: "C"
-    },
-    {
-    id: 5,
-    question: "How long should organic waste be composted before use in gardens?",
-    options: [
-        { id: "A", text: "A) 1-2 weeks" },
-        { id: "B", text: "B) 2-3 months" },
-        { id: "C", text: "C) 6-12 months" },
-        { id: "D", text: "D) 2 years" }
-    ],
-    correctAnswer: "B"
-    }
-    ];
+import { useLocation, useNavigate } from "react-router-dom";
+import { resumeQuiz, submitQuiz, saveAnswer, markQuestion } from "../../../services/features/quizService";
+import ToastNotification from "../../../components/Notification/ToastNotification";
+import { ToastContainer } from "react-toastify";
 
 function TakeQuiz() {
     const { isDarkTheme } = ThemeStore();
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    const [quizData, setQuizData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState({});
     const [markedForReview, setMarkedForReview] = useState(new Set());
     const [showResultModal, setShowResultModal] = useState(false);
     const [showPaletteMobile, setShowPaletteMobile] = useState(false);
+    const [timeRemaining, setTimeRemaining] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isNavigating, setIsNavigating] = useState(false);
+    const [quizResult, setQuizResult] = useState(null);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
+    // Load quiz data
+    useEffect(() => {
+        const loadQuiz = async () => {
+            try {
+                setIsLoading(true);
+                const { quizData: passedQuizData, resumeQuizId } = location.state || {};
+
+                if (passedQuizData) {
+                    // New quiz started
+                    setQuizData(passedQuizData);
+                    const finishTime = new Date(passedQuizData.finishes_at).getTime();
+                    const now = new Date().getTime();
+                    setTimeRemaining(Math.max(0, Math.floor((finishTime - now) / 1000)));
+                } else if (resumeQuizId) {
+                    const response = await resumeQuiz(resumeQuizId);
+                    if (response.success && response.data) {
+                        setQuizData(response.data);
+                        setTimeRemaining(response.data?.time_remaining || 0);
+                        
+                        const savedAnswers = {};
+                        const markedQuestions = new Set();
+                        
+                        (response.data?.questions || []).forEach((q, index) => {
+                            if (q.user_answer) {
+                                savedAnswers[q.question_id] = q.user_answer;
+                            }
+                            if (q.is_marked === 1) {
+                                markedQuestions.add(index);
+                            }
+                        });
+                        
+                        setAnswers(savedAnswers);
+                        setMarkedForReview(markedQuestions);
+                        
+                        ToastNotification('Quiz resumed successfully', 'success');
+                    } else if (response.autoSubmitted && response.result) {
+                        ToastNotification('Quiz was expired and has been auto-submitted', 'info');
+                        setQuizResult(response.result);
+                        setShowResultModal(true);
+                        setIsLoading(false);
+                        return;
+                    } else {
+                        ToastNotification(response.message || 'Failed to resume quiz', 'error');
+                        navigate('/quiz');
+                        return;
+                    }
+                } else {
+                    // No quiz data provided
+                    ToastNotification('No quiz data found', 'error');
+                    navigate('/quiz');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error loading quiz:', error);
+                ToastNotification('Failed to load quiz', 'error');
+                navigate('/quiz');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadQuiz();
+    }, [location.state, navigate]);
+
+    // Timer countdown
+    useEffect(() => {
+        if (!quizData || timeRemaining <= 0) return;
+
+        const timer = setInterval(() => {
+            setTimeRemaining(prev => {
+                if (prev <= 1) {
+                    clearInterval(timer);
+                    ToastNotification('Time expired! Submitting quiz...', 'warning');
+                    submitQuiz(quizData.quiz_id).then(response => {
+                        if (response.success) {
+                            setQuizResult(response.data);
+                            setShowResultModal(true);
+                        } else {
+                            ToastNotification(response.message || 'Failed to submit quiz', 'error');
+                        }
+                    }).catch(error => {
+                        console.error('Error auto-submitting quiz:', error);
+                        ToastNotification('Failed to submit quiz', 'error');
+                    });
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [quizData]);
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    };
+
+    if (isLoading || !quizData) {
+        return (
+            <div className={`min-h-screen ${isDarkTheme ? "bg-darkBackground" : "bg-background"} flex items-center justify-center`}>
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>Loading quiz...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const quizQuestions = quizData.questions || [];
     const currentQuestion = quizQuestions[currentQuestionIndex];
     const totalQuestions = quizQuestions.length;
 
     function handleAnswerSelect(optionId) {
-    setAnswers(function(prev) {
-        return {
-        ...prev,
-        [currentQuestionIndex]: optionId
-        };
-    });
+        setAnswers(function(prev) {
+            return {
+                ...prev,
+                [currentQuestion.question_id]: optionId
+            };
+        });
     }
 
-    function handleMarkForReview() {
-        setMarkedForReview(function(prev) {
-        const newSet = new Set(prev);
-        if (newSet.has(currentQuestionIndex)) {
-            newSet.delete(currentQuestionIndex);
-        } else {
-            newSet.add(currentQuestionIndex);
+    async function handleMarkForReview() {
+        try {
+            const isCurrentlyMarked = markedForReview.has(currentQuestionIndex);
+            const newMarkStatus = !isCurrentlyMarked;
+            
+            await markQuestion(quizData.quiz_id, currentQuestion.question_id, newMarkStatus ? 1 : 0);
+            
+            setMarkedForReview(function(prev) {
+                const newSet = new Set(prev);
+                if (newSet.has(currentQuestionIndex)) {
+                    newSet.delete(currentQuestionIndex);
+                } else {
+                    newSet.add(currentQuestionIndex);
+                }
+                return newSet;
+            });
+        } catch (error) {
+            console.error('Error marking question:', error);
+            ToastNotification('Failed to mark question for review', 'error');
         }
-        return newSet;
-        });
     }
 
     function goToQuestion(index) {
@@ -99,40 +176,109 @@ function TakeQuiz() {
         setShowPaletteMobile(false);
     }
 
-    function handleNext() {
-        if (currentQuestionIndex < totalQuestions - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
+    async function handleNext() {
+        if (currentQuestionIndex < totalQuestions - 1 && !isNavigating) {
+            setIsNavigating(true);
+            try {
+                const currentAnswer = answers[currentQuestion.question_id];
+                if (currentAnswer) {
+                    await saveAnswer(quizData.quiz_id, currentQuestion.question_id, currentAnswer);
+                }
+                setCurrentQuestionIndex(currentQuestionIndex + 1);
+            } catch (error) {
+                console.error('Error saving answer:', error);
+            } finally {
+                setIsNavigating(false);
+            }
         }
     }
 
     function handlePrevious() {
         if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex(currentQuestionIndex - 1);
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
         }
     }
 
     function handleClearResponse() {
         setAnswers(function(prev) {
-        const newAnswers = { ...prev };
-        delete newAnswers[currentQuestionIndex];
-        return newAnswers;
+            const newAnswers = { ...prev };
+            delete newAnswers[currentQuestion.question_id];
+            return newAnswers;
         });
     }
 
-    function handleSubmit() {
-        const correct = quizQuestions.filter(function(q, index) {
-        return answers[index] === q.correctAnswer;
-        }).length;
-        
-        const wrong = Object.keys(answers).length - correct;
-        
-        setShowResultModal(true);
+    async function handleSubmit(autoSubmit = false) {
+        if (!autoSubmit) {
+            setShowConfirmModal(true);
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            
+            const currentAnswer = answers[currentQuestion.question_id];
+            if (currentAnswer) {
+                await saveAnswer(quizData.quiz_id, currentQuestion.question_id, currentAnswer);
+            }
+
+            const response = await submitQuiz(quizData.quiz_id);
+
+            console.log('Quiz submission response:', response);
+
+            if (response.success) {
+                console.log('Setting quiz result:', response.data);
+                console.log('Setting showResultModal to true');
+                setQuizResult(response.data);
+                setShowResultModal(true);
+                console.log('States updated - modal should show');
+            } else {
+                ToastNotification(response.message || 'Failed to submit quiz', 'error');
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+            ToastNotification('Failed to submit quiz', 'error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    async function confirmSubmit() {
+        setShowConfirmModal(false);
+
+        try {
+            setIsSubmitting(true);
+            
+            const currentAnswer = answers[currentQuestion.question_id];
+            if (currentAnswer) {
+                await saveAnswer(quizData.quiz_id, currentQuestion.question_id, currentAnswer);
+            }
+
+            const response = await submitQuiz(quizData.quiz_id);
+
+            console.log('Quiz submission response (confirmSubmit):', response);
+
+            if (response.success) {
+                console.log('Setting quiz result (confirmSubmit):', response.data);
+                console.log('Setting showResultModal to true (confirmSubmit)');
+                setQuizResult(response.data);
+                setShowResultModal(true);
+                console.log('States updated (confirmSubmit) - modal should show');
+            } else {
+                ToastNotification(response.message || 'Failed to submit quiz', 'error');
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+            ToastNotification('Failed to submit quiz', 'error');
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     function getQuestionStatus(index) {
         if (index === currentQuestionIndex) return "current";
         if (markedForReview.has(index)) return "review";
-        if (answers[index]) return "answered";
+        const question = quizQuestions[index];
+        if (question && answers[question.question_id]) return "answered";
         return "notVisited";
     }
 
@@ -162,6 +308,7 @@ function TakeQuiz() {
 
     return (
         <div className={isDarkTheme ? "dark" : ""}>
+            <ToastContainer/>
         <div className="min-h-screen bg-background ">
             {/* Mobile Palette Toggle */}
             <button
@@ -194,7 +341,7 @@ function TakeQuiz() {
                     const status = getQuestionStatus(index);
                     return (
                         <button
-                        key={q.id}
+                        key={q.question_id || index}
                         onClick={() => goToQuestion(index)}
                         className={`w-full aspect-square rounded-small text-sm font-medium
                                     ${getPaletteStyle(status)}
@@ -278,14 +425,19 @@ function TakeQuiz() {
                                 ${isDarkTheme ? "text-primaryLight" : "text-primary"}`}>
                     Question {currentQuestionIndex + 1} of {totalQuestions}
                     </h3>
+                    <p className={`text-xs mt-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-600"}`}>
+                        Time Remaining: {formatTime(timeRemaining)}
+                    </p>
                 </div>
                 <button
-                    onClick={handleSubmit}
+                    onClick={() => handleSubmit(false)}
+                    disabled={isSubmitting}
                     className="px-4 py-2 rounded-medium text-sm font-medium bg-primary text-white
                             hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
-                            focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
+                            focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
+                            disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Submit Quiz
+                    {isSubmitting ? 'Submitting...' : 'Submit Quiz'}
                 </button>
                 </div>
 
@@ -301,41 +453,44 @@ function TakeQuiz() {
 
                 {/* Options */}
                 <div className="space-y-3">
-                    {currentQuestion.options.map(function(option) {
-                    const isSelected = answers[currentQuestionIndex] === option.id;
-                    return (
-                        <button
-                        key={option.id}
-                        onClick={() => handleAnswerSelect(option.id)}
-                        className={`w-full text-left p-3 md:p-4 rounded-medium border-2 transition-all duration-200 ease-in-out
-                                    ${isSelected 
-                                    ? isDarkTheme
-                                        ? "border-primary bg-primary/10" 
-                                        : "border-primary bg-secondary"
-                                    : isDarkTheme
-                                        ? "border-darkBorder bg-darkBackground hover:border-primary/40 hover:bg-darkSurfaceHover"
-                                        : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"}
-                                    hover:scale-[0.99] active:scale-[0.99]
-                                    focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]`}
-                        >
-                        <div className="flex items-center gap-3">
-                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center 
+                    {['A', 'B', 'C', 'D'].map(function(optionId) {
+                        const optionText = currentQuestion[`option_${optionId.toLowerCase()}`];
+                        if (!optionText) return null;
+                        
+                        const isSelected = answers[currentQuestion.question_id] === optionId;
+                        return (
+                            <button
+                            key={optionId}
+                            onClick={() => handleAnswerSelect(optionId)}
+                            className={`w-full text-left p-3 md:p-4 rounded-medium border-2 transition-all duration-200 ease-in-out
                                         ${isSelected 
-                                            ? "border-primary bg-primary" 
-                                            : isDarkTheme 
-                                            ? "border-darkBorder" 
-                                            : "border-gray-300"}`}>
-                            {isSelected && (
-                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                            )}
+                                        ? isDarkTheme
+                                            ? "border-primary bg-primary/10" 
+                                            : "border-primary bg-secondary"
+                                        : isDarkTheme
+                                            ? "border-darkBorder bg-darkBackground hover:border-primary/40 hover:bg-darkSurfaceHover"
+                                            : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"}
+                                        hover:scale-[0.99] active:scale-[0.99]
+                                        focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]`}
+                            >
+                            <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center 
+                                            ${isSelected 
+                                                ? "border-primary bg-primary" 
+                                                : isDarkTheme 
+                                                ? "border-darkBorder" 
+                                                : "border-gray-300"}`}>
+                                {isSelected && (
+                                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                                )}
+                                </div>
+                                <span className={`text-sm
+                                                ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
+                                {optionId}) {optionText}
+                                </span>
                             </div>
-                            <span className={`text-sm
-                                            ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                            {option.text}
-                            </span>
-                        </div>
-                        </button>
-                    );
+                            </button>
+                        );
                     })}
                 </div>
                 </div>
@@ -390,7 +545,7 @@ function TakeQuiz() {
 
                     <button
                     onClick={handleNext}
-                    disabled={currentQuestionIndex === totalQuestions - 1}
+                    disabled={currentQuestionIndex === totalQuestions - 1 || isNavigating}
                     className="px-4 md:px-6 py-3 rounded-medium text-sm font-medium bg-primary text-white flex items-center justify-center gap-2
                                 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
                                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
@@ -405,20 +560,28 @@ function TakeQuiz() {
             </div>
         </div>
 
+        {/* Confirm Submit Modal */}
+        {showConfirmModal && (
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                title="Submit Quiz"
+                message={`You have answered ${Object.keys(answers).length} out of ${totalQuestions} questions. Are you sure you want to submit?`}
+                confirmText="Submit"
+                cancelText="Cancel"
+                type="submit"
+                onConfirm={confirmSubmit}
+                onClose={() => setShowConfirmModal(false)}
+            />
+        )}
+
         {/* Result Modal */}
         <QuizResultModal
             isOpen={showResultModal}
-            onClose={() => setShowResultModal(false)}
-            results={{
-            quizTitle: "Hazardous Waste Safety Quiz",
-            total: totalQuestions,
-            correct: quizQuestions.filter(function(q, index) {
-                return answers[index] === q.correctAnswer;
-            }).length,
-            wrong: Object.keys(answers).length - quizQuestions.filter(function(q, index) {
-                return answers[index] === q.correctAnswer;
-            }).length
+            onClose={() => {
+                setShowResultModal(false);
+                navigate('/quiz');
             }}
+            results={quizResult}
         />
         </div>
     );

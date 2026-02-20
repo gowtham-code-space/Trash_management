@@ -25,6 +25,7 @@ import { clearSession } from "../../services/core/session";
 import { logout } from "../../services/features/authService";
 import { api } from "../../services/core/apiMethods";
 
+import place_holder_img from '../../assets/avator_placeholder.png'
 // Role ID to Role Name mapping
 function getRoleNameFromId(roleId) {
     const roleMap = {
@@ -314,7 +315,7 @@ return (
             </div>
             <div className="relative group cursor-pointer transition-transform active:scale-95">
             <img 
-                src={userDetails?.profile_pic || "https://res.cloudinary.com/do7fy5b0l/image/upload/v1771158049/avator_placeholder_ijsokb.png"} 
+                src={userDetails?.profile_pic || place_holder_img} 
                 alt="Avatar" 
                 className="w-10 h-10 rounded-full border-2 border-primaryLight p-0.5"
             />

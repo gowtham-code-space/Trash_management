@@ -6,6 +6,7 @@ import {
     createdResponse,
     conflictResponse
 } from '../../../utils/response.js';
+import { uploadUserProfilePicture } from '../../../utils/publicUrlService.js';
 import {
     getUserProfileService,
     updateBasicProfileService,
@@ -40,15 +41,16 @@ export const updateBasicProfileHandler = async (req, res) => {
         const trimmedFirstName = firstName.trim();
         const trimmedLastName = lastName.trim();
 
-        let profilePicPublicId = null;
+        let profilePicUrl = null;
         if (req.file) {
-            profilePicPublicId = req.file.filename;
+            const userId = req.user.user_id;
+            profilePicUrl = await uploadUserProfilePicture(req.file.buffer, userId);
         }
         
         const updateData = {
             firstName: trimmedFirstName,
             lastName: trimmedLastName,
-            profilePic: profilePicPublicId
+            profilePic: profilePicUrl
         };
         
         const result = await updateBasicProfileService(userId, updateData);

@@ -1,21 +1,8 @@
 import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from '../config/cloudinary.js';
 import { badRequestResponse } from '../utils/response.js';
 
-// Configure Cloudinary storage
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: (req, file) => {
-        // Use authenticated user's ID if available, otherwise fallback
-        const userId = req.user?.user_id || req.body.userId || 'unknown';
-        return {
-            folder: `trash_management/${userId}`,
-            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-            transformation: [{ quality: 'auto' }]
-        };
-    }
-});
+// Configure memory storage for multer
+const storage = multer.memoryStorage();
 
 // File filter - only allow images
 const fileFilter = (req, file, cb) => {

@@ -1,16 +1,29 @@
 import React from "react";
 import ThemeStore from "../../../store/ThemeStore";
-import { Check, X, Star, Certificate } from "../../../assets/icons/icons";
+import { Check, X, Star } from "../../../assets/icons/icons";
 import { useNavigate } from "react-router-dom";
 
 function QuizResultModal({ isOpen, onClose, results }) {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
 
-    if (!isOpen) return null;
+    console.log('QuizResultModal render:', { isOpen, hasResults: !!results, results });
 
-    const percentage = Math.round((results.correct / results.total) * 100);
-    const passed = percentage >= 60;
+    if (!isOpen) {
+        console.log('QuizResultModal: Not showing because isOpen is false');
+        return null;
+    }
+    
+    if (!results) {
+        console.log('QuizResultModal: Not showing because results is null/undefined');
+        return null;
+    }
+
+    const percentage = parseFloat(results.percentage || 0);
+    const passed = results.is_pass === 1 || results.is_pass === true;
+    const score = results.score || 0;
+    const totalScore = results.total_score || 20;
+    const passMarkPercentage = results.pass_mark ? Math.round((results.pass_mark / results.total_score) * 100) : 60;
 
     return (
         <div className={isDarkTheme ? "dark" : ""}>
@@ -23,7 +36,7 @@ function QuizResultModal({ isOpen, onClose, results }) {
                     Quiz Completed!
                 </h2>
                 <p className="text-sm text-gray-500">
-                    {results.quizTitle}
+                    Quiz #{results.quiz_id}
                 </p>
                 </div>
                 <button
@@ -42,7 +55,7 @@ function QuizResultModal({ isOpen, onClose, results }) {
                             ${passed ? "bg-success/10 border-4 border-success" : "bg-error/10 border-4 border-error"}`}>
                 <div className="text-center">
                     <p className={`text-3xl font-bold ${passed ? "text-success" : "text-error"}`}>
-                    {percentage}%
+                    {percentage.toFixed(0)}%
                     </p>
                     <p className="text-xs text-gray-500">Score</p>
                 </div>
@@ -62,26 +75,19 @@ function QuizResultModal({ isOpen, onClose, results }) {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-6">
                 <div className="bg-secondary rounded-medium p-4 text-center border border-gray-200">
                 <p className="text-2xl font-bold text-primary mb-1">
-                    {results.total}
+                    {score}
                 </p>
-                <p className="text-xs text-gray-500">Total</p>
+                <p className="text-xs text-gray-500">Your Score</p>
                 </div>
                 
-                <div className="bg-success/10 rounded-medium p-4 text-center border border-success/20">
-                <p className="text-2xl font-bold text-success mb-1">
-                    {results.correct}
+                <div className="bg-secondary rounded-medium p-4 text-center border border-gray-200">
+                <p className="text-2xl font-bold text-primary mb-1">
+                    {totalScore}
                 </p>
-                <p className="text-xs text-gray-500">Correct</p>
-                </div>
-                
-                <div className="bg-error/10 rounded-medium p-4 text-center border border-error/20">
-                <p className="text-2xl font-bold text-error mb-1">
-                    {results.wrong}
-                </p>
-                <p className="text-xs text-gray-500">Wrong</p>
+                <p className="text-xs text-gray-500">Total Score</p>
                 </div>
             </div>
 
@@ -97,38 +103,25 @@ function QuizResultModal({ isOpen, onClose, results }) {
                     </h3>
                     <p className="text-xs text-gray-500">
                     {passed 
-                        ? "You've demonstrated excellent knowledge of waste management practices."
-                        : "Review the topics and try again to improve your score."}
+                        ? `You've scored ${percentage.toFixed(1)}% and passed the quiz! (Pass mark: ${passMarkPercentage}%)`
+                        : `You've scored ${percentage.toFixed(1)}%. You need ${passMarkPercentage}% to pass. Review the topics and try again!`}
                     </p>
                 </div>
                 </div>
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">            
-                {passed && (
-                <button
-                    onClick={()=>navigate("/quiz")}
-                    className="flex-1 px-6 py-3 rounded-medium text-sm font-medium bg-primary text-white flex items-center justify-center gap-2
+            <button
+                onClick={() => {
+                    onClose();
+                    navigate("/quiz");
+                }}
+                className="w-full px-6 py-3 rounded-medium text-sm font-medium bg-primary text-white
                             hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
-                >
-                    <Certificate size={18} defaultColor="#fff" />
-                    Get Certificate
-                </button>
-                )}
-                
-                {!passed && (
-                <button
-                    onClick={()=>navigate("/quiz")}
-                    className="flex-1 px-6 py-3 rounded-medium text-sm font-medium bg-primary text-white
-                            hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
-                            focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
-                >
-                    Retake Quiz
-                </button>
-                )}
-            </div>
+            >
+                {passed ? "Back to Quiz" : "Retake Quiz"}
+            </button>
             </div>
         </div>
         </div>

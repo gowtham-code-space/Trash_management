@@ -38,7 +38,7 @@ const pool = mysql.createPool({
     
     // Compatibility settings
     charset: 'utf8mb4',
-    timezone: '+05:30',
+    timezone: 'Z', // UTC timezone (was '+05:30' IST - changed to store all times in UTC)
     supportBigNumbers: true,
     bigNumberStrings: true,
     dateStrings: true,
