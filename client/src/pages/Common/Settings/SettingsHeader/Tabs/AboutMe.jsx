@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import UpdateContactInfo from "../../../../../components/Modals/Settings/UpdateContactInfo";
 import ViewProfileModal from "../../../../../components/Modals/Settings/ViewProfileModal";
 import { getProfile, updateProfile, requestPhoneOtp, requestEmailOtp, verifyEmailOtp, deleteProfilePic } from "../../../../../services/features/settingsService";
+import { SkeletonAvatar, SkeletonLine, SkeletonBlock } from "../../../../../components/skeleton";
 
 function AboutMe() {
     const navigate = useNavigate();
@@ -253,8 +254,46 @@ function AboutMe() {
         {loading ? (
             <div className="max-w-2xl mx-auto">
                 <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
-                    <div className="flex items-center justify-center py-20">
-                        <p className="text-secondaryDark">Loading profile...</p>
+                    <div className="flex items-start justify-between mb-6">
+                        <div className="flex items-center gap-4">
+                            <SkeletonAvatar variant="large" />
+                            <SkeletonLine variant="medium" width="1/3" />
+                        </div>
+                        <SkeletonLine variant="small" width="1/4" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <SkeletonLine variant="small" width="1/3" />
+                            <div className="mt-2">
+                                <SkeletonLine variant="medium" width="full" />
+                            </div>
+                        </div>
+                        <div>
+                            <SkeletonLine variant="small" width="1/3" />
+                            <div className="mt-2">
+                                <SkeletonLine variant="medium" width="full" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <SkeletonLine variant="small" width="1/2" />
+                            <div className="mt-2">
+                                <SkeletonLine variant="medium" width="full" />
+                            </div>
+                        </div>
+                        <div>
+                            <SkeletonLine variant="small" width="1/2" />
+                            <div className="mt-2">
+                                <SkeletonLine variant="medium" width="full" />
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <SkeletonLine variant="small" width="1/4" />
+                        <div className="mt-2">
+                            <SkeletonBlock variant="medium" height="medium" />
+                        </div>
                     </div>
                 </div>
             </div>

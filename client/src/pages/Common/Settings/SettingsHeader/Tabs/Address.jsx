@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import UpdateAddressInfo from "../../../../../components/Modals/Settings/UpdateAddressInfo";
 import { getAddress, updateAddress } from "../../../../../services/features/settingsService";
 import { getDistricts, getWardsByDistrict, getStreetsByWard } from "../../../../../services/features/authService";
+import { SkeletonLine } from "../../../../../components/skeleton";
 
 function Address() {
     const [isEditMode, setIsEditMode] = useState(false);
@@ -198,7 +199,36 @@ function Address() {
             <div className="bg-background py-5">
                 <div className="max-w-2xl mx-auto">
                     <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
-                        <p className="text-center text-secondaryDark/60">Loading...</p>
+                        <div className="flex items-center justify-between mb-6">
+                            <SkeletonLine variant="large" width="1/3" />
+                            <SkeletonLine variant="medium" width="1/4" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <SkeletonLine variant="small" width="1/3" />
+                                <div className="mt-2">
+                                    <SkeletonLine variant="medium" width="full" />
+                                </div>
+                            </div>
+                            <div>
+                                <SkeletonLine variant="small" width="1/2" />
+                                <div className="mt-2">
+                                    <SkeletonLine variant="medium" width="full" />
+                                </div>
+                            </div>
+                            <div>
+                                <SkeletonLine variant="small" width="1/3" />
+                                <div className="mt-2">
+                                    <SkeletonLine variant="medium" width="full" />
+                                </div>
+                            </div>
+                            <div>
+                                <SkeletonLine variant="small" width="1/2" />
+                                <div className="mt-2">
+                                    <SkeletonLine variant="medium" width="full" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

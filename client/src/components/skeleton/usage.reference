@@ -1,0 +1,124 @@
+/**
+ * Skeleton Component Usage Examples
+ * 
+ * Import components individually:
+ * import { SkeletonLine, SkeletonAvatar, SkeletonCard, SkeletonBlock, SkeletonButton } from '../components/Skeleton';
+ * 
+ * Or import all at once:
+ * import * as Skeleton from '../components/Skeleton';
+ */
+
+// ===== SkeletonLine =====
+// Used for text placeholders
+<SkeletonLine variant="small" />        // h-3 (captions, labels)
+<SkeletonLine variant="medium" />       // h-4 (body text) - DEFAULT
+<SkeletonLine variant="large" />        // h-5 (subheadings)
+<SkeletonLine variant="heading" />      // h-6 (headings)
+
+// With width control
+<SkeletonLine width="full" />           // w-full - DEFAULT
+<SkeletonLine width="3/4" />            // w-3/4
+<SkeletonLine width="1/2" />            // w-1/2
+<SkeletonLine width="1/3" />            // w-1/3
+<SkeletonLine width="1/4" />            // w-1/4
+
+// Combined usage
+<SkeletonLine variant="heading" width="3/4" />
+
+
+// ===== SkeletonAvatar =====
+// Used for circular profile images/icons
+<SkeletonAvatar variant="small" />      // w-8 h-8 (icons)
+<SkeletonAvatar variant="medium" />     // w-12 h-12 (icons) - DEFAULT
+<SkeletonAvatar variant="large" />      // w-16 h-16 (avatars)
+<SkeletonAvatar variant="xlarge" />     // w-24 h-24 (profile pics)
+
+
+// ===== SkeletonCard =====
+// Used for card containers with built-in content lines
+<SkeletonCard variant="small" />        // p-4, min-h-32
+<SkeletonCard variant="medium" />       // p-6, min-h-48 - DEFAULT
+<SkeletonCard variant="large" />        // p-8, min-h-64
+
+
+// ===== SkeletonBlock =====
+// Used for rectangular content blocks (images, divs)
+<SkeletonBlock variant="small" />       // rounded-medium
+<SkeletonBlock variant="medium" />      // rounded-large - DEFAULT
+<SkeletonBlock variant="large" />       // rounded-large
+
+// With height control
+<SkeletonBlock height="auto" />         // h-auto - DEFAULT
+<SkeletonBlock height="small" />        // h-20
+<SkeletonBlock height="medium" />       // h-32
+<SkeletonBlock height="large" />        // h-48
+<SkeletonBlock height="xlarge" />       // h-64
+
+// Combined usage
+<SkeletonBlock variant="medium" height="large" />
+
+
+// ===== SkeletonButton =====
+// Used for button placeholders
+<SkeletonButton variant="small" />      // px-4 py-2, h-9
+<SkeletonButton variant="medium" />     // px-6 py-3, h-11 - DEFAULT
+<SkeletonButton variant="large" />      // px-8 py-4, h-14
+
+// With width control
+<SkeletonButton width="auto" />         // w-auto - DEFAULT
+<SkeletonButton width="full" />         // w-full
+<SkeletonButton width="fit" />          // w-fit
+
+
+// ===== REAL USAGE EXAMPLE - Quiz Page Loading =====
+import { SkeletonCard, SkeletonLine, SkeletonAvatar, SkeletonButton } from '../components/Skeleton';
+
+function QuizPageSkeleton() {
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <SkeletonCard variant="small">
+        <SkeletonLine variant="medium" width="1/2" />
+        <SkeletonLine variant="small" width="3/4" />
+      </SkeletonCard>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-3 gap-4 mb-6">
+        <SkeletonCard variant="small" />
+        <SkeletonCard variant="small" />
+        <SkeletonCard variant="small" />
+      </div>
+
+      {/* Quiz History */}
+      <SkeletonCard variant="medium">
+        <div className="space-y-3">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="flex items-center gap-3">
+              <SkeletonAvatar variant="medium" />
+              <div className="flex-1 space-y-2">
+                <SkeletonLine variant="medium" width="1/2" />
+                <SkeletonLine variant="small" width="1/3" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </SkeletonCard>
+
+      {/* Action Button */}
+      <SkeletonButton variant="large" width="full" />
+    </div>
+  );
+}
+
+
+// ===== THEME BEHAVIOR =====
+// All skeleton components automatically adapt to light/dark theme via ThemeStore
+// Light theme: Gray shimmer (bg-gray-200)
+// Dark theme: Dark surface shimmer (bg-darkSurface)
+
+
+// ===== CUSTOM STYLING =====
+// All components accept className prop for additional customization
+<SkeletonLine className="my-4" />
+<SkeletonAvatar className="mx-auto" />
+<SkeletonCard className="shadow-lg" />

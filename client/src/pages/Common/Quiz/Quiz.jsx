@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getQuizStats, getQuizHistory, startQuiz, getQuizReview, getCertificateUrl } from "../../../services/features/quizService";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import { SkeletonLine, SkeletonCard, SkeletonBlock, SkeletonButton } from "../../../components/skeleton";
 
 function Quiz() {
   const navigate = useNavigate();
@@ -168,10 +169,63 @@ function Quiz() {
 
   if (isLoading) {
     return (
-      <div className={`min-h-screen ${isDarkTheme ? "bg-darkBackground" : "bg-background"} flex items-center justify-center`}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>Loading quiz data...</p>
+      <div className={`min-h-screen ${isDarkTheme ? "bg-darkBackground" : "bg-background"}`}>
+        <div className="p-6 rounded-large mb-6 bg-primary">
+          <SkeletonLine variant="medium" width="3/4" />
+          <div className="mt-2 mb-4">
+            <SkeletonLine variant="small" width="1/2" />
+          </div>
+          <SkeletonButton variant="medium" width="fit" />
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className={`p-4 rounded-large ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
+              <SkeletonBlock variant="small" height="small" />
+              <div className="mt-2">
+                <SkeletonLine variant="large" width="1/2" />
+              </div>
+              <div className="mt-1">
+                <SkeletonLine variant="small" width="3/4" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className={`p-6 rounded-large mb-6 ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
+          <div className="flex justify-between items-center mb-4">
+            <SkeletonLine variant="large" width="1/3" />
+            <SkeletonLine variant="small" width="1/4" />
+          </div>
+          <div className="space-y-3">
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} className={`p-4 rounded-medium ${isDarkTheme ? "bg-darkBackground" : "bg-gray-50"}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <SkeletonBlock variant="small" height="small" />
+                    <div>
+                      <SkeletonLine variant="medium" width="1/2" />
+                      <div className="mt-1">
+                        <SkeletonLine variant="small" width="1/3" />
+                      </div>
+                    </div>
+                  </div>
+                  <SkeletonLine variant="small" width="1/4" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={`p-6 rounded-large ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
+          <SkeletonLine variant="large" width="1/3" />
+          <div className="flex gap-4 overflow-x-auto pb-2 mt-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="min-w-50">
+                <SkeletonBlock variant="medium" height="xlarge" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

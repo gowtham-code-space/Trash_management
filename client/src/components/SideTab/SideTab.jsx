@@ -24,6 +24,7 @@ import ThemeStore from "../../store/ThemeStore";
 import { clearSession } from "../../services/core/session";
 import { logout } from "../../services/features/authService";
 import { api } from "../../services/core/apiMethods";
+import { SkeletonLine } from "../../components/skeleton";
 
 import place_holder_img from '../../assets/avator_placeholder.png'
 // Role ID to Role Name mapping
@@ -306,11 +307,15 @@ return (
             className="flex items-center gap-3 pl-2 md:pl-4 border-l border-secondaryLight hover:cursor-pointer"
         >
             <div className="hidden sm:block text-right">
-            <p className="text-sm font-bold text-primary leading-none mb-1">
-                {isLoadingUser ? 'Loading...' : (
-                    userDetails?.first_name ? `${userDetails.first_name} ${userDetails.last_name || ''}`.trim() : userDetails?.email || 'User'
-                )}
-            </p>
+            {isLoadingUser ? (
+                <div className="mb-1">
+                    <SkeletonLine variant="medium" width="3/4" />
+                </div>
+            ) : (
+                <p className="text-sm font-bold text-primary leading-none mb-1">
+                    {userDetails?.first_name ? `${userDetails.first_name} ${userDetails.last_name || ''}`.trim() : userDetails?.email || 'User'}
+                </p>
+            )}
             <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">View Profile</p>
             </div>
             <div className="relative group cursor-pointer transition-transform active:scale-95">
