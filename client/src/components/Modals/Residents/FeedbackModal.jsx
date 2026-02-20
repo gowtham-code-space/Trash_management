@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Star, Check, Add } from "../../../assets/icons/icons";
+import { Star, Check, Add, X } from "../../../assets/icons/icons";
 import ToastNotification from "../../../components/Notification/ToastNotification";
+import ThemeStore from "../../../store/ThemeStore";
 
 function FeedbackModal({ collector, onClose }) {
+    const { isDarkTheme } = ThemeStore();
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
@@ -22,87 +24,95 @@ function FeedbackModal({ collector, onClose }) {
     }
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {/* Backdrop */}
+        <div className={isDarkTheme ? "dark" : ""}>
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
         <div 
             className="absolute inset-0 bg-primary/40 backdrop-blur-sm animate-in fade-in duration-300"
             onClick={onClose}
         />
 
-        {/* Modal Card */}
-        <div className="relative bg-white border border-secondary rounded-xl p-6 w-full max-w-sm shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center">
-            
-            {/* Profile Image */}
-            <div className="relative mb-4">
-            <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-primaryLight shadow-md">
-                <img src={collector.avatar} alt="TrashMan" className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute -bottom-2 -right-2 bg-success text-white p-1 rounded-lg border-2 border-white shadow-sm">
-                <Check size={14} isPressed={false} isDarkTheme={true} />
-            </div>
-            </div>
-
-            {/* Collector Details */}
-            <div className="text-center mb-6">
-            <h2 className="text-base font-bold text-black uppercase tracking-tight">{collector.name}</h2>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">ID: {collector.id}</p>
-            </div>
-
-            {/* Star Rating */}
-            <div className="flex items-center gap-2 mb-6">
-            {[1, 2, 3, 4, 5].map(function(num) {
-                return (
-                <button 
-                    key={num}
-                    onClick={function() { setRating(num); }}
-                    className="transition-transform active:scale-75 hover:scale-110"
-                >
-                    <Star 
-                    size={28} 
-                    isPressed={num <= rating} 
-                    isDarkTheme={false} 
-                    OnpressColor="#F2C94C" 
-                    />
-                </button>
-                );
-            })}
-            </div>
-
-            {/* Comment Area */}
-            <div className="w-full mb-6">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-2 block">
-                Share your experience
-            </label>
-            <textarea 
-                rows="3"
-                value={comment}
-                onChange={function(e) { setComment(e.target.value); }}
-                placeholder="Help us improve our service..."
-                className="w-full p-3 bg-background border border-secondary rounded-lg text-xs focus:border-primaryLight focus:outline-none transition-colors resize-none placeholder:italic"
-            />
-            </div>
-
-            {/* Actions */}
-            <div className="grid grid-cols-2 gap-3 w-full">
-            <button 
+        <div className="relative bg-white border border-secondary rounded-veryLarge p-8 w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-300">
+            <button
                 onClick={onClose}
-                className="py-3 bg-background border border-secondary rounded-lg text-xs font-bold text-gray-500 hover:bg-secondary transition-all active:scale-95"
+                className="absolute top-4 right-4 p-2 rounded-medium bg-background hover:bg-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
             >
-                Cancel
+                <X size={18} defaultColor="#316F5D" />
             </button>
-            <button 
-                onClick={handleSubmit}
-                disabled={loading}
-                className="py-3 bg-primaryLight text-white rounded-lg text-xs font-bold shadow-lg shadow-primaryLight/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-                {loading ? "Sending..." : (
-                <>
-                    Submit
-                    <Add size={14} isPressed={false} isDarkTheme={true} />
-                </>
-                )}
-            </button>
+
+            <div className="flex flex-col items-center">
+            <div className="relative mb-6">
+                <div className="w-28 h-28 rounded-veryLarge overflow-hidden border-4 border-primaryLight shadow-xl">
+                    <img src={collector.avatar} alt="Waste Collector" className="w-full h-full object-cover" />
+                </div>
+                <div className="absolute -bottom-3 -right-3 bg-success p-2 rounded-large shadow-lg">
+                    <Check size={18} isPressed={false} isDarkTheme={true} />
+                </div>
             </div>
+
+            <div className="text-center mb-8">
+                <h2 className="text-xl font-bold text-primary uppercase tracking-tight">{collector.name}</h2>
+                <p className="text-sm text-secondaryDark mt-2 bg-secondary px-4 py-1 rounded-large inline-block">ID: {collector.id}</p>
+            </div>
+
+            <div className="w-full mb-8">
+                <label className="text-sm font-bold text-secondaryDark uppercase tracking-wide mb-4 block text-center">
+                    Rate Your Experience
+                </label>
+                <div className="flex items-center justify-center gap-3 bg-background rounded-veryLarge p-4">
+                {[1, 2, 3, 4, 5].map(function(num) {
+                    return (
+                    <button 
+                        key={num}
+                        onClick={function() { setRating(num); }}
+                        className="p-2 hover:scale-[1.15] active:scale-[0.95] focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-medium transition-all duration-200 ease-in-out"
+                    >
+                        <Star 
+                        size={36} 
+                        isPressed={num <= rating} 
+                        isDarkTheme={false} 
+                        OnpressColor="#F2C94C" 
+                        />
+                    </button>
+                    );
+                })}
+                </div>
+            </div>
+
+            <div className="w-full mb-8">
+                <label className="text-sm font-bold text-secondaryDark uppercase tracking-wide mb-3 block">
+                    Share Your Feedback
+                </label>
+                <textarea 
+                    rows="5"
+                    value={comment}
+                    onChange={function(e) { setComment(e.target.value); }}
+                    placeholder="Tell us about your experience with the waste collection service..."
+                    className="w-full p-4 bg-background border-2 border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary hover:border-primaryLight transition-all duration-200 ease-in-out resize-none placeholder:text-secondaryDark/50"
+                />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 w-full">
+                <button 
+                    onClick={onClose}
+                    className="py-4 bg-background border-2 border-secondary rounded-large text-sm font-bold text-secondaryDark hover:bg-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
+                >
+                    Cancel
+                </button>
+                <button 
+                    onClick={handleSubmit}
+                    disabled={loading || rating === 0}
+                    className="py-4 bg-primary text-white rounded-large text-sm font-bold shadow-lg hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? "Submitting..." : (
+                    <>
+                        Submit Feedback
+                        <Check size={18} isPressed={false} isDarkTheme={true} />
+                    </>
+                    )}
+                </button>
+            </div>
+            </div>
+        </div>
         </div>
         </div>
     );
