@@ -140,8 +140,11 @@ export const getQuizHistoryHandler = async (req, res) => {
         const userId = req.user.user_id;
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const dateFilter = req.query.dateFilter || null;
+        const startDate = req.query.startDate || null;
+        const endDate = req.query.endDate || null;
 
-        const result = await quizService.getQuizHistoryService(userId, page, limit);
+        const result = await quizService.getQuizHistoryService(userId, page, limit, dateFilter, startDate, endDate);
 
         if (!result.success) {
             return errorResponse(res, 'Failed to fetch quiz history', 500);

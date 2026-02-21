@@ -3,10 +3,10 @@ import {
     Location,
     Expand,
     X
-} from "../../assets/icons/icons";
-import ThemeStore from "../../store/ThemeStore";
+} from "../../../assets/icons/icons";
+import ThemeStore from "../../../store/ThemeStore";
 
-function TrashManFeedBack() {
+function CreateFeedBack() {
     const { isDarkTheme } = ThemeStore();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -328,4 +328,4 @@ function TrashManFeedBack() {
     );
 }
 
-export default TrashManFeedBack;
+export default CreateFeedBack;

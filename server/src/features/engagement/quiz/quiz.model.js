@@ -278,10 +278,18 @@ export const getQuizStats = async (userId) => {
     }
 };
 
-export const getQuizHistory = async (userId, limit, offset) => {
+export const getQuizHistory = async (userId, limit, offset, dateFilter = null, startDate = null, endDate = null) => {
     try {
         const parsedLimit = parseInt(limit, 10);
         const parsedOffset = parseInt(offset, 10);
+        
+        let dateCondition = '';
+        const params = [userId];
+        
+        if (dateFilter === 'custom' && startDate && endDate) {
+            dateCondition = 'AND qm.created_at >= ? AND qm.created_at < ?';
+            params.push(startDate, endDate);
+        }
         
         const query = `
             SELECT 
@@ -299,12 +307,13 @@ export const getQuizHistory = async (userId, limit, offset) => {
             FROM quiz_management qm
             JOIN quiz_total_score_time qst ON qm.score_time_id = qst.score_time_id
             WHERE qm.user_id = ?
+            ${dateCondition}
             ORDER BY qm.created_at DESC
             LIMIT ${parsedLimit} OFFSET ${parsedOffset}
         `;
         
         const conn = await pool.getConnection();
-        const [rows] = await conn.execute(query, [userId]);
+        const [rows] = await conn.execute(query, params);
         conn.release();
         
         return rows;
@@ -313,16 +322,25 @@ export const getQuizHistory = async (userId, limit, offset) => {
     }
 };
 
-export const getQuizHistoryCount = async (userId) => {
+export const getQuizHistoryCount = async (userId, dateFilter = null, startDate = null, endDate = null) => {
     try {
+        let dateCondition = '';
+        const params = [userId];
+        
+        if (dateFilter === 'custom' && startDate && endDate) {
+            dateCondition = 'AND created_at >= ? AND created_at < ?';
+            params.push(startDate, endDate);
+        }
+        
         const query = `
             SELECT COUNT(*) as total
             FROM quiz_management
             WHERE user_id = ?
+            ${dateCondition}
         `;
         
         const conn = await pool.getConnection();
-        const [rows] = await conn.execute(query, [userId]);
+        const [rows] = await conn.execute(query, params);
         conn.release();
         
         return rows[0].total;

@@ -94,7 +94,6 @@
     width: 60px;
     height: 60px;
     border-color: var(--color-success);
-    box-shadow: 0 0 20px rgba(30, 142, 84, 0.5);
 }
 
 .qr-scanner-corners::before {
@@ -120,7 +119,6 @@
     width: 60px;
     height: 60px;
     border-color: var(--color-success);
-    box-shadow: 0 0 20px rgba(30, 142, 84, 0.5);
 }
 
 .qr-scanner-corners-bottom::before {

@@ -10,7 +10,6 @@ import Home from "../pages/Residents/Home";
 import Map from "../pages/Residents/Map";
 import ReportTrash from "../pages/Residents/ReportTrash";
 import TrashDetails from "../pages/Residents/TrashDetails"
-import Feedback from "../pages/Residents/Feedback";
 import ResidentStats from "../pages/Residents/ResidentStats";
 import RouteTimings from "../pages/Common/RouteTimings/RouteTimings";
 
@@ -21,7 +20,6 @@ import TakeQuiz from "../pages/Common/Quiz/TakeQuiz";
 //TrashMan
 import TrashManDashboard from "../pages/TrashMan/TrashManDashBoard";
 import UploadAttendance from "../pages/TrashMan/Attendance/UploadAttendance";
-import TrashManFeedBack from "../pages/TrashMan/TrashmanFeedback";
 import ImmediateTasks from "../pages/TrashMan/ImmediateTasks/ImmediateTasks";
 import TrashmanStats from "../pages/TrashMan/TrashmanStats";
 
@@ -59,6 +57,10 @@ import ConfigHeader from "../pages/Commissioner/ConfigHeader/ConfigHeader";
 import RouteConfigHeader from "../pages/SanitoryInspector/RouteConfigHeader/RouteConfigHeader";
 import EmployeesOverview from "../pages/Commissioner/ManageEmployees/EmployeesOverview";
 
+// feedback
+import CreateFeedBack from "../pages/Common/Feedback/CreateFeedBack";
+import SubmitFeedBack from "../pages/Common/Feedback/SubmitFeedBack";
+
 
 
 
@@ -95,7 +97,7 @@ return (
             <Route path="my-stats" element={<ResidentStats/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
-            <Route path="submit-feedback" element={<Feedback/>} />
+            <Route path="submit-feedback" element={<SubmitFeedBack/>} />
             <Route path="settings" element={<SettingsHeader/>} />
             </>
         )}
@@ -108,8 +110,8 @@ return (
             <Route path="immediate-tasks" element={<ImmediateTasks/>} />
             <Route path="upload-attendance" element={<UploadAttendance/>} />
             <Route path="my-stats" element={<TrashmanStats/>} />
-            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
-            <Route path="submit-feedback" element={<Feedback/>} />
+            <Route path="create-feedback-session" element={<CreateFeedBack/>} />
+            <Route path="submit-feedback" element={<SubmitFeedBack/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />
             <Route path="settings" element={<SettingsHeader/>} />
@@ -123,8 +125,8 @@ return (
             <Route index element={<SupervisorDashboard/>} />
             <Route path="trashman-stats" element={<TrashmanStats/>} />
             <Route path="attendance" element={<Attendance/>} />
-            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
-            <Route path="submit-feedback" element={<Feedback/>} />
+            <Route path="create-feedback-session" element={<CreateFeedBack/>} />
+            <Route path="submit-feedback" element={<SubmitFeedBack/>} />
             <Route path="all-tasks" element={<AllTasks/>}/>
             <Route path="assign-task" element={<AssignToTrashmen/>}/>
             <Route path="my-stats" element={<SupervisorStats/>} />
@@ -147,7 +149,7 @@ return (
             <Route path="overall-stats" element={<StatsHeader/>} />
             <Route path="id-card" element={<IdentityCard/>} />
             <Route path="search-workers" element={<SearchWorkers/>} />
-            <Route path="create-feedback-session" element={<TrashManFeedBack/>} />
+            <Route path="create-feedback-session" element={<CreateFeedBack/>} />
             <Route path="config-route" element={<RouteConfigHeader/>} />
             <Route path="quiz" element={<Quiz/>} />
             <Route path="take-quiz" element={<TakeQuiz/>} />

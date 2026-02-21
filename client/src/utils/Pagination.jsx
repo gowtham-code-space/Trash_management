@@ -1,20 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LeftArrow, RightArrow } from "../assets/icons/icons";
 
-function Pagination({ data, itemsPerPage = 5, renderItem , gridDisplay = false }) {
-const [currentPage, setCurrentPage] = useState(1);
+function Pagination({ data, itemsPerPage = 5, renderItem, gridDisplay = false, serverSide = false, totalItems = 0, currentPage = 1, onPageChange }) {
+const [localPage, setLocalPage] = useState(1);
 
-// Pagination Logic
-const totalItems = data.length;
-const totalPages = Math.ceil(totalItems / itemsPerPage);
-const startIdx = (currentPage - 1) * itemsPerPage;
-const endIdx = Math.min(startIdx + itemsPerPage, totalItems);
-const currentItems = data.slice(startIdx, endIdx);
+const activePage = serverSide ? currentPage : localPage;
+
+const totalPages = serverSide 
+    ? Math.ceil(totalItems / itemsPerPage) 
+    : Math.ceil(data.length / itemsPerPage);
+
+const startIdx = serverSide 
+    ? (currentPage - 1) * itemsPerPage 
+    : (localPage - 1) * itemsPerPage;
+
+const endIdx = serverSide 
+    ? Math.min(startIdx + itemsPerPage, totalItems) 
+    : Math.min(startIdx + itemsPerPage, data.length);
+
+const currentItems = serverSide ? data : data.slice(startIdx, endIdx);
+
+const displayTotal = serverSide ? totalItems : data.length;
+
+useEffect(() => {
+    if (!serverSide) {
+        setLocalPage(1);
+    }
+}, [data.length, serverSide]);
 
 function handlePageChange(pageNum) {
-if (pageNum >= 1 && pageNum <= totalPages) {
-    setCurrentPage(pageNum);
-}
+    if (pageNum >= 1 && pageNum <= totalPages) {
+        if (serverSide && onPageChange) {
+            onPageChange(pageNum);
+        } else {
+            setLocalPage(pageNum);
+        }
+    }
 }
 
 return (
@@ -27,14 +48,14 @@ return (
     {/* Pagination Controls */}
     <div className="flex items-center justify-end mt-6 gap-4 border-t border-secondary pt-4">
     <span className="text-[11px] font-bold text-gray-400">
-        Showing {startIdx + 1}-{endIdx} of {totalItems}
+        Showing {startIdx + 1}-{endIdx} of {displayTotal}
     </span>
     
     <div className="flex items-center gap-1.5">
         <button 
-        onClick={() => handlePageChange(currentPage - 1)}
+        onClick={() => handlePageChange(activePage - 1)}
         className={`p-1.5 rounded-lg border border-secondary transition-all ${
-            currentPage === 1 
+            activePage === 1 
             ? 'opacity-20 pointer-events-none' 
             : 'hover:bg-background active:scale-90 text-primary'
         }`}
@@ -43,22 +64,22 @@ return (
         </button>
 
         <div className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-lg text-xs font-bold shadow-sm">
-        {currentPage}
+        {activePage}
         </div>
 
-        {currentPage < totalPages && (
+        {activePage < totalPages && (
         <button 
-            onClick={() => handlePageChange(currentPage + 1)}
+            onClick={() => handlePageChange(activePage + 1)}
             className="w-8 h-8 flex items-center justify-center border border-secondary hover:bg-background rounded-lg text-primary text-xs font-bold transition-all"
         >
-            {currentPage + 1}
+            {activePage + 1}
         </button>
         )}
 
         <button 
-        onClick={() => handlePageChange(currentPage + 1)}
+        onClick={() => handlePageChange(activePage + 1)}
         className={`p-1.5 rounded-lg border border-secondary transition-all ${
-            currentPage === totalPages 
+            activePage === totalPages 
             ? 'opacity-20 pointer-events-none' 
             : 'hover:bg-background active:scale-90 text-primary'
         }`}

@@ -5,11 +5,11 @@ import {
   RightArrow, 
   Check, 
   QRScanner 
-} from "../../assets/icons/icons";
-import ToastNotification from "../../components/Notification/ToastNotification";
+} from "../../../assets/icons/icons";
+import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
-import FeedBackModal from "../../components/Modals/Residents/FeedbackModal";
-import ThemeStore from "../../store/ThemeStore";
+import FeedBackModal from "../../../components/Modals/Residents/FeedbackModal";
+import ThemeStore from "../../../store/ThemeStore";
 
 // Mock Collector Data declared at component top level
 const mockTrashMan = {
@@ -19,7 +19,7 @@ const mockTrashMan = {
   rating: 4.8
 };
 
-function Feedback() {
+function SubmitFeedBack() {
   const [verifyMethod, setVerifyMethod] = useState("QR"); // QR or OTP
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [showModal, setShowModal] = useState(false);
@@ -116,8 +116,8 @@ function Feedback() {
         {/* Verification Section */}
         <div className="bg-white border border-secondary rounded-veryLarge p-6 md:p-8 shadow-sm">
           <header className="text-center mb-8">
-            <h1 className="text-xl font-bold text-primary uppercase tracking-wide">Waste Collector Verification</h1>
-            <p className="text-sm text-secondaryDark mt-2">Verify your waste collection to provide valuable feedback</p>
+            <h1 className="text-xl font-bold text-primary uppercase tracking-wide">Submit Feedback</h1>
+            <p className="text-sm text-secondaryDark mt-2">Verify using QR / OTP to provide valuable feedback</p>
           </header>
 
           {/* Toggle Switch */}
@@ -218,10 +218,10 @@ function Feedback() {
           onClose={() => setShowModal(false)} 
         />
       )}
-      <ToastContainer position="bottom-center" />
+      <ToastContainer/>
     </div>
     </div>
   );
 }
 
-export default Feedback;
+export default SubmitFeedBack;

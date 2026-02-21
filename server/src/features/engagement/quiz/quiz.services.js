@@ -281,16 +281,15 @@ export const getQuizStatsService = async (userId) => {
     }
 };
 
-export const getQuizHistoryService = async (userId, page = 1, limit = 10) => {
+export const getQuizHistoryService = async (userId, page = 1, limit = 10, dateFilter = null, startDate = null, endDate = null) => {
     try {
         const parsedPage = parseInt(page);
         const parsedLimit = parseInt(limit);
         const offset = (parsedPage - 1) * parsedLimit;
         
-        const history = await quizModel.getQuizHistory(userId, parsedLimit, offset);
-        const totalCount = await quizModel.getQuizHistoryCount(userId);
+        const history = await quizModel.getQuizHistory(userId, parsedLimit, offset, dateFilter, startDate, endDate);
+        const totalCount = await quizModel.getQuizHistoryCount(userId, dateFilter, startDate, endDate);
         
-        // Convert MySQL datetime to ISO 8601 format
         const formattedHistory = history.map(quiz => ({
             ...quiz,
             created_at: toISOString(quiz.created_at),

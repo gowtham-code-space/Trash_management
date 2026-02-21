@@ -25,8 +25,18 @@ export const submitQuiz = async (quizId) => {
     return await api.post('/quiz/submit', { quizId });
 };
 
-export const getQuizHistory = async (page = 1, limit = 10) => {
-    return await api.get(`/quiz/history?page=${page}&limit=${limit}`);
+export const getQuizHistory = async (page = 1, limit = 10, dateFilter = null, startDate = null, endDate = null) => {
+    let url = `/quiz/history?page=${page}&limit=${limit}`;
+    
+    if (dateFilter) {
+        url += `&dateFilter=${dateFilter}`;
+    }
+    
+    if (startDate && endDate) {
+        url += `&startDate=${startDate}&endDate=${endDate}`;
+    }
+    
+    return await api.get(url);
 };
 
 export const getQuizReview = async (quizId) => {
