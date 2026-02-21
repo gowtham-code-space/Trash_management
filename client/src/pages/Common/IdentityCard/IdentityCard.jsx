@@ -1,30 +1,162 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TNgovLogo from "../../../assets/TNgov.png";
 import frontSvg from "../../../assets/front.svg";
 import backSvg from "../../../assets/back.svg";
 import ThemeStore from "../../../store/ThemeStore";
-
-// Sample JSON data for the identity card - Make this dynamic
-const cardData = {
-    firstName: "JHON",
-    lastName: "SMITH",
-    position: "Sanitary Inspector",
-    idNo: "000234568",
-    joinDate: "11/17/2024",
-    phone: "+000 23 4568",
-    profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    qrData: "FEEDBACK-749382-SESSION",
-    address: "123 Main Street, Anna Nagar, Chennai - 600040, Tamil Nadu, India"
-};
+import place_holder from "../../../assets/avator_placeholder.png"
+import { getIdCard } from "../../../services/features/idCardService";
+import { SkeletonLine, SkeletonAvatar, SkeletonBlock, SkeletonCard } from "../../../components/skeleton";
 
 export default function IdentityCard() {
     const { isDarkTheme } = ThemeStore();
     const [isFlipped, setIsFlipped] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [cardData, setCardData] = useState(null);
+
+    useEffect(() => {
+        const fetchIdCard = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const response = await getIdCard();
+                
+                const names = response?.fullName?.split(' ') || [];
+                const firstName = names[0] || '';
+                const lastName = names.slice(1).join(' ') || '';
+                
+                setCardData({
+                    firstName: firstName.toUpperCase(),
+                    lastName: lastName.toUpperCase(),
+                    position: 'Government Employee',
+                    idNo: response.employeeId,
+                    joinDate: new Date(response.issuedDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }),
+                    phone: response.phoneNumber,
+                    profileImage: response.profilePic || place_holder,
+                    qrData: response.qrCode,
+                    address: response.address,
+                    cardStatus: response.cardStatus,
+                });
+            } catch (err) {
+                setError(err.message || 'Failed to load ID card');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchIdCard();
+    }, []);
 
     function handleFlip() {
         setIsFlipped(function(prev) {
         return !prev;
         });
+    }
+
+    if (loading) {
+        return (
+            <div className={`min-h-screen transition-colors duration-300 ${isDarkTheme ? 'bg-darkBackground' : 'bg-background'}`}>
+                <div className="relative z-10 min-h-screen">
+                    {/* Header Section */}
+                    <div className="text-center mb-12 max-w-full">
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                            <div className="w-12 h-12">
+                                <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
+                            </div>
+                            <div className="text-left">
+                                <h1 className={`text-xl font-bold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Identity Card</h1>
+                                <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Tamil Nadu Government</p>
+                            </div>
+                        </div>
+                        <SkeletonLine variant="small" width="1/3" className="mx-auto" />
+                    </div>
+
+                    {/* Main Content Grid */}
+                    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        {/* Left Side - ID Card Skeleton */}
+                        <div className="flex flex-col items-center">
+                            <div className="w-85 h-135">
+                                <SkeletonBlock variant="large" height="xlarge" className="rounded-[36px]! h-135!" />
+                            </div>
+                            <SkeletonLine variant="small" width="3/4" className="mt-6" />
+                        </div>
+
+                        {/* Right Side - Information Cards Skeleton */}
+                        <div className="space-y-6">
+                            {/* Card Details Skeleton */}
+                            <SkeletonCard variant="medium">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <SkeletonAvatar variant="medium" />
+                                        <SkeletonLine variant="large" width="1/2" />
+                                    </div>
+                                    <div className="space-y-3">
+                                        {[1, 2, 3, 4].map(i => (
+                                            <div key={i} className="space-y-1">
+                                                <SkeletonLine variant="small" width="1/4" />
+                                                <SkeletonLine variant="medium" width="1/2" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </SkeletonCard>
+
+                            {/* Card Status Skeleton */}
+                            <SkeletonCard variant="medium">
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <SkeletonAvatar variant="medium" />
+                                        <SkeletonLine variant="large" width="1/2" />
+                                    </div>
+                                    <div className="space-y-3">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="flex items-center justify-between">
+                                                <SkeletonLine variant="small" width="1/4" />
+                                                <SkeletonLine variant="small" width="1/3" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </SkeletonCard>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={`min-h-screen transition-colors duration-300 flex items-center justify-center ${isDarkTheme ? 'bg-darkBackground' : 'bg-background'}`}>
+                <div className={`p-8 rounded-large shadow-lg border ${isDarkTheme ? 'bg-darkBackgroundSecondary border-darkBorder' : 'bg-white border-gray-200'}`}>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center">
+                            <svg className="w-6 h-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Error Loading ID Card</h2>
+                            <p className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{error}</p>
+                        </div>
+                    </div>
+                    <button 
+                        onClick={() => window.location.reload()}
+                        className="w-full mt-4 px-4 py-2 bg-primary text-white rounded-large hover:bg-primary/90 transition-colors"
+                    >
+                        Retry
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    if (!cardData) {
+        return null;
     }
 
     return (
@@ -149,7 +281,7 @@ export default function IdentityCard() {
                             
                             <div className="w-21.25 h-21.25 bg-white p-1.5 rounded-md shadow-xl">
                                 <img 
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${cardData.qrData}`}
+                                    src={cardData.qrData}
                                     alt="QR Code"
                                     className="w-full h-full"
                                 />
@@ -203,9 +335,9 @@ export default function IdentityCard() {
                 {/* Card Status */}
                 <div className={`rounded-large p-6 shadow-lg border ${isDarkTheme ? 'bg-darkBackgroundSecondary border-darkBorder' : 'bg-white border-gray-200'}`}>
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div className={`w-10 h-10 rounded-full ${cardData.cardStatus === 'Active' ? 'bg-success/10' : 'bg-error/10'} flex items-center justify-center`}>
+                    <svg className={`w-5 h-5 ${cardData.cardStatus === 'Active' ? 'text-success' : 'text-error'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={cardData.cardStatus === 'Active' ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"} />
                     </svg>
                     </div>
                     <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Card Status</h2>
@@ -213,19 +345,14 @@ export default function IdentityCard() {
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                     <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Status</span>
-                    <span className="px-3 py-1 bg-success/10 text-success text-xs font-medium rounded-full">Active</span>
+                    <span className={`px-3 py-1 ${cardData.cardStatus === 'Active' ? 'bg-success/10 text-success' : 'bg-error/10 text-error'} text-xs font-medium rounded-full`}>{cardData.cardStatus}</span>
                     </div>
                     <div className="flex items-center justify-between">
                     <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Issued Date</span>
                     <span className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.joinDate}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Valid Until</span>
-                    <span className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>11/17/2029</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Card Type</span>
-                    <span className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Government Employee</span>
+                    
                     </div>
                 </div>
                 </div>

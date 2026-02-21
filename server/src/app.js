@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-// Import routes
 import authRoutes from './auth/auth.routes.js';
 import settingsRoutes from './features/common/settings/settings.routes.js';
 import quizRoutes from './features/engagement/quiz/quiz.routes.js';
+import idCardRoutes from './features/common/IdCard/IdCard.routes.js';
 
 const app = express();
 
@@ -33,6 +33,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/idcard', idCardRoutes);
 
 // Global error handler
 app.use((err, req, res, next) => {

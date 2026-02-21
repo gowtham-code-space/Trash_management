@@ -165,7 +165,7 @@ function Login() {
           disabled={isLoading}
           className={`w-full font-medium py-3 rounded-lg mb-6 transition-all duration-200 ${
             isLoading
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? 'bg-primary text-white cursor-not-allowed'
               : 'bg-primaryLight text-white hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
           }`}
         >
