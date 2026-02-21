@@ -1,11 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 import authRoutes from './auth/auth.routes.js';
 import settingsRoutes from './features/common/settings/settings.routes.js';
 import quizRoutes from './features/engagement/quiz/quiz.routes.js';
 import idCardRoutes from './features/common/IdCard/IdCard.routes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load OpenAPI specification
+const swaggerDocument = YAML.load(join(__dirname, '../docs/openapi.yaml'));
 
 const app = express();
 
@@ -29,6 +39,17 @@ app.get('/health', (req, res) => {
     });
 });
 
+// API Documentation (Swagger UI)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Trash Management API Documentation',
+    customfavIcon: '/favicon.ico'
+}));
+
+// Redirect /docs to /api-docs for convenience
+app.get('/docs', (req, res) => {
+    res.redirect('/api-docs');
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/settings', settingsRoutes);

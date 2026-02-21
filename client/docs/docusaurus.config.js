@@ -77,7 +77,7 @@ const config = {
             label: 'Documentation',
           },
           {
-            href: 'https://github.com/your-org/trash-management',
+            href: 'https://github.com/gowtham-code-space/Trash_management',
             label: 'GitHub',
             position: 'right',
           },
@@ -125,7 +125,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/your-org/trash-management',
+                href: 'https://github.com/gowtham-code-space/Trash_management',
               },
             ],
           },

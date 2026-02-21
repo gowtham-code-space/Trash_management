@@ -1,0 +1,1728 @@
+openapi: 3.0.3
+info:
+  title: Trash Management System API
+  description: |
+    Production-grade REST API for municipal waste management operations.
+    Supports role-based access control for 6 user types: Residents, Trash Workers, 
+    Supervisors, Sanitary Inspectors, Municipal Health Officers, and Commissioners.
+    
+    **Authentication:**
+    - OTP-based authentication via email
+    - JWT access tokens (short-lived, sent in Authorization header)
+    - Refresh tokens (long-lived, stored in HttpOnly cookies)
+    - Automatic token rotation on refresh
+    
+    **Base URL:** https://api.trashapp.com/v1
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: api@trashapp.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://api.trashapp.com/v1
+    description: Production server
+  - url: https://staging-api.trashapp.com/v1
+    description: Staging server
+  - url: http://localhost:5000/api
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Quiz
+    description: Quiz engagement system for waste management education
+  - name: Settings
+    description: User profile and account settings management
+  - name: ID Card
+    description: Digital identity card generation
+  - name: System
+    description: System health and monitoring endpoints
+
+security:
+  - bearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health check endpoint
+      description: Check API server health status and uptime
+      operationId: healthCheck
+      security: []
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2026-02-21T10:30:00.000Z'
+                  uptime:
+                    type: number
+                    description: Server uptime in seconds
+                    example: 86400.5
+
+  /auth/request-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Request OTP for authentication
+      description: |
+        Initiates authentication flow by sending OTP to user's email.
+        Supports both login and signup scenarios.
+      operationId: requestOtp
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                isSignup:
+                  type: boolean
+                  default: false
+                  description: Indicates if this is a signup request
+      responses:
+        '201':
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          otp_id:
+                            type: string
+                            description: Temporary OTP session identifier
+                          userId:
+                            type: integer
+                            description: User's unique identifier
+                          message:
+                            type: string
+                            example: Check your email for OTP
+        '200':
+          description: User should complete signup
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          shouldRedirect:
+                            type: boolean
+                            example: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/verify-otp:
+    post:
+      tags:
+        - Authentication
+      summary: Verify OTP and authenticate user
+      description: |
+        Verifies the OTP code and returns authentication tokens.
+        Sets refresh token as HttpOnly cookie.
+      operationId: verifyOtp
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - otp_code
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                otp_code:
+                  type: string
+                  pattern: '^\d{6}$'
+                  example: '123456'
+                  description: 6-digit OTP code
+      responses:
+        '200':
+          description: OTP verified successfully
+          headers:
+            Set-Cookie:
+              description: HttpOnly refresh token cookie
+              schema:
+                type: string
+                example: refreshToken=eyJhbGc...; HttpOnly; Secure; SameSite=None; Max-Age=604800
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          accessToken:
+                            type: string
+                            description: JWT access token for API requests
+                            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                          hasCompletedSignup:
+                            type: boolean
+                            description: Whether user has completed profile setup
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/complete-signup:
+    post:
+      tags:
+        - Authentication
+      summary: Complete user signup profile
+      description: |
+        Completes user registration with profile details and optional profile picture.
+        Requires multipart/form-data for file upload.
+      operationId: completeSignup
+      security: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - userId
+                - firstName
+                - lastName
+                - email
+                - phoneNumber
+                - district
+                - wardNumber
+                - wardName
+                - streetName
+                - houseNumber
+              properties:
+                userId:
+                  type: integer
+                  example: 123
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  format: email
+                  example: john.doe@example.com
+                phoneNumber:
+                  type: string
+                  example: '+919876543210'
+                district:
+                  type: string
+                  example: Central District
+                wardNumber:
+                  type: integer
+                  example: 5
+                wardName:
+                  type: string
+                  example: Ward 5
+                streetName:
+                  type: string
+                  example: Main Street
+                houseNumber:
+                  type: string
+                  example: '123A'
+                profilePic:
+                  type: string
+                  format: binary
+                  description: Profile picture file (JPEG/PNG)
+      responses:
+        '200':
+          description: Signup completed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          completed:
+                            type: boolean
+                            example: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: |
+        Exchanges refresh token for new access token and refresh token (rotation).
+        Refresh token must be sent in HttpOnly cookie.
+      operationId: refreshToken
+      security: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          required: true
+          schema:
+            type: string
+          description: Refresh token from HttpOnly cookie
+      responses:
+        '200':
+          description: Token refreshed successfully
+          headers:
+            Set-Cookie:
+              description: New HttpOnly refresh token cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          accessToken:
+                            type: string
+                            description: New JWT access token
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout user
+      description: |
+        Invalidates refresh token and clears authentication cookies.
+        Does not require access token.
+      operationId: logout
+      security: []
+      parameters:
+        - in: cookie
+          name: refreshToken
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Logged out successfully
+          headers:
+            Set-Cookie:
+              description: Cleared refresh token cookie
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/user/{userId}:
+    get:
+      tags:
+        - Authentication
+      summary: Get user details by ID
+      description: Retrieves basic user profile information
+      operationId: getUserDetails
+      security: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: User's unique identifier
+      responses:
+        '200':
+          description: User details retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/districts:
+    get:
+      tags:
+        - Authentication
+      summary: Get all districts
+      description: Retrieves list of available districts for address selection
+      operationId: getDistricts
+      security: []
+      responses:
+        '200':
+          description: Districts retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/District'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/wards/{districtId}:
+    get:
+      tags:
+        - Authentication
+      summary: Get wards by district
+      description: Retrieves list of wards for a specific district
+      operationId: getWards
+      security: []
+      parameters:
+        - name: districtId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: District identifier
+      responses:
+        '200':
+          description: Wards retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Ward'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/streets/{wardId}:
+    get:
+      tags:
+        - Authentication
+      summary: Get streets by ward
+      description: Retrieves list of streets for a specific ward
+      operationId: getStreets
+      security: []
+      parameters:
+        - name: wardId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Ward identifier
+      responses:
+        '200':
+          description: Streets retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Street'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /auth/check-contact:
+    post:
+      tags:
+        - Authentication
+      summary: Check if contact exists
+      description: Validates if email or phone number is already registered
+      operationId: checkContact
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contact
+                - type
+              properties:
+                contact:
+                  type: string
+                  example: user@example.com
+                type:
+                  type: string
+                  enum: [email, phone]
+                  example: email
+      responses:
+        '200':
+          description: Contact availability checked
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          exists:
+                            type: boolean
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/stats:
+    get:
+      tags:
+        - Quiz
+      summary: Get quiz statistics
+      description: Retrieves user's quiz performance statistics
+      operationId: getQuizStats
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/QuizStats'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/start:
+    post:
+      tags:
+        - Quiz
+      summary: Start a new quiz
+      description: |
+        Initiates a new quiz session for the authenticated user.
+        Returns 409 if an incomplete quiz already exists.
+      operationId: startQuiz
+      responses:
+        '201':
+          description: Quiz started successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/CreatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/QuizSession'
+        '409':
+          description: Incomplete quiz exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  hasIncomplete:
+                    type: boolean
+                    example: true
+                  incompleteQuizId:
+                    type: integer
+                    example: 42
+                  message:
+                    type: string
+                    example: You have an incomplete quiz. Please complete it first.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/resume/{quizId}:
+    get:
+      tags:
+        - Quiz
+      summary: Resume incomplete quiz
+      description: |
+        Retrieves an incomplete quiz session for continuation.
+        Returns 410 if quiz time has expired.
+      operationId: resumeQuiz
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Quiz session identifier
+      responses:
+        '200':
+          description: Quiz resumed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/QuizSession'
+        '410':
+          description: Quiz time expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  timeExpired:
+                    type: boolean
+                    example: true
+                  autoSubmitted:
+                    type: boolean
+                    example: true
+                  result:
+                    $ref: '#/components/schemas/QuizResult'
+                  message:
+                    type: string
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/answer:
+    patch:
+      tags:
+        - Quiz
+      summary: Save answer to a question
+      description: Records user's answer for a specific quiz question
+      operationId: saveAnswer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - quizId
+                - questionId
+                - userAnswer
+              properties:
+                quizId:
+                  type: integer
+                  example: 42
+                questionId:
+                  type: integer
+                  example: 15
+                userAnswer:
+                  type: string
+                  example: 'A'
+                  description: User's selected option (A/B/C/D)
+      responses:
+        '200':
+          description: Answer saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/mark:
+    patch:
+      tags:
+        - Quiz
+      summary: Mark question for review
+      description: Toggles review flag on a quiz question
+      operationId: markQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - quizId
+                - questionId
+                - isMarked
+              properties:
+                quizId:
+                  type: integer
+                  example: 42
+                questionId:
+                  type: integer
+                  example: 15
+                isMarked:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Mark status updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/submit:
+    post:
+      tags:
+        - Quiz
+      summary: Submit quiz for grading
+      description: |
+        Finalizes quiz session and calculates results.
+        Quiz cannot be resumed after submission.
+      operationId: submitQuiz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - quizId
+              properties:
+                quizId:
+                  type: integer
+                  example: 42
+      responses:
+        '200':
+          description: Quiz submitted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/QuizResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/history:
+    get:
+      tags:
+        - Quiz
+      summary: Get quiz history with pagination
+      description: |
+        Retrieves paginated list of user's completed quizzes.
+        Supports date filtering (today, week, month, custom range).
+      operationId: getQuizHistory
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: Number of records per page
+        - name: dateFilter
+          in: query
+          schema:
+            type: string
+            enum: [today, week, month, custom]
+          description: Predefined date filter
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+            example: '2026-01-01'
+          description: Start date for custom range (ISO 8601)
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+            example: '2026-02-21'
+          description: End date for custom range (ISO 8601)
+      responses:
+        '200':
+          description: History retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          history:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/QuizHistoryItem'
+                          pagination:
+                            $ref: '#/components/schemas/PaginationInfo'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/review/{quizId}:
+    get:
+      tags:
+        - Quiz
+      summary: Get detailed quiz review
+      description: |
+        Retrieves complete quiz review including questions, 
+        user's answers, and correct answers
+      operationId: getQuizReview
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Quiz session identifier
+      responses:
+        '200':
+          description: Review retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/QuizReview'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /quiz/certificate/{quizId}:
+    get:
+      tags:
+        - Quiz
+      summary: Download quiz certificate
+      description: |
+        Generates and returns PDF certificate for passed quizzes.
+        Certificate includes user details, score, and completion date.
+      operationId: viewCertificate
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Quiz session identifier
+      responses:
+        '200':
+          description: Certificate generated successfully
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/pdf
+            Content-Disposition:
+              schema:
+                type: string
+                example: inline; filename="certificate-42.pdf"
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/profile:
+    get:
+      tags:
+        - Settings
+      summary: Get user profile
+      description: Retrieves complete user profile information
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          profile:
+                            $ref: '#/components/schemas/UserProfile'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags:
+        - Settings
+      summary: Update basic profile
+      description: |
+        Updates user's first name, last name, and optionally profile picture.
+        Supports multipart/form-data for file upload.
+      operationId: updateBasicProfile
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                profilePic:
+                  type: string
+                  format: binary
+                  description: Profile picture file (JPEG/PNG)
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/profile-pic:
+    delete:
+      tags:
+        - Settings
+      summary: Delete profile picture
+      description: Removes user's profile picture (reverts to default)
+      operationId: deleteProfilePic
+      responses:
+        '200':
+          description: Profile picture deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/request-email-otp:
+    post:
+      tags:
+        - Settings
+      summary: Request OTP for email change
+      description: |
+        Sends OTP to new email address for verification.
+        Checks if email is already in use.
+      operationId: requestEmailChangeOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - newEmail
+              properties:
+                newEmail:
+                  type: string
+                  format: email
+                  example: newemail@example.com
+      responses:
+        '201':
+          description: OTP sent successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/CreatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          otp_id:
+                            type: string
+        '200':
+          description: Email same as current
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          sameAsPrevious:
+                            type: boolean
+                            example: true
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/verify-email-otp:
+    post:
+      tags:
+        - Settings
+      summary: Verify email change OTP
+      description: Validates OTP and updates user's email address
+      operationId: verifyEmailChangeOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - newEmail
+                - otpCode
+              properties:
+                newEmail:
+                  type: string
+                  format: email
+                  example: newemail@example.com
+                otpCode:
+                  type: string
+                  pattern: '^\d{6}$'
+                  example: '123456'
+      responses:
+        '200':
+          description: Email updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/request-phone-otp:
+    post:
+      tags:
+        - Settings
+      summary: Request OTP for phone change
+      description: |
+        **Under Construction:** Placeholder for phone number change feature.
+        Currently returns construction notice.
+      operationId: requestPhoneChangeOtp
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - newPhone
+              properties:
+                newPhone:
+                  type: string
+                  example: '+919876543210'
+      responses:
+        '200':
+          description: Under construction notice
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          underConstruction:
+                            type: boolean
+                            example: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /settings/address:
+    get:
+      tags:
+        - Settings
+      summary: Get user address
+      description: Retrieves user's complete address information
+      operationId: getAddress
+      responses:
+        '200':
+          description: Address retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Address'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    patch:
+      tags:
+        - Settings
+      summary: Update user address
+      description: Updates user's residential address information
+      operationId: updateAddress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - district_id
+                - ward_id
+                - street_id
+                - house_number
+              properties:
+                district_id:
+                  type: integer
+                  example: 1
+                ward_id:
+                  type: integer
+                  example: 5
+                street_id:
+                  type: integer
+                  example: 42
+                house_number:
+                  type: string
+                  example: '123A'
+      responses:
+        '200':
+          description: Address updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /idcard:
+    get:
+      tags:
+        - ID Card
+      summary: Get digital ID card
+      description: |
+        Retrieves user's digital identity card with QR code.
+        Used for worker identification and verification.
+      operationId: getIdCard
+      responses:
+        '200':
+          description: ID card retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/IdCard'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT access token obtained from /auth/verify-otp or /auth/refresh.
+        Include in Authorization header: `Authorization: Bearer {token}`
+
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operation completed successfully
+        data:
+          type: object
+          nullable: true
+
+    CreatedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Resource created successfully
+        data:
+          type: object
+          nullable: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: An error occurred
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Validation failed
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+    PaginationInfo:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 5
+        totalItems:
+          type: integer
+          example: 47
+        itemsPerPage:
+          type: integer
+          example: 10
+        hasNextPage:
+          type: boolean
+          example: true
+        hasPreviousPage:
+          type: boolean
+          example: false
+
+    UserDetails:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 123
+        first_name:
+          type: string
+          nullable: true
+          example: John
+        last_name:
+          type: string
+          nullable: true
+          example: Doe
+        email:
+          type: string
+          format: email
+          nullable: true
+          example: john.doe@example.com
+        phone_number:
+          type: string
+          nullable: true
+          example: '+919876543210'
+        role_id:
+          type: integer
+          example: 1
+          description: |
+            Role identifier:
+            1 = Resident
+            2 = Trash Worker
+            3 = Supervisor
+            4 = Sanitary Inspector
+            5 = Municipal Health Officer
+            6 = Commissioner
+        role_name:
+          type: string
+          example: Resident
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+          example: https://cdn.trashapp.com/profiles/user123.jpg
+        district:
+          type: string
+          nullable: true
+          example: Central District
+        ward_name:
+          type: string
+          nullable: true
+          example: Ward 5
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/UserDetails'
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-01-15T08:30:00.000Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2026-02-20T14:22:00.000Z'
+
+    District:
+      type: object
+      properties:
+        district_id:
+          type: integer
+          example: 1
+        district_name:
+          type: string
+          example: Central District
+
+    Ward:
+      type: object
+      properties:
+        ward_id:
+          type: integer
+          example: 5
+        ward_number:
+          type: integer
+          example: 5
+        ward_name:
+          type: string
+          example: Ward 5
+        district_id:
+          type: integer
+          example: 1
+
+    Street:
+      type: object
+      properties:
+        street_id:
+          type: integer
+          example: 42
+        street_name:
+          type: string
+          example: Main Street
+        ward_id:
+          type: integer
+          example: 5
+
+    Address:
+      type: object
+      properties:
+        district_id:
+          type: integer
+          example: 1
+        district:
+          type: string
+          example: Central District
+        ward_id:
+          type: integer
+          example: 5
+        ward_number:
+          type: integer
+          example: 5
+        ward_name:
+          type: string
+          example: Ward 5
+        street_id:
+          type: integer
+          example: 42
+        street_name:
+          type: string
+          example: Main Street
+        house_number:
+          type: string
+          example: '123A'
+
+    QuizStats:
+      type: object
+      properties:
+        totalQuizzes:
+          type: integer
+          example: 15
+        passedQuizzes:
+          type: integer
+          example: 12
+        failedQuizzes:
+          type: integer
+          example: 3
+        averageScore:
+          type: number
+          format: float
+          example: 78.5
+        bestScore:
+          type: integer
+          example: 95
+        lastAttemptDate:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-02-20T10:15:00.000Z'
+
+    QuizSession:
+      type: object
+      properties:
+        quiz_id:
+          type: integer
+          example: 42
+        user_id:
+          type: integer
+          example: 123
+        start_time:
+          type: string
+          format: date-time
+          example: '2026-02-21T09:00:00.000Z'
+        end_time:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-02-21T09:45:00.000Z'
+        time_limit_minutes:
+          type: integer
+          example: 45
+        time_remaining_seconds:
+          type: integer
+          example: 2700
+        status:
+          type: string
+          enum: [in_progress, completed, expired]
+          example: in_progress
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuizQuestion'
+
+    QuizQuestion:
+      type: object
+      properties:
+        question_id:
+          type: integer
+          example: 15
+        question_text:
+          type: string
+          example: What is the proper way to segregate waste?
+        option_a:
+          type: string
+          example: Mix all waste together
+        option_b:
+          type: string
+          example: Separate dry and wet waste
+        option_c:
+          type: string
+          example: Only dry waste matters
+        option_d:
+          type: string
+          example: Waste segregation is not required
+        user_answer:
+          type: string
+          nullable: true
+          example: 'B'
+        is_marked:
+          type: boolean
+          example: false
+
+    QuizResult:
+      type: object
+      properties:
+        quiz_id:
+          type: integer
+          example: 42
+        total_questions:
+          type: integer
+          example: 20
+        correct_answers:
+          type: integer
+          example: 16
+        score_percentage:
+          type: number
+          format: float
+          example: 80.0
+        passing_percentage:
+          type: number
+          format: float
+          example: 60.0
+        passed:
+          type: boolean
+          example: true
+        time_taken_minutes:
+          type: integer
+          example: 32
+        submitted_at:
+          type: string
+          format: date-time
+          example: '2026-02-21T09:32:00.000Z'
+
+    QuizHistoryItem:
+      type: object
+      properties:
+        quiz_id:
+          type: integer
+          example: 42
+        start_time:
+          type: string
+          format: date-time
+          example: '2026-02-21T09:00:00.000Z'
+        submitted_at:
+          type: string
+          format: date-time
+          example: '2026-02-21T09:32:00.000Z'
+        score_percentage:
+          type: number
+          format: float
+          example: 80.0
+        passed:
+          type: boolean
+          example: true
+        total_questions:
+          type: integer
+          example: 20
+        correct_answers:
+          type: integer
+          example: 16
+
+    QuizReview:
+      type: object
+      properties:
+        quiz_id:
+          type: integer
+          example: 42
+        score_percentage:
+          type: number
+          format: float
+          example: 80.0
+        passed:
+          type: boolean
+          example: true
+        submitted_at:
+          type: string
+          format: date-time
+          example: '2026-02-21T09:32:00.000Z'
+        questions:
+          type: array
+          items:
+            type: object
+            properties:
+              question_id:
+                type: integer
+              question_text:
+                type: string
+              option_a:
+                type: string
+              option_b:
+                type: string
+              option_c:
+                type: string
+              option_d:
+                type: string
+              correct_answer:
+                type: string
+                example: 'B'
+              user_answer:
+                type: string
+                nullable: true
+                example: 'B'
+              is_correct:
+                type: boolean
+                example: true
+
+    IdCard:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 123
+        full_name:
+          type: string
+          example: John Doe
+        role_name:
+          type: string
+          example: Trash Worker
+        profile_pic:
+          type: string
+          format: uri
+          nullable: true
+          example: https://cdn.trashapp.com/profiles/user123.jpg
+        qr_code_data:
+          type: string
+          description: QR code data for scanner verification
+          example: TM-USER-123-2026
+        issued_date:
+          type: string
+          format: date
+          example: '2026-01-15'
+        valid_until:
+          type: string
+          format: date
+          nullable: true
+          example: '2027-01-15'
+
+  responses:
+    BadRequest:
+      description: Bad request - Invalid input parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Email and OTP code are required
+
+    Unauthorized:
+      description: Unauthorized - Invalid or missing authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Invalid or expired token
+
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Insufficient permissions
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Resource not found
+
+    Conflict:
+      description: Conflict - Resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Email already in use
+
+    ValidationError:
+      description: Validation error - Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationErrorResponse'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            message: Internal server error
