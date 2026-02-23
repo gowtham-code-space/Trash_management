@@ -15,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load OpenAPI specification
-const swaggerDocument = YAML.load(join(__dirname, '../docs/openapi.yaml'));
+const swaggerDocument = YAML.load(join(__dirname, '../docs/api/openapi.yaml'));
 
 const app = express();
 
