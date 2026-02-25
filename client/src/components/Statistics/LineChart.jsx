@@ -10,7 +10,7 @@ import {
     PieChart as RechartsPie,
 } from "recharts";
 import { ToastContainer } from "react-toastify";
-function LineChart({ data ,monthDropDown, yearDropDown}) {
+function LineChart({ data, monthDropDown, yearDropDown, title = "Monthly Trend" }) {
     const [selectedMonth, setSelectedMonth] = useState(monthDropDown[0] || null);
     const [selectedYear, setSelectedYear] = useState(yearDropDown[0] || null);
 
@@ -36,7 +36,7 @@ function LineChart({ data ,monthDropDown, yearDropDown}) {
         <div className="bg-secondary p-6 rounded-large border border-secondary">
         <div className="flex items-center justify-between mb-6">
             <h2 className="text-base font-semibold text-secondaryDark">
-            Monthly Trend
+            {title}
             </h2>
             
             <div className="flex gap-2">

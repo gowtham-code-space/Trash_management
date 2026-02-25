@@ -61,6 +61,10 @@ import EmployeesOverview from "../pages/Commissioner/ManageEmployees/EmployeesOv
 import CreateFeedBack from "../pages/Common/Feedback/CreateFeedBack";
 import SubmitFeedBack from "../pages/Common/Feedback/SubmitFeedBack";
 
+// Admin
+import AdminDashboard from "../pages/Admin/AdminDashBoard";
+import QuizManagement from "../pages/Admin/QuizManagement";
+import LogsHeader from "../pages/Admin/LogsHeader/LogsHeader";
 
 
 
@@ -191,6 +195,14 @@ return (
             <Route path="id-card" element={<IdentityCard/>} />
             </>)
             }
+        {Number(user?.role_id) === 7 && (
+                    <>
+                    <Route index element={<AdminDashboard/>} />
+                    <Route path="quiz-management" element={<QuizManagement/>} />
+                    <Route path="logs" element={<LogsHeader/>} />
+                    <Route path="settings" element={<SettingsHeader/>} />
+                    </>
+                )}
         </Route>
 
         {/* Catch-all route for 404 - Must be last */}

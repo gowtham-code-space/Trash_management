@@ -35,18 +35,16 @@ function getRoleNameFromId(roleId) {
         3: "SuperVisor",
         4: "SanitaryInspector",
         5: "MHO",
-        6: "Commissioner"
+        6: "Commissioner",
+        7: "Admin"
     };
     return roleMap[roleId] || "Resident";
 }
 
-/**
- * Internal Mobile Bottom Navigation Component
- */
+
 function BottomNav({ user, menuItems, isActive }) {
 const navigate = useNavigate();
 
-// Filter menu items to only show those with showMobile: true
 const mobileMenuItems = menuItems.filter(item => item.showMobile === true);
 
 function handleNavigation(path) {
@@ -103,9 +101,6 @@ return (
 );
 }
 
-/**
- * Main SideTab Component (Responsive Wrapper)
- */
 function SideTab({ user }) {
 const navigate = useNavigate();
 const location = useLocation();
@@ -113,7 +108,7 @@ const { isDarkTheme } = ThemeStore();
 const [userDetails, setUserDetails] = useState(null);
 const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-// Fetch user details on mount
+
 useEffect(function() {
     async function fetchUserDetails() {
         if (!user || !user.user_id) {
@@ -177,8 +172,6 @@ SanitaryInspector: [
 MHO: [
     { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
     { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: false },
-    //{ id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    //{ id: "zones", label: "Zones", mobileLabel: "Zones", icon: Map, showMobile: true, isHighlighted: false },
     { id: "id-card", label: "Id Card", mobileLabel: "Id card", icon: IdCard, showMobile: true, isHighlighted: false },
     { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
     { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
@@ -191,9 +184,14 @@ Commissioner:[
     { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
     { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
 ],
+Admin:[
+    { id: "", label: "Dashboard", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
+    { id: "Quiz-management", label: "Quiz Management", mobileLabel: "Quiz", icon: Configure, showMobile: true, isHighlighted: false },
+    { id: "logs", label: "View Logs", mobileLabel: "Logs", icon: People, showMobile: true, isHighlighted: false },
+{ id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false }
+],
 };
 
-// Get role name from role_id
 const roleName = user?.role_id ? getRoleNameFromId(user.role_id) : (user?.role || "Resident");
 const menuItems = menuConfig[roleName] || [];
 
@@ -215,10 +213,7 @@ return currentItem ? currentItem.label : "Dashboard";
 return (
 <div>
 <div className="flex h-screen overflow-hidden">
-    {/* DESKTOP SIDEBAR - Background updated to primary */}
     <aside className="hidden md:flex w-64 h-full bg-primary border-r border-primary flex-col z-20 shrink-0 transition-all duration-300">
-    
-    {/* LOGO AREA */}
     <div className="h-20 bg-primary flex items-center gap-3 px-6 shrink-0 shadow-md">
         <div className="transition-transform hover:rotate-12 duration-300">
         <Add defaultColor={"white"} />
@@ -226,7 +221,6 @@ return (
         <h1 className="text-xl font-bold text-white tracking-tight">CleanCity</h1>
     </div>
 
-    {/* NAV LINKS - Hover updated to secondary */}
     <nav className="flex-1 space-y-2 overflow-y-auto p-4 custom-scrollbar">
         {menuItems.map(function(item) {
         const active = isActive(item.id);
@@ -257,7 +251,6 @@ return (
         })}
     </nav>
 
-    {/* BOTTOM LOGOUT */}
     <div className="w-full py-5 border-t border-primaryLight flex justify-baseline items-center shrink-0">
         <button 
         onClick={async function() { 
@@ -282,10 +275,8 @@ return (
     </div>
     </aside>
 
-    {/* RIGHT SIDE WRAPPER */}
     <div className="flex-1 flex flex-col h-full overflow-hidden">
     
-    {/* TOP HEADER */}
     <header className={`${isDarkTheme && "dark"} h-20  bg-white border-b border-secondary px-4 md:px-8 flex items-center justify-between z-10 shadow-sm shrink-0`}>
         <div className="flex items-center gap-2 md:gap-4">
         <h2 className="text-lg md:text-xl font-bold text-primary tracking-tight truncate">
