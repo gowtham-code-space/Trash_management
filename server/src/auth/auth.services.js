@@ -22,21 +22,150 @@ export const sendOtpEmail = async (email, otpCode, userName = 'User') => {
             to: email,
             subject: 'Your OTP for Trash Management Login',
             html: `
-                <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
-                    <div style="background-color: white; padding: 30px; border-radius: 8px; max-width: 500px; margin: 0 auto;">
-                        <h2 style="color: #333; text-align: center;">Trash Management System</h2>
-                        <p style="color: #666; font-size: 16px;">Hi ${userName},</p>
-                        <p style="color: #666; font-size: 14px;">Your One-Time Password (OTP) for login is:</p>
-                        <div style="background-color: #f0f0f0; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
-                            <h1 style="color: #007bff; margin: 0; letter-spacing: 2px;">${otpCode}</h1>
-                        </div>
-                        <p style="color: #999; font-size: 12px;">This OTP will expire in 10 minutes.</p>
-                        <p style="color: #999; font-size: 12px;">If you didn't request this, please ignore this email.</p>
-                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-                        <p style="color: #999; font-size: 11px; text-align: center;">© 2026 Trash Management. All rights reserved.</p>
-                    </div>
-                </div>
-            `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Static Template</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    </head>
+    <body style="margin:0; font-family:'Poppins',sans-serif; background:#ffffff; font-size:14px;">
+
+    <div style="
+        max-width:680px;
+        margin:0 auto;
+        padding:45px 30px 60px;
+        background:#f4f7ff;
+        background-image:url(https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661497957196_595865/email-template-background-banner);
+        background-repeat:no-repeat;
+        background-size:800px 452px;
+        background-position:top center;
+        font-size:14px;
+        color:#434343;
+    ">
+
+        <!-- Header -->
+        <header>
+        <table style="width:100%;">
+            <tbody>
+            <tr style="height:0;">
+                <td>
+                <p style="font-weight:bold; font-size:24px; color:#ffffff; margin:0;">Trash Management</p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </header>
+
+        <!-- Main -->
+        <main>
+        <div style="
+            margin:0;
+            margin-top:70px;
+            padding:60px 30px 60px;
+            background:#ffffff;
+            border-radius:30px;
+            text-align:center;
+        ">
+            <div style="width:100%; max-width:489px; margin:0 auto;">
+
+            <h1 style="margin:0; font-size:24px; font-weight:500; color:#1f1f1f;">
+                Your OTP
+            </h1>
+
+            <p style="margin:0; margin-top:17px; font-size:16px; font-weight:500;">
+                Hey <span style="font-weight:bold; color:#1E8E54;">${userName},</span>
+            </p>
+
+            <p style="margin:0; margin-top:17px; font-weight:500; letter-spacing:0.56px; line-height:1.6;">
+                Thank you for using Trash management. Use the following OTP to complete the procedure to change your email address. OTP is valid for
+                <span style="font-weight:600; color:#1f1f1f;">10 minutes</span>.
+                Do not share this code with others.
+            </p>
+
+            <div style="
+                background-color:#F4F7FF;
+                border-radius:25px;
+                padding:30px 20px;
+                margin-top:36px;
+            ">
+                <p style="
+                margin:0;
+                font-size:40px;
+                font-weight:600;
+                letter-spacing:25px;
+                color:#1E8E54;
+                text-align:center;
+                padding-left:25px; /* compensate letter-spacing optical shift */
+                ">
+                ${otpCode}
+                </p>
+            </div>
+
+            </div>
+        </div>
+
+        <!-- Help text -->
+        <p style="
+            max-width:400px;
+            margin:0 auto;
+            margin-top:40px;
+            text-align:center;
+            font-weight:500;
+            color:#8c8c8c;
+            line-height:1.7;
+        ">
+            Need help? Ask at
+            <a href="mailto:gowthamj7773@gmail.com" style="color:#1E8E54; text-decoration:none;">gowthamj7773@gmail.com</a>
+            or visit our
+            <a href="" target="_blank" style="color:#1E8E54; text-decoration:none;">Help Center</a>
+        </p>
+        </main>
+
+        <!-- Footer -->
+        <footer style="
+        width:100%;
+        max-width:490px;
+        margin:30px auto 0;
+        text-align:center;
+        border-top:1px solid #e6ebf1;
+        ">
+        <p style="margin:0; margin-top:40px; font-size:22px; font-weight:600; color:#434343;">
+            Trash Management
+        </p>
+
+        <p style="margin:0; margin-top:8px; color:#434343;">
+            Sample Address, Sample State, Country-123.
+        </p>
+
+        <!-- Social icons -->
+        <div style="margin:16px 0 0;">
+            <a href="" target="_blank" style="display:inline-block;">
+            <img width="36" alt="Facebook" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661502815169_682499/email-template-icon-facebook"/>
+            </a>
+            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
+            <img width="36" alt="Instagram" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661504218208_684135/email-template-icon-instagram"/>
+            </a>
+            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
+            <img width="36" alt="Twitter" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661503043040_372004/email-template-icon-twitter"/>
+            </a>
+            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
+            <img width="36" alt="Youtube" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661503195931_210869/email-template-icon-youtube"/>
+            </a>
+        </div>
+
+        <p style="margin:0; margin-top:16px; margin-bottom:0; color:#434343;">
+            Copyright © 2026 Company. All rights reserved.
+        </p>
+        </footer>
+
+    </div>
+    </body>
+    </html>
+
+                `
         };
         
         await transporter.sendMail(mailOptions);
