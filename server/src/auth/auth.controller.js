@@ -3,6 +3,7 @@ import { requestOtp, verifyOtp, refreshAccessToken, completeSignup, logout, getD
 import { verifyRefreshToken } from '../utils/jwt.js';
 import { getUserById } from './auth.model.js';
 import { uploadUserProfilePicture } from '../utils/publicUrlService.js';
+import { logAudit, logEvent } from '../logs/producer.js';
 
 export const requestOtpHandler = async (req, res) => {
     try {
@@ -55,6 +56,16 @@ export const verifyOtpHandler = async (req, res) => {
             secure: true, // Required for sameSite: 'none'
             sameSite: 'none', // Required for cross-site (dev tunnels)
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
+        logEvent({
+            event_type: 'USER_LOGIN_SUCCESS',
+            entity_type: 'user',
+            entity_id: result.user.user_id,
+            user_id: result.user.user_id,
+            severity: 'INFO',
+            metadata: { email, role_id: result.user.role_id },
+            created_at: new Date()
         });
 
         return successResponse(res, result.message, {
@@ -117,22 +128,37 @@ export const refreshTokenHandler = async (req, res) => {
 export const logoutHandler = async (req, res) => {
     try {
         const refreshToken = req.cookies.refreshToken;
-        
-        // Decode refresh token to get user_id
+        let decoded = null;
+
         if (refreshToken) {
-            const decoded = verifyRefreshToken(refreshToken);
+            decoded = verifyRefreshToken(refreshToken);
             if (decoded && decoded.user_id) {
                 await logout(decoded.user_id);
             }
         }
-        
-        // Clear HttpOnly refresh token cookie
+
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: true,
             sameSite: 'none'
         });
-        
+
+        if (decoded?.user_id) {
+            logAudit({
+                entity_type: 'session',
+                entity_id: decoded.user_id,
+                action_type: 'USER_LOGOUT',
+                old_value: null,
+                new_value: null,
+                performed_by: decoded.user_id,
+                performed_role_id: decoded.role_id || null,
+                ip_address: req.ip,
+                user_agent: req.headers['user-agent'],
+                remarks: null,
+                created_at: new Date()
+            });
+        }
+
         return successResponse(res, 'Logged out successfully');
     } catch (error) {
         console.error('Error in logoutHandler:', error);
@@ -168,7 +194,17 @@ export const completeSignupHandler = async (req, res) => {
         };
         
         const result = await completeSignup(userId, userData);
-        
+
+        logEvent({
+            event_type: 'USER_ONBOARDING_COMPLETED',
+            entity_type: 'user',
+            entity_id: userId,
+            user_id: userId,
+            severity: 'INFO',
+            metadata: { email, wardNumber, district },
+            created_at: new Date()
+        });
+
         return successResponse(res, result.message, {
             completed: true
         });

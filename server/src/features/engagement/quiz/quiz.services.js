@@ -1,6 +1,6 @@
 import * as quizModel from './quiz.model.js';
 import { getUserById } from '../../../auth/auth.model.js';
-import { generateQuizCertificate, convertCertificateToPDF } from '../../../utils/certificateService.js';
+import { generateQuizCertificate, convertCertificateToPDF } from '../../../utils/certificate/certificateService.js';
 import { uploadCertificate } from '../../../utils/publicUrlService.js';
 
 // Helper function to convert MySQL datetime to ISO 8601 format (UTC)

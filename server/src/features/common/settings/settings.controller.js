@@ -17,6 +17,7 @@ import {
     getAddressService,
     updateAddressService
 } from './settings.services.js';
+import { logAudit, logEvent } from '../../../logs/producer.js';
 
 export const getUserProfileHandler = async (req, res) => {
     try {
@@ -54,7 +55,21 @@ export const updateBasicProfileHandler = async (req, res) => {
         };
         
         const result = await updateBasicProfileService(userId, updateData);
-        
+
+        logAudit({
+            entity_type: 'user',
+            entity_id: userId,
+            action_type: 'PROFILE_UPDATED',
+            old_value: result.oldData,
+            new_value: updateData,
+            performed_by: userId,
+            performed_role_id: req.user.role_id || null,
+            ip_address: req.ip,
+            user_agent: req.headers['user-agent'],
+            remarks: null,
+            created_at: new Date()
+        });
+
         return successResponse(res, result.message);
     } catch (error) {
         console.error('Error in updateBasicProfileHandler:', error);
@@ -105,7 +120,31 @@ export const verifyEmailChangeOtpHandler = async (req, res) => {
         }
         
         const result = await verifyEmailChangeOtp(userId, newEmail.toLowerCase().trim(), otpCode);
-        
+
+        logAudit({
+            entity_type: 'user',
+            entity_id: userId,
+            action_type: 'EMAIL_CHANGED',
+            old_value: result.oldData,
+            new_value: { email: newEmail.toLowerCase().trim() },
+            performed_by: userId,
+            performed_role_id: req.user.role_id || null,
+            ip_address: req.ip,
+            user_agent: req.headers['user-agent'],
+            remarks: null,
+            created_at: new Date()
+        });
+
+        logEvent({
+            event_type: 'USER_EMAIL_CHANGED',
+            entity_type: 'user',
+            entity_id: userId,
+            user_id: userId,
+            severity: 'WARNING',
+            metadata: { old_email: result.oldData?.email, new_email: newEmail.toLowerCase().trim() },
+            created_at: new Date()
+        });
+
         return successResponse(res, result.message);
     } catch (error) {
         console.error('Error in verifyEmailChangeOtpHandler:', error);
@@ -156,6 +195,21 @@ export const deleteProfilePicHandler = async (req, res) => {
     try {
         const userId = req.user.user_id;
         const result = await deleteProfilePicService(userId);
+
+        logAudit({
+            entity_type: 'user',
+            entity_id: userId,
+            action_type: 'PROFILE_PIC_DELETED',
+            old_value: result.oldData,
+            new_value: null,
+            performed_by: userId,
+            performed_role_id: req.user.role_id || null,
+            ip_address: req.ip,
+            user_agent: req.headers['user-agent'],
+            remarks: null,
+            created_at: new Date()
+        });
+
         return successResponse(res, result.message);
     } catch (error) {
         console.error('Error in deleteProfilePicHandler:', error);
@@ -202,7 +256,21 @@ export const updateAddressHandler = async (req, res) => {
                 message: result.message
             });
         }
-        
+
+        logAudit({
+            entity_type: 'user',
+            entity_id: userId,
+            action_type: 'ADDRESS_UPDATED',
+            old_value: result.oldData,
+            new_value: { district_id, ward_id, street_id, house_number },
+            performed_by: userId,
+            performed_role_id: req.user.role_id || null,
+            ip_address: req.ip,
+            user_agent: req.headers['user-agent'],
+            remarks: null,
+            created_at: new Date()
+        });
+
         return successResponse(res, result.message);
     } catch (error) {
         console.error('Error in updateAddressHandler:', error);

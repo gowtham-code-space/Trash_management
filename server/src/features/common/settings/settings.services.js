@@ -66,14 +66,13 @@ export const getUserProfileService = async (userId) => {
 
 export const updateBasicProfileService = async (userId, updateData) => {
     try {
-        if (updateData.profilePic) {
-            const currentProfile = await settingsModel.getUserProfile(userId);
-            if (currentProfile?.profile_pic) {
-                try {
-                    await deleteFromCloudinary(currentProfile.profile_pic);
-                } catch (error) {
-                    console.error('Warning: Failed to delete old profile pic from Cloudinary:', error);
-                }
+        const currentProfile = await settingsModel.getUserProfile(userId);
+
+        if (updateData.profilePic && currentProfile?.profile_pic) {
+            try {
+                await deleteFromCloudinary(currentProfile.profile_pic);
+            } catch (error) {
+                console.error('Warning: Failed to delete old profile pic from Cloudinary:', error);
             }
         }
         
@@ -83,7 +82,12 @@ export const updateBasicProfileService = async (userId, updateData) => {
         }
         return {
             success: true,
-            message: 'Profile updated successfully'
+            message: 'Profile updated successfully',
+            oldData: {
+                first_name: currentProfile?.first_name || null,
+                last_name: currentProfile?.last_name || null,
+                profile_pic: currentProfile?.profile_pic || null
+            }
         };
     } catch (error) {
         console.error('Error in updateBasicProfileService:', error);
@@ -107,7 +111,8 @@ export const deleteProfilePicService = async (userId) => {
         
         return {
             success: true,
-            message: 'Profile picture deleted successfully'
+            message: 'Profile picture deleted successfully',
+            oldData: { profile_pic: currentProfile.profile_pic }
         };
     } catch (error) {
         console.error('Error in deleteProfilePicService:', error);
@@ -169,6 +174,10 @@ export const verifyEmailChangeOtp = async (userId, newEmail, otpCode) => {
         if (decryptedOtp !== otpCode) {
             throw new Error('Invalid OTP code');
         }
+
+        const currentUser = await settingsModel.getUserProfile(userId);
+        const oldEmail = currentUser?.email || null;
+
         await settingsModel.markOtpAsUsed(otpRecord.otp_id);
         const updateResult = await settingsModel.updateUserEmail(userId, newEmail);
         
@@ -178,7 +187,8 @@ export const verifyEmailChangeOtp = async (userId, newEmail, otpCode) => {
         
         return {
             success: true,
-            message: 'Email updated successfully'
+            message: 'Email updated successfully',
+            oldData: { email: oldEmail }
         };
     } catch (error) {
         console.error('Error in verifyEmailChangeOtp:', error);
@@ -287,7 +297,14 @@ export const updateAddressService = async (userId, addressData) => {
         
         return {
             success: true,
-            message: 'Address updated successfully'
+            message: 'Address updated successfully',
+            oldData: {
+                district: currentAddress.district,
+                ward_number: currentAddress.ward_number,
+                ward_name: currentAddress.ward_name,
+                street_name: currentAddress.street_name,
+                house_number: currentAddress.house_number
+            }
         };
     } catch (error) {
         console.error('Error in updateAddressService:', error);

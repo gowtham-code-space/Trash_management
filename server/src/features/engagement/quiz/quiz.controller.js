@@ -1,5 +1,6 @@
 import * as quizService from './quiz.services.js';
 import { successResponse, errorResponse, createdResponse } from '../../../utils/response.js';
+import { logEvent } from '../../../logs/producer.js';
 
 export const startQuizHandler = async (req, res) => {
     try {
@@ -16,6 +17,16 @@ export const startQuizHandler = async (req, res) => {
             }
             return errorResponse(res, result.message, 400);
         }
+        logEvent({
+            event_type: 'QUIZ_STARTED',
+            entity_type: 'quiz',
+            entity_id: result.quiz.quiz_id,
+            user_id: userId,
+            severity: 'INFO',
+            metadata: null,
+            created_at: new Date()
+        });
+
         return createdResponse(res, 'Quiz started successfully', result.quiz);
     } catch (error) {
         console.error('Error starting quiz:', error);
@@ -67,6 +78,16 @@ export const submitQuizHandler = async (req, res) => {
         if (!result.success) {
             return errorResponse(res, result.message, 400);
         }
+
+        logEvent({
+            event_type: 'QUIZ_COMPLETED',
+            entity_type: 'quiz',
+            entity_id: parseInt(quizId),
+            user_id: userId,
+            severity: result.result.is_pass ? 'INFO' : 'WARNING',
+            metadata: { score: result.result.score, is_pass: result.result.is_pass },
+            created_at: new Date()
+        });
 
         return successResponse(res, 'Quiz submitted successfully', result.result);
     } catch (error) {

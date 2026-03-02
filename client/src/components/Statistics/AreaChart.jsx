@@ -135,8 +135,12 @@ function AreaChart({
         )}
       </div>
 
-      <div className="overflow-x-auto">
-        <div className="h-56 mt-4" style={{ minWidth: '500px' }}>
+      <div className="h-56 mt-4">
+        {chartData.length === 0 ? (
+          <div className="h-full flex items-center justify-center">
+            <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>No data available</p>
+          </div>
+        ) : (
           <ResponsiveContainer width="100%" height="100%">
             <RechartsAreaChart 
               data={chartData} 
@@ -182,8 +186,8 @@ function AreaChart({
               />
             </RechartsAreaChart>
           </ResponsiveContainer>
+        )}
         </div>
-      </div>
     </div>
   );
 }

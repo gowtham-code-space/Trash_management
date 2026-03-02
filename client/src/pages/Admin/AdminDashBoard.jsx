@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ThemeStore from "../../store/ThemeStore";
 import AdminKpiCard from "../../components/Cards/Admin/AdminKpiCard";
 import AreaChart from "../../components/Statistics/AreaChart";
@@ -14,6 +14,7 @@ Settings,
 Edit,
 DownArrow,
 } from "../../assets/icons/icons";
+import { getMetrics } from "../../services/features/adminService";
 
 const kpiData = [
 {
@@ -75,49 +76,18 @@ icon: <People size={16} />,
 },
 ];
 
-const apiTrafficData = [
-{ label: "00:00", value: 1200 },
-{ label: "03:00", value: 800 },
-{ label: "06:00", value: 1500 },
-{ label: "09:00", value: 2800 },
-{ label: "12:00", value: 4200 },
-{ label: "15:00", value: 3800 },
-{ label: "18:00", value: 3150 },
-{ label: "21:00", value: 2100 },
-{ label: "23:59", value: 1700 },
-];
+const INTERVAL_FOR_RANGE = { today: '5m', week: '1h', month: '1h', custom: '1h' };
 
-const errors4xxData = [
-{ label: "00:00", value: 45 },
-{ label: "03:00", value: 32 },
-{ label: "06:00", value: 58 },
-{ label: "09:00", value: 120 },
-{ label: "12:00", value: 180 },
-{ label: "15:00", value: 165 },
-{ label: "18:00", value: 142 },
-{ label: "21:00", value: 98 },
-{ label: "23:59", value: 76 },
-];
+function formatLabel(isoStr, range) {
+    const d = new Date(isoStr);
+    if (range === 'today') return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    if (range === 'week') return d.toLocaleDateString([], { weekday: 'short' }) + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
 
-const errors5xxData = [
-{ label: "00:00", value: 2 },
-{ label: "03:00", value: 1 },
-{ label: "06:00", value: 3 },
-{ label: "09:00", value: 8 },
-{ label: "12:00", value: 15 },
-{ label: "15:00", value: 12 },
-{ label: "18:00", value: 9 },
-{ label: "21:00", value: 5 },
-{ label: "23:59", value: 4 },
-];
-
-const escalationTiers = [
-{ role: "Resident", timing: "Trigger", isTrigger: true },
-{ role: "Supervisor", timing: "24h" },
-{ role: "Sanitary Inspector", timing: "48h" },
-{ role: "MHO", timing: "72h" },
-{ role: "Commissioner", timing: "Final", isFinal: true },
-];
+function toChartData(rows, range) {
+    return (rows || []).map(r => ({ label: formatLabel(r.bucket, range), value: r.value }));
+}
 
 function AdminDashboard() {
 const { isDarkTheme } = ThemeStore();
@@ -125,6 +95,8 @@ const [isEditingEscalation, setIsEditingEscalation] = useState(false);
 const [activeFilter, setActiveFilter] = useState("today");
 const [showDatePicker, setShowDatePicker] = useState(false);
 const [customLabel, setCustomLabel] = useState(null);
+const [customRange, setCustomRange] = useState(null);
+const [chartData, setChartData] = useState({ traffic: [], errors4xx: [], errors5xx: [] });
 const [escalationConfig, setEscalationConfig] = useState([
     { role: "Resident", timing: "Trigger", isTrigger: true, editable: false },
     { role: "Supervisor", timing: "24h", editable: true },
@@ -132,6 +104,34 @@ const [escalationConfig, setEscalationConfig] = useState([
     { role: "MHO", timing: "72h", editable: true },
     { role: "Commissioner", timing: "Final", isFinal: true, editable: false },
 ]);
+
+useEffect(() => {
+    const interval = INTERVAL_FOR_RANGE[activeFilter] || '5m';
+    const params = activeFilter === 'custom' && customRange
+        ? { start: customRange.from.toISOString(), end: customRange.to.toISOString(), interval }
+        : { range: activeFilter === 'custom' ? 'today' : activeFilter, interval };
+
+    async function fetchAll() {
+        try {
+            const [traffic, errors4xx, errors5xx] = await Promise.all([
+                getMetrics({ ...params, metricType: 'API_TRAFFIC' }),
+                getMetrics({ ...params, metricType: 'HTTP_4XX' }),
+                getMetrics({ ...params, metricType: 'HTTP_5XX' }),
+            ]);
+            console.log('[metrics] raw traffic:', traffic?.data);
+            const labelRange = activeFilter === 'custom' ? 'week' : activeFilter;
+            setChartData({
+                traffic: toChartData(traffic?.data, labelRange),
+                errors4xx: toChartData(errors4xx?.data, labelRange),
+                errors5xx: toChartData(errors5xx?.data, labelRange),
+            });
+        } catch (err) {
+            console.error('Failed to fetch metrics:', err);
+        }
+    }
+
+    fetchAll();
+}, [activeFilter, customRange]);
 
 function handleTimingChange(index, value) {
     setEscalationConfig(function (prev) {
@@ -152,6 +152,7 @@ function handleFilterClick(value) {
     } else {
         setActiveFilter(value);
         setCustomLabel(null);
+        setCustomRange(null);
         setShowDatePicker(false);
     }
 }
@@ -160,6 +161,7 @@ function handleDateApply(from, to) {
     const fmt = (d) =>
         `${d.getDate()} ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()]}`;
     setCustomLabel(`${fmt(from)} – ${fmt(to)}`);
+    setCustomRange({ from, to });
     setActiveFilter("custom");
     setShowDatePicker(false);
 }
@@ -192,7 +194,7 @@ return (
                     <AreaChart
                     title="API Traffic Volume"
                     subtitle="Requests per minute trend"
-                    data={apiTrafficData}
+                    data={chartData.traffic}
                     showFilters={true}
                     activeFilter={activeFilter}
                     customLabel={customLabel}
@@ -207,14 +209,14 @@ return (
                     <AreaChart 
                     title="4xx Errors Trend"
                     subtitle="Client errors over time"
-                    data={errors4xxData}
+                    data={chartData.errors4xx}
                     showFilters={false}
                     syncId="apiCharts"
                     />
                     <AreaChart 
                     title="5xx Errors Trend"
                     subtitle="Server errors over time"
-                    data={errors5xxData}
+                    data={chartData.errors5xx}
                     showFilters={false}
                     syncId="apiCharts"
                     />
