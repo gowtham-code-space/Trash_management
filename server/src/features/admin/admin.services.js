@@ -45,3 +45,79 @@ export const getMetricsService = async ({ range, interval, metricType, start: st
     const rows = await adminModel.getMetricsData(metricType, start, end, intervalSec);
     return rows.map(r => ({ bucket: r.bucket, value: Number(r.value) }));
 };
+
+export const getLogsService = async ({ type, page = 1, limit = 20, search, method, status, userId, action, entityType, eventType, severity, performedBy, start, end }) => {
+    const offset = (Number(page) - 1) * Number(limit);
+    const filters = { search, method, status, userId, action, entityType, eventType, severity, performedBy, start, end };
+    let rows, total;
+    if (type === 'api') {
+        [rows, total] = await Promise.all([adminModel.getApiLogs(filters, limit, offset), adminModel.getApiLogsCount(filters)]);
+    } else if (type === 'audit') {
+        [rows, total] = await Promise.all([adminModel.getAuditLogs(filters, limit, offset), adminModel.getAuditLogsCount(filters)]);
+    } else if (type === 'event') {
+        [rows, total] = await Promise.all([adminModel.getEventLogs(filters, limit, offset), adminModel.getEventLogsCount(filters)]);
+    } else {
+        throw err400('Invalid type. Use: api, audit, event');
+    }
+    return { rows, total, page: Number(page), limit: Number(limit) };
+};
+
+export const getDistinctValuesService = async (type) => {
+    if (type === 'api') return adminModel.getApiDistinct();
+    if (type === 'audit') return adminModel.getAuditDistinct();
+    if (type === 'event') return adminModel.getEventDistinct();
+    throw err400('Invalid type');
+};
+
+export const exportLogsService = async ({ type, search, method, status, userId, action, entityType, eventType, severity, performedBy, start, end }) => {
+    const filters = { search, method, status, userId, action, entityType, eventType, severity, performedBy, start, end };
+    if (type === 'api') return adminModel.exportApiLogs(filters);
+    if (type === 'audit') return adminModel.exportAuditLogs(filters);
+    if (type === 'event') return adminModel.exportEventLogs(filters);
+    throw err400('Invalid type');
+};
+
+export const getDashboardKpisService = async () => adminModel.getDashboardKpis();
+
+export const getQuizKpisService = async () => adminModel.getQuizKpis();
+
+// ── Quiz Configs ──────────────────────────────────────────────────────────────
+export const getQuizConfigsService = async () => adminModel.getAllQuizConfigs();
+
+export const createQuizConfigService = async (data) => {
+    const id = await adminModel.createQuizConfig(data);
+    const configs = await adminModel.getAllQuizConfigs();
+    return configs.find(c => c.score_time_id === id);
+};
+
+export const updateQuizConfigService = async (id, data) => {
+    await adminModel.updateQuizConfig(id, data);
+    const configs = await adminModel.getAllQuizConfigs();
+    return configs.find(c => c.score_time_id === Number(id)) || null;
+};
+
+export const deleteQuizConfigService = async (id) => adminModel.deleteQuizConfig(id);
+
+export const restoreQuizConfigService = async (id) => adminModel.restoreQuizConfig(id);
+
+export const getDeletedQuizConfigsService = async () => adminModel.getDeletedQuizConfigs();
+
+export const setActiveQuizConfigService = async (id) => adminModel.setActiveQuizConfig(id);
+
+// ── Questions ─────────────────────────────────────────────────────────────────
+export const getQuestionsService = async ({ search, page = 1, limit = 10 }) => {
+    const offset = (Number(page) - 1) * Number(limit);
+    const [rows, total] = await Promise.all([
+        adminModel.getQuestions({ search, limit, offset }),
+        adminModel.getQuestionsCount({ search }),
+    ]);
+    return { rows, total, page: Number(page), limit: Number(limit) };
+};
+
+export const createQuestionService = async (data) => adminModel.createQuestion(data);
+
+export const updateQuestionService = async (id, data) => adminModel.updateQuestion(id, data);
+
+export const deleteQuestionService = async (id) => adminModel.deleteQuestion(id);
+
+export const bulkCreateQuestionsService = async (questions) => adminModel.bulkCreateQuestions(questions);

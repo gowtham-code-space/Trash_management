@@ -7,7 +7,7 @@ export const apiLogger = (req, res, next) => {
         const responseTime = Date.now() - start;
 
         logApiRequest({
-            user_id: req.user?.id || null,
+            user_id: req.user?.user_id || null,
             role_id: req.user?.role_id || null,
             endpoint: req.originalUrl,
             http_method: req.method,

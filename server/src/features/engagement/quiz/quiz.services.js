@@ -204,16 +204,18 @@ export const submitQuizService = async (quizId, userId) => {
 
         const quizHistory = await quizModel.getQuizHistoryAnswers(quizId);
         let score = 0;
-        const totalQuestions = quizHistory.length;
-        const scorePerQuestion = quiz.total_score / totalQuestions;
+        const correctMark = Number(quiz.correct_mark);
+        const wrongMark = Number(quiz.wrong_mark);
 
         quizHistory.forEach(qa => {
             if (qa.user_answer && qa.user_answer === qa.correct_answer) {
-                score += scorePerQuestion;
+                score += correctMark;
+            } else if (qa.user_answer && qa.user_answer !== qa.correct_answer) {
+                score += wrongMark;
             }
         });
 
-        score = Math.round(score);
+        score = Math.max(0, Math.round(score));
         const isPass = score >= quiz.pass_mark ? 1 : 0;
         
         let certificateUrl = null;

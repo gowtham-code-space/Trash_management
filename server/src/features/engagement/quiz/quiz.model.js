@@ -2,21 +2,9 @@ import pool from '../../../config/db.js';
 
 export const getQuizConfig = async () => {
     try {
-        const query = `
-            SELECT 
-                score_time_id,
-                total_time,
-                total_score,
-                pass_mark,
-                total_questions
-            FROM quiz_total_score_time
-            WHERE score_time_id = 1
-        `;
-        
-        const conn = await pool.getConnection();
-        const [rows] = await conn.execute(query);
-        conn.release();
-        
+        const [rows] = await pool.query(
+            'SELECT score_time_id, total_time, total_score, pass_mark, total_questions, correct_mark, wrong_mark FROM quiz_total_score_time WHERE is_active = 1 LIMIT 1'
+        );
         return rows.length > 0 ? rows[0] : null;
     } catch (error) {
         throw error;
@@ -162,7 +150,9 @@ export const getQuiz = async (quizId, userId) => {
                 qst.total_time,
                 qst.total_score,
                 qst.pass_mark,
-                qst.total_questions
+                qst.total_questions,
+                qst.correct_mark,
+                qst.wrong_mark
             FROM quiz_management qm
             JOIN quiz_total_score_time qst ON qm.score_time_id = qst.score_time_id
             WHERE qm.quiz_id = ? AND qm.user_id = ?

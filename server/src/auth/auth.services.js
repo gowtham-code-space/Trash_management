@@ -21,151 +21,146 @@ export const sendOtpEmail = async (email, otpCode, userName = 'User') => {
             from: process.env.EMAIL_USER,
             to: email,
             subject: 'Your OTP for Trash Management Login',
-            html: `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Static Template</title>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-    </head>
-    <body style="margin:0; font-family:'Poppins',sans-serif; background:#ffffff; font-size:14px;">
+            html: 
+            `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>OTP Email</title>
 
-    <div style="
-        max-width:680px;
-        margin:0 auto;
-        padding:45px 30px 60px;
-        background:#f4f7ff;
-        background-image:url(https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661497957196_595865/email-template-background-banner);
-        background-repeat:no-repeat;
-        background-size:800px 452px;
-        background-position:top center;
-        font-size:14px;
-        color:#434343;
-    ">
+            <style>
+            @media screen and (max-width: 600px) {
 
-        <!-- Header -->
-        <header>
-        <table style="width:100%;">
-            <tbody>
-            <tr style="height:0;">
-                <td>
-                <p style="font-weight:bold; font-size:24px; color:#ffffff; margin:0;">Trash Management</p>
-                </td>
+            .container {
+                padding: 25px 15px 40px !important;
+            }
+
+            .main-card {
+                padding: 35px 20px !important;
+                border-radius: 20px !important;
+            }
+
+            .otp-box {
+                padding: 20px 10px !important;
+            }
+
+            .otp-text {
+                font-size: 28px !important;
+                letter-spacing: 12px !important;
+                padding-left: 12px !important;
+            }
+
+            .heading {
+                font-size: 20px !important;
+            }
+
+            .paragraph {
+                font-size: 14px !important;
+            }
+
+            .footer-title {
+                font-size: 18px !important;
+            }
+
+            }
+            </style>
+
+            </head>
+
+            <body style="margin:0; font-family:'Poppins',sans-serif; background:#ffffff;">
+
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+            <td align="center">
+
+            <!-- Wrapper -->
+            <table class="container" width="680" cellpadding="0" cellspacing="0" border="0"
+            style="max-width:680px;width:100%;padding:45px 30px 60px;background:#f4f7ff;background-image:url(https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661497957196_595865/email-template-background-banner);background-repeat:no-repeat;background-size:800px 452px;background-position:top center;color:#434343;">
+
+            <!-- Header -->
+            <tr>
+            <td>
+            <p style="font-weight:bold;font-size:24px;color:#ffffff;margin:0;">
+            Trash Management
+            </p>
+            </td>
             </tr>
-            </tbody>
-        </table>
-        </header>
 
-        <!-- Main -->
-        <main>
-        <div style="
-            margin:0;
-            margin-top:70px;
-            padding:60px 30px 60px;
-            background:#ffffff;
-            border-radius:30px;
-            text-align:center;
-        ">
-            <div style="width:100%; max-width:489px; margin:0 auto;">
+            <!-- Main Card -->
+            <tr>
+            <td align="center">
 
-            <h1 style="margin:0; font-size:24px; font-weight:500; color:#1f1f1f;">
-                Your OTP
+            <table class="main-card" width="100%" cellpadding="0" cellspacing="0"
+            style="margin-top:70px;padding:60px 30px;background:#ffffff;border-radius:30px;text-align:center;">
+
+            <tr>
+            <td>
+
+            <h1 class="heading" style="margin:0;font-size:24px;font-weight:500;color:#1f1f1f;">
+            Your OTP
             </h1>
 
-            <p style="margin:0; margin-top:17px; font-size:16px; font-weight:500;">
-                Hey <span style="font-weight:bold; color:#1E8E54;">${userName},</span>
+            <p class="paragraph" style="margin-top:17px;font-size:16px;font-weight:500;">
+            Hey <span style="font-weight:bold;color:#1E8E54;">${userName},</span>
             </p>
 
-            <p style="margin:0; margin-top:17px; font-weight:500; letter-spacing:0.56px; line-height:1.6;">
-                Thank you for using Trash management. Use the following OTP to complete the procedure to change your email address. OTP is valid for
-                <span style="font-weight:600; color:#1f1f1f;">10 minutes</span>.
-                Do not share this code with others.
+            <p class="paragraph" style="margin-top:17px;font-weight:500;letter-spacing:0.5px;line-height:1.6;">
+            Use the following OTP to complete the procedure. OTP is valid for 
+            <strong>10 minutes</strong>. Do not share this code.
             </p>
 
-            <div style="
-                background-color:#F4F7FF;
-                border-radius:25px;
-                padding:30px 20px;
-                margin-top:36px;
-            ">
-                <p style="
-                margin:0;
-                font-size:40px;
-                font-weight:600;
-                letter-spacing:25px;
-                color:#1E8E54;
-                text-align:center;
-                padding-left:25px; /* compensate letter-spacing optical shift */
-                ">
-                ${otpCode}
-                </p>
-            </div>
+            <!-- OTP Box -->
+            <table class="otp-box" width="100%" cellpadding="0" cellspacing="0"
+            style="background:#F4F7FF;border-radius:25px;padding:30px 20px;margin-top:36px;">
+            <tr>
+            <td align="center">
 
-            </div>
-        </div>
+            <p class="otp-text"
+            style="margin:0;font-size:40px;font-weight:600;letter-spacing:25px;color:#1E8E54;padding-left:25px;">
+            ${otpCode}
+            </p>
 
-        <!-- Help text -->
-        <p style="
-            max-width:400px;
-            margin:0 auto;
-            margin-top:40px;
-            text-align:center;
-            font-weight:500;
-            color:#8c8c8c;
-            line-height:1.7;
-        ">
-            Need help? Ask at
-            <a href="mailto:gowthamj7773@gmail.com" style="color:#1E8E54; text-decoration:none;">gowthamj7773@gmail.com</a>
-            or visit our
-            <a href="" target="_blank" style="color:#1E8E54; text-decoration:none;">Help Center</a>
-        </p>
-        </main>
+            </td>
+            </tr>
+            </table>
 
-        <!-- Footer -->
-        <footer style="
-        width:100%;
-        max-width:490px;
-        margin:30px auto 0;
-        text-align:center;
-        border-top:1px solid #e6ebf1;
-        ">
-        <p style="margin:0; margin-top:40px; font-size:22px; font-weight:600; color:#434343;">
+            </td>
+            </tr>
+            </table>
+
+            </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+            <td align="center">
+
+            <p class="footer-title"
+            style="margin-top:40px;font-size:22px;font-weight:600;color:#434343;">
             Trash Management
-        </p>
+            </p>
 
-        <p style="margin:0; margin-top:8px; color:#434343;">
-            Sample Address, Sample State, Country-123.
-        </p>
+            <p style="margin-top:8px;color:#434343;">
+            Sample Address, Sample State, Country-123
+            </p>
 
-        <!-- Social icons -->
-        <div style="margin:16px 0 0;">
-            <a href="" target="_blank" style="display:inline-block;">
-            <img width="36" alt="Facebook" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661502815169_682499/email-template-icon-facebook"/>
-            </a>
-            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
-            <img width="36" alt="Instagram" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661504218208_684135/email-template-icon-instagram"/>
-            </a>
-            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
-            <img width="36" alt="Twitter" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661503043040_372004/email-template-icon-twitter"/>
-            </a>
-            <a href="" target="_blank" style="display:inline-block; margin-left:8px;">
-            <img width="36" alt="Youtube" src="https://archisketch-resources.s3.ap-northeast-2.amazonaws.com/vrstyler/1661503195931_210869/email-template-icon-youtube"/>
-            </a>
-        </div>
-
-        <p style="margin:0; margin-top:16px; margin-bottom:0; color:#434343;">
+            <p style="margin-top:16px;color:#434343;">
             Copyright © 2026 Company. All rights reserved.
-        </p>
-        </footer>
+            </p>
 
-    </div>
-    </body>
-    </html>
+            </td>
+            </tr>
 
-                `
+            </table>
+            </td>
+            </tr>
+            </table>
+
+            </body>
+            </html>
+            `
         };
         
         await transporter.sendMail(mailOptions);

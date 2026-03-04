@@ -1,208 +1,103 @@
-import React, { useState, useRef, useEffect } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import Pagination from "../../../../utils/Pagination";
 import LogDetailsModal from "../../../../components/Modals/Admin/LogDetailsModal";
-import { RightArrow, DownArrow } from "../../../../assets/icons/icons";
+import { RightArrow, DownArrow, Search } from "../../../../assets/icons/icons";
+import { getLogs, getLogFilters } from "../../../../services/features/adminService";
+import { SkeletonLine } from "../../../../components/skeleton";
 
-const mockApiLogs = [
-  {
-    api_log_id: "API-5021",
-    user_id: "Admin_01",
-    role_id: "SUPER_ADMIN",
-    endpoint: "/api/v1/complaints",
-    http_method: "GET",
-    status_code: 200,
-    response_time_ms: 120,
-    ip_address: "192.168.1.42",
-    user_agent: "Mozilla/5.0",
-    request_body: null,
-    response_body: { count: 45 },
-    created_at: "Oct 24, 09:42:12"
-  },
-  {
-    api_log_id: "API-5020",
-    user_id: "MiHO_Salem",
-    role_id: "MHO",
-    endpoint: "/api/v1/auth/login",
-    http_method: "POST",
-    status_code: 200,
-    response_time_ms: 85,
-    ip_address: "10.0.0.12",
-    user_agent: "PostmanRuntime/7.26.8",
-    request_body: { username: "mh_salem" },
-    response_body: { token: "***" },
-    created_at: "Oct 24, 09:30:45"
-  },
-  {
-    api_log_id: "API-5019",
-    user_id: "Supervisor_04",
-    role_id: "SUPERVISOR",
-    endpoint: "/api/v1/zones/NZ-01/config",
-    http_method: "PUT",
-    status_code: 403,
-    response_time_ms: 20,
-    ip_address: "192.168.4.101",
-    user_agent: "Mozilla/5.0",
-    request_body: { zone_config: {} },
-    response_body: { error: "Forbidden" },
-    created_at: "Oct 24, 09:15:22"
-  },
-  {
-    api_log_id: "API-5018",
-    user_id: "Commissioner_01",
-    role_id: "COMMISSIONER",
-    endpoint: "/api/v1/dashboard/status",
-    http_method: "GET",
-    status_code: 200,
-    response_time_ms: 340,
-    ip_address: "172.16.0.5",
-    user_agent: "Mozilla/5.0",
-    request_body: null,
-    response_body: { status: "healthy" },
-    created_at: "Oct 24, 08:55:10"
-  },
-  {
-    api_log_id: "API-5017",
-    user_id: "Admin_02",
-    role_id: "ADMIN",
-    endpoint: "/api/v1/employees/EMP-99",
-    http_method: "DELETE",
-    status_code: 500,
-    response_time_ms: 512,
-    ip_address: "192.168.1.45",
-    user_agent: "Mozilla/5.0",
-    request_body: null,
-    response_body: { error: "Internal Server Error" },
-    created_at: "Oct 24, 08:45:33"
-  },
-  {
-    api_log_id: "API-5016",
-    user_id: "Guest_User",
-    role_id: "GUEST",
-    endpoint: "/api/v1/public/map",
-    http_method: "GET",
-    status_code: 200,
-    response_time_ms: 45,
-    ip_address: "45.22.19.112",
-    user_agent: "Mozilla/5.0",
-    request_body: null,
-    response_body: { map_data: "***" },
-    created_at: "Oct 24, 08:30:11"
-  },
-  {
-    api_log_id: "API-5015",
-    user_id: "Supervisor_05",
-    role_id: "SUPERVISOR",
-    endpoint: "/api/v1/complaints/COM-22/assign",
-    http_method: "POST",
-    status_code: 201,
-    response_time_ms: 110,
-    ip_address: "192.168.4.105",
-    user_agent: "Mozilla/5.0",
-    request_body: { assignee: "EMP-88" },
-    response_body: { success: true },
-    created_at: "Oct 24, 08:15:00"
-  },
-  {
-    api_log_id: "API-5014",
-    user_id: "Admin_01",
-    role_id: "SUPER_ADMIN",
-    endpoint: "/api/v1/logs/export",
-    http_method: "GET",
-    status_code: 200,
-    response_time_ms: 1200,
-    ip_address: "192.168.1.42",
-    user_agent: "Mozilla/5.0",
-    request_body: null,
-    response_body: { export_url: "/exports/logs.csv" },
-    created_at: "Oct 24, 08:05:00"
-  }
-];
+const LIMIT = 20;
+const SKELETON_ROWS = 8;
 
-export default function ApiRequestLogs({ searchQuery = "" }) {
+export default function ApiRequestLogs({ searchQuery = "", dateRange, onFiltersChange }) {
+  const [logs, setLogs] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [filterOptions, setFilterOptions] = useState({ http_method: [], user_id: [] });
+  const [filters, setFilters] = useState({ method: "", status: "", userId: "" });
   const [selectedLog, setSelectedLog] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expandedRow, setExpandedRow] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [filters, setFilters] = useState({
-    method: "All",
-    status: "All",
-    user: "All"
-  });
+  const headerRef = useRef(null);
 
-  const dropdownRef = useRef(null);
-
-  useEffect(function () {
-    function handleClickOutside(e) {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpenDropdown(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return function () { document.removeEventListener("mousedown", handleClickOutside); };
+  useEffect(() => {
+    getLogFilters("api").then(res => { if (res?.data) setFilterOptions(res.data); });
   }, []);
 
-  const filteredLogs = mockApiLogs.filter(log => {
-    const matchesSearch = log.api_log_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.endpoint.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      log.user_id.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesMethod = filters.method === "All" || log.http_method === filters.method;
-    const matchesStatus = filters.status === "All" || 
-      (filters.status === "2xx" && log.status_code >= 200 && log.status_code < 300) ||
-      (filters.status === "4xx" && log.status_code >= 400 && log.status_code < 500) ||
-      (filters.status === "5xx" && log.status_code >= 500);
-    const matchesUser = filters.user === "All" || log.user_id === filters.user;
+  useEffect(() => { setPage(1); }, [searchQuery, dateRange, filters]);
 
-    return matchesSearch && matchesMethod && matchesStatus && matchesUser;
-  });
-
-  function handleDetailsClick(log) {
-    setSelectedLog(log);
-    setIsModalOpen(true);
-  }
-
-  function toggleExpand(logId) {
-    setExpandedRow(expandedRow === logId ? null : logId);
-  }
-
-  function toggleDropdown(column) {
-    setOpenDropdown(openDropdown === column ? null : column);
-  }
-
-  function handleFilterChange(column, value) {
-    setFilters(function (prev) {
-      return { ...prev, [column]: value };
+  useEffect(() => {
+    if (onFiltersChange) onFiltersChange({
+      method: filters.method || undefined,
+      status: filters.status || undefined,
+      user_id: filters.userId || undefined,
     });
-    setOpenDropdown(null);
+  }, [filters]); // eslint-disable-line
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    getLogs({
+      type: "api", page, limit: LIMIT,
+      search: searchQuery || undefined,
+      method: filters.method || undefined,
+      status: filters.status || undefined,
+      user_id: filters.userId || undefined,
+      start: dateRange?.start, end: dateRange?.end,
+    }).then(res => {
+      if (!cancelled) { setLogs(res?.data?.rows || []); setTotal(res?.data?.total || 0); }
+    }).catch(console.error).finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [searchQuery, dateRange, filters, page]);
+
+  useEffect(() => {
+    function h(e) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) setOpenDropdown(null);
+    }
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+
+  function clearAllFilters() {
+    setFilters({ method: "", status: "", userId: "" });
   }
 
-  function ColumnHeader({ label, column, options }) {
+  function ColumnHeader({ label, col, options }) {
+    const active = filters[col] || "";
+    const isOpen = openDropdown === col;
     return (
-      <div className="relative" ref={column ? dropdownRef : null}>
+      <div className="relative">
         <button
-          onClick={() => column && toggleDropdown(column)}
-          className="flex items-center gap-1.5 text-xs font-bold hover:text-primary transition-colors duration-200"
+          onClick={() => col && setOpenDropdown(isOpen ? null : col)}
+          className={`flex items-center gap-1.5 text-xs font-bold transition-colors duration-200
+            ${active ? "text-primary" : "text-secondaryDark hover:text-primary"}`}
         >
           <span>{label}</span>
-          {column && <DownArrow size={10} defaultColor="#316F5D" />}
+          {active && (
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-white leading-none">
+              {active.length > 8 ? active.slice(0, 8) + "…" : active}
+            </span>
+          )}
+          {col && (
+            <span className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
+              <DownArrow size={10} defaultColor={active ? "#316F5D" : "#6B7280"} />
+            </span>
+          )}
         </button>
-        
-        {column && openDropdown === column && (
-          <div className="absolute top-full left-0 mt-2 w-40 bg-white rounded-large border border-secondary shadow-xl z-50 overflow-hidden">
-            {options.map(function (option) {
-              const isActive = filters[column] === option;
-              return (
-                <button
-                  key={option}
-                  onClick={() => handleFilterChange(column, option)}
-                  className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-all duration-200
-                    hover:bg-background border-b border-secondary last:border-0
-                    ${isActive ? "bg-primary/10 text-primary font-bold" : "text-secondaryDark"}`}
-                >
-                  {option}
-                </button>
-              );
-            })}
+        {col && isOpen && (
+          <div className="absolute top-full left-0 mt-2 w-44 bg-white rounded-large border border-secondary shadow-xl z-50 overflow-hidden">
+            {["All", ...options].map(opt => (
+              <button
+                key={opt}
+                onClick={() => { setFilters(p => ({ ...p, [col]: opt === "All" ? "" : opt })); setOpenDropdown(null); }}
+                className={`w-full text-left px-4 py-2.5 text-xs font-medium transition-all hover:bg-background border-b border-secondary last:border-0
+                  ${(!active && opt === "All") || active === opt ? "bg-primary/10 text-primary font-bold" : "text-secondaryDark"}`}
+              >
+                {opt}
+              </button>
+            ))}
           </div>
         )}
       </div>
@@ -210,88 +105,119 @@ export default function ApiRequestLogs({ searchQuery = "" }) {
   }
 
   function StatusBadge({ code }) {
-    let bgColor = "";
-    if (code >= 200 && code < 300) bgColor = "bg-success/10 text-success";
-    else if (code >= 400 && code < 500) bgColor = "bg-warning/10 text-warning";
-    else if (code >= 500) bgColor = "bg-error/10 text-error";
-    else bgColor = "bg-secondary text-secondaryDark";
+    const cls = code >= 500 ? "bg-error/10 text-error" : code >= 400 ? "bg-warning/10 text-warning" : "bg-success/10 text-success";
+    return <span className={`px-2 py-1 rounded-small text-xs font-medium ${cls}`}>{code}</span>;
+  }
 
+  function NoRecords() {
     return (
-      <span className={`px-2 py-1 rounded-small text-xs font-medium ${bgColor}`}>
-        {code}
-      </span>
+      <div className="flex flex-col items-center justify-center py-16 gap-3">
+        <div className="p-4 bg-secondary rounded-full">
+          <Search size={28} defaultColor="#9CA3AF" />
+        </div>
+        <p className="text-sm font-semibold text-secondaryDark">No records found</p>
+        <p className="text-xs text-secondaryDark/60">
+          {Object.values(filters).some(Boolean)
+            ? "Try adjusting or clearing your filters"
+            : "No API request logs available"}
+        </p>
+      </div>
+    );
+  }
+
+  function TableSkeleton() {
+    return (
+      <>
+        {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
+          <div key={i} className="grid grid-cols-8 gap-4 p-4 border-b border-secondary last:border-0">
+            <SkeletonLine variant="small" width="3/4" />
+            <SkeletonLine variant="small" width="1/2" />
+            <SkeletonLine variant="small" width="full" className="col-span-2" />
+            <SkeletonLine variant="small" width="1/2" />
+            <SkeletonLine variant="small" width="3/4" />
+            <SkeletonLine variant="small" width="full" />
+            <div className="flex justify-end"><SkeletonLine variant="small" width="1/4" /></div>
+          </div>
+        ))}
+      </>
     );
   }
 
   return (
     <div className="bg-secondary rounded-large p-4">
-      {/* Table Container - Horizontally scrollable on mobile */}
-      <div className="overflow-x-auto">
-        {/* Table Header - Always visible */}
-        <div className="grid grid-cols-8 gap-4 px-4 py-3 bg-white rounded-medium mb-2 text-xs font-bold text-secondaryDark border border-secondary min-w-200">
-          <div>Log ID</div>
-          <ColumnHeader label="Method" column="method" options={["All", "GET", "POST", "PUT", "DELETE"]} />
-          <div className="col-span-2">Endpoint</div>
-          <ColumnHeader label="Status" column="status" options={["All", "2xx", "4xx", "5xx"]} />
-          <div>Time</div>
-          <ColumnHeader label="User" column="user" options={["All", ...Array.from(new Set(mockApiLogs.map(l => l.user_id)))]} />
-          <div className="text-right">Actions</div>
+      {/* Active filter chips */}
+      {activeFilterCount > 0 && (
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className="text-xs text-secondaryDark font-medium">Active filters:</span>
+          {filters.method && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+              Method: {filters.method}
+              <button onClick={() => setFilters(p => ({ ...p, method: "" }))} className="hover:text-error transition-colors leading-none">×</button>
+            </span>
+          )}
+          {filters.status && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/20">
+              Status: {filters.status}
+              <button onClick={() => setFilters(p => ({ ...p, status: "" }))} className="hover:opacity-60 transition-opacity leading-none">×</button>
+            </span>
+          )}
+          {filters.userId && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
+              User: {filters.userId}
+              <button onClick={() => setFilters(p => ({ ...p, userId: "" }))} className="hover:text-error transition-colors leading-none">×</button>
+            </span>
+          )}
+          {activeFilterCount > 1 && (
+            <button onClick={clearAllFilters} className="text-xs text-error hover:underline font-medium transition-colors">
+              Clear all
+            </button>
+          )}
         </div>
+      )}
 
+      <div className="overflow-x-auto">
+        <div
+          ref={headerRef}
+          className="grid grid-cols-8 gap-4 px-4 py-3 bg-white rounded-medium mb-2 text-xs font-bold text-secondaryDark border border-secondary min-w-200"
+        >
+          <div className="text-xs font-bold text-secondaryDark">Log ID</div>
+          <ColumnHeader label="Method" col="method" options={filterOptions.http_method} />
+          <div className="col-span-2 text-xs font-bold text-secondaryDark">Endpoint</div>
+          <ColumnHeader label="Status" col="status" options={["2xx", "4xx", "5xx"]} />
+          <div className="text-xs font-bold text-secondaryDark">Resp Time</div>
+          <ColumnHeader label="User" col="userId" options={filterOptions.user_id} />
+          <div className="text-xs font-bold text-secondaryDark text-right">Actions</div>
+        </div>
         <div className="bg-white rounded-large overflow-hidden border border-secondary min-w-200">
-          <Pagination
-            data={filteredLogs}
-            itemsPerPage={8}
-            renderItem={(log) => (
-              <div key={log.api_log_id}>
-                <div className="grid grid-cols-8 gap-4 p-4 text-sm hover:bg-secondary/50 transition-all duration-200 ease-in-out border-b border-secondary last:border-0">
-                  <div className="font-medium text-primary">{log.api_log_id}</div>
-                  <div className="text-secondaryDark">
-                    <span className="bg-secondary px-2 py-1 rounded-small text-xs">{log.http_method}</span>
-                  </div>
-                  <div className="col-span-2 text-secondaryDark truncate">{log.endpoint}</div>
+          {loading ? (
+            <TableSkeleton />
+          ) : logs.length === 0 ? (
+            <NoRecords />
+          ) : (
+            <Pagination
+              data={logs} itemsPerPage={LIMIT} serverSide={true}
+              totalItems={total} currentPage={page} onPageChange={setPage}
+              renderItem={(log) => (
+                <div key={log.api_log_id} className="grid grid-cols-8 gap-4 p-4 text-sm hover:bg-secondary/50 border-b border-secondary last:border-0 transition-all">
+                  <div className="font-medium text-primary text-xs truncate">{String(log.api_log_id)}</div>
+                  <div><span className="bg-secondary px-2 py-1 rounded-small text-xs">{log.http_method}</span></div>
+                  <div className="col-span-2 text-secondaryDark truncate text-xs">{log.endpoint}</div>
                   <div><StatusBadge code={log.status_code} /></div>
-                  <div className="text-secondaryDark">{log.response_time_ms}ms</div>
-                  <div className="text-secondaryDark truncate">{log.user_id}</div>
-                  <div className="flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => handleDetailsClick(log)}
-                      className="p-1.5 hover:bg-secondary rounded-small transition-all duration-200 ease-in-out
-                               hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
-                    >
-                      <RightArrow size={14} className="text-primary" />
+                  <div className="text-secondaryDark text-xs">{log.response_time_ms}ms</div>
+                  <div className="text-secondaryDark truncate text-xs">{String(log.user_id ?? "-")}</div>
+                  <div className="flex items-center justify-end">
+                    <button onClick={() => { setSelectedLog(log); setIsModalOpen(true); }}
+                      className="p-1.5 hover:bg-secondary rounded-small transition-all hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20">
+                      <RightArrow size={14} />
                     </button>
                   </div>
                 </div>
-                
-                {/* Expanded Details */}
-                {expandedRow === log.api_log_id && (
-                  <div className="px-4 py-3 bg-background border-t border-secondary">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-secondaryDark">IP Address:</span>
-                        <span className="text-xs text-primary font-medium">{log.ip_address}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-semibold text-secondaryDark">Date:</span>
-                        <span className="text-xs text-primary font-medium">{log.created_at}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          />
+              )}
+            />
+          )}
         </div>
       </div>
-
-      {/* Details Modal */}
-      <LogDetailsModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        logData={selectedLog}
-        logType="api"
-      />
+      <LogDetailsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} logData={selectedLog} logType="api" />
     </div>
   );
 }

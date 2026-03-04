@@ -10,71 +10,40 @@ Stats,
 Notification,
 People,
 Check,
-Settings,
 Edit,
 DownArrow,
 } from "../../assets/icons/icons";
-import { getMetrics } from "../../services/features/adminService";
+import { getMetrics, getDashboardKpis } from "../../services/features/adminService";
 
-const kpiData = [
-{
-title: "API Requests Today",
-value: "4.2M",
-subtitle: "+8.4% vs avg",
-subtitleColor: "#1E8E54",
-icon: <Mobile size={16} />,
-},
-{
-title: "Requests / Min",
-value: "3,150",
-subtitle: "Stable load",
-icon: <Stats size={16} />,
-},
-{
-title: "4XX Errors",
-value: "842",
-subtitle: "0.02% Rate",
-subtitleColor: "#F2C94C",
-icon: <Notification size={16} />,
-},
-{
-title: "5XX Errors",
-value: "15",
-subtitle: "Critical Check",
-subtitleColor: "#E75A4C",
-icon: <Notification size={16} />,
-highlighted: true,
-},
-{
-title: "Avg Response Time",
-value: "124ms",
-subtitle: "Optimal (<200ms)",
-subtitleColor: "#1E8E54",
-icon: <Stats size={16} />,
-},
-{
-title: "New Users",
-value: "1,245",
-subtitle: "+18% this month",
-subtitleColor: "#1E8E54",
-icon: <People size={16} />,
-},
-{
-title: "Failed Login Attempts",
-value: "89",
-subtitle: "Security Check",
-subtitleColor: "#F2C94C",
-icon: <Notification size={16} />,
-highlighted: true,
-},
-{
-title: "Active Users Today",
-value: "45,200",
-subtitle: "All roles combined",
-subtitleColor: "#1E8E54",
-icon: <People size={16} />,
-},
-];
+function fmt(n) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return n.toLocaleString();
+  return String(n);
+}
+
+function pct(curr, prev) {
+  if (!prev) return null;
+  const v = ((curr - prev) / prev * 100).toFixed(1);
+  return (Number(v) >= 0 ? '+' : '') + v + '%';
+}
+
+function buildKpiCards(d) {
+  if (!d) return [];
+  const reqPerMin = d.minutesElapsedToday ? Math.round(d.apiRequestsToday / d.minutesElapsedToday) : 0;
+  const apiChange = pct(d.apiRequestsToday, d.apiRequestsYesterday);
+  const userChange = pct(d.newUsersThisMonth, d.newUsersLastMonth);
+  const errRate = d.apiRequestsToday ? ((d.errors4xx / d.apiRequestsToday) * 100).toFixed(2) + '% Rate' : '0.00% Rate';
+  return [
+    { title: 'API Requests Today', value: fmt(d.apiRequestsToday), subtitle: apiChange ? `${apiChange} vs yesterday` : 'No prior data', subtitleColor: apiChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <Mobile size={16} /> },
+    { title: 'Requests / Min', value: fmt(reqPerMin), subtitle: "Today's avg rate", icon: <Stats size={16} /> },
+    { title: '4XX Errors', value: fmt(d.errors4xx), subtitle: errRate, subtitleColor: '#F2C94C', icon: <Notification size={16} /> },
+    { title: '5XX Errors', value: fmt(d.errors5xx), subtitle: d.errors5xx > 0 ? 'Critical Check' : 'All Clear', subtitleColor: d.errors5xx > 0 ? '#E75A4C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.errors5xx > 0 },
+    { title: 'Avg Response Time', value: d.avgResponseMs + 'ms', subtitle: d.avgResponseMs < 200 ? 'Optimal (<200ms)' : d.avgResponseMs < 500 ? 'Moderate' : 'High latency', subtitleColor: d.avgResponseMs < 200 ? '#1E8E54' : d.avgResponseMs < 500 ? '#F2C94C' : '#E75A4C', icon: <Stats size={16} /> },
+    { title: 'New Users', value: fmt(d.newUsersThisMonth), subtitle: userChange ? `${userChange} vs last month` : 'This month', subtitleColor: userChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <People size={16} /> },
+    { title: 'Failed Login Attempts', value: fmt(d.failedLoginsToday), subtitle: d.failedLoginsToday > 50 ? 'Security Check' : 'Normal range', subtitleColor: d.failedLoginsToday > 50 ? '#F2C94C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.failedLoginsToday > 100 },
+    { title: 'Active Users Today', value: fmt(d.activeUsersToday), subtitle: 'All roles combined', subtitleColor: '#1E8E54', icon: <People size={16} /> },
+  ];
+}
 
 const INTERVAL_FOR_RANGE = { today: '5m', week: '1h', month: '1h', custom: '1h' };
 
@@ -96,6 +65,8 @@ const [activeFilter, setActiveFilter] = useState("today");
 const [showDatePicker, setShowDatePicker] = useState(false);
 const [customLabel, setCustomLabel] = useState(null);
 const [customRange, setCustomRange] = useState(null);
+const [kpis, setKpis] = useState(null);
+const [kpisLoading, setKpisLoading] = useState(true);
 const [chartData, setChartData] = useState({ traffic: [], errors4xx: [], errors5xx: [] });
 const [escalationConfig, setEscalationConfig] = useState([
     { role: "Resident", timing: "Trigger", isTrigger: true, editable: false },
@@ -104,6 +75,14 @@ const [escalationConfig, setEscalationConfig] = useState([
     { role: "MHO", timing: "72h", editable: true },
     { role: "Commissioner", timing: "Final", isFinal: true, editable: false },
 ]);
+
+useEffect(() => {
+    setKpisLoading(true);
+    getDashboardKpis()
+        .then(res => { if (res?.data) setKpis(res.data); })
+        .catch(console.error)
+        .finally(() => setKpisLoading(false));
+}, []);
 
 useEffect(() => {
     const interval = INTERVAL_FOR_RANGE[activeFilter] || '5m';
@@ -173,19 +152,12 @@ return (
 
         {/* KPI Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        {kpiData.map(function (card, idx) {
-            return (
-            <AdminKpiCard
-                key={idx}
-                title={card.title}
-                value={card.value}
-                subtitle={card.subtitle}
-                subtitleColor={card.subtitleColor}
-                icon={card.icon}
-                highlighted={card.highlighted}
-            />
-            );
-        })}
+        {kpisLoading
+            ? Array.from({ length: 8 }).map((_, i) => <AdminKpiCard key={i} loading />)
+            : buildKpiCards(kpis).map((card, idx) => (
+                <AdminKpiCard key={idx} title={card.title} value={card.value} subtitle={card.subtitle} subtitleColor={card.subtitleColor} icon={card.icon} highlighted={card.highlighted} />
+            ))
+        }
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
