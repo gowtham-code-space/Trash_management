@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../store/ThemeStore";
 import { Check, X, Location, People, Task } from "../../assets/icons/icons";
 
@@ -54,6 +55,7 @@ const complaintData = {
 
 function ComplaintDetails() {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
 
     function getStatusColor(status) {
         switch (status) {
@@ -97,7 +99,7 @@ function ComplaintDetails() {
                         className="px-3 py-1 text-xs font-medium rounded-medium text-white"
                         style={{ backgroundColor: getPriorityColor(complaintData.priority) }}
                     >
-                        {complaintData.priority} Priority
+                        {t('pages:resident.trash_details.priority_badge', { priority: complaintData.priority })}
                     </span>
                     </div>
                     
@@ -116,13 +118,13 @@ function ComplaintDetails() {
                 </div>
                 
                 <button className="px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-medium hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    Download Report
+                    {t('pages:resident.trash_details.download_report')}
                 </button>
                 </div>
                 
                 <div className="pt-6 border-t border-secondary">
                 <h3 className="text-sm font-semibold text-secondaryDark mb-2">
-                    Description
+                    {t('pages:resident.trash_details.description')}
                 </h3>
                 <p className="text-sm text-secondaryDark/80 leading-relaxed">
                     {complaintData.description}
@@ -134,7 +136,7 @@ function ComplaintDetails() {
                 {/* Workflow Timeline */}
                 <div className="lg:col-span-2 bg-secondary p-6 rounded-large border border-secondary">
                 <h2 className="text-base font-semibold text-secondaryDark mb-6">
-                    Complaint Workflow
+                    {t('pages:resident.trash_details.complaint_workflow')}
                 </h2>
                 
                 <div className="relative">
@@ -215,7 +217,7 @@ function ComplaintDetails() {
                     <div className="flex items-start gap-3">
                     <Task size={16} defaultColor="#145B47" />
                     <p className="text-xs text-secondaryDark leading-relaxed">
-                        <span className="font-semibold">Escalation Flow:</span> Resident → Supervisor → Trash Collector (if assigned) → Sanitary Inspector (auto-escalated if unresolved) → Municipal Health Officer (auto-escalated if unresolved)
+                        <span className="font-semibold">{t('pages:resident.trash_details.escalation_flow_label')}</span> {t('pages:resident.trash_details.escalation_flow_desc')}
                     </p>
                     </div>
                 </div>
@@ -226,12 +228,12 @@ function ComplaintDetails() {
                 {/* Status Card */}
                 <div className="bg-secondary p-6 rounded-large border border-secondary">
                     <h2 className="text-base font-semibold text-secondaryDark mb-5">
-                    Current Status
+                    {t('pages:resident.trash_details.current_status')}
                     </h2>
                     
                     <div className="space-y-4">
                     <div className="flex items-center justify-between pb-4 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Status</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:resident.trash_details.status')}</span>
                         <span
                         className="px-3 py-1.5 text-xs font-medium rounded-medium text-white"
                         style={{ backgroundColor: "#F2C94C" }}
@@ -241,7 +243,7 @@ function ComplaintDetails() {
                     </div>
                     
                     <div className="flex items-center justify-between pb-4 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Priority</span>
+                        <span className="text-sm text-secondaryDark">{t('common:priority')}</span>
                         <span
                         className="px-3 py-1.5 text-xs font-medium rounded-medium text-white"
                         style={{ backgroundColor: getPriorityColor(complaintData.priority) }}
@@ -251,7 +253,7 @@ function ComplaintDetails() {
                     </div>
                     
                     <div className="flex items-center justify-between pb-4 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Submitted</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:resident.trash_details.submitted')}</span>
                         <span className="text-sm font-medium text-secondaryDark">
                             {complaintData?.submittedDate}
                         </span>

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { X, Check } from "../../../../assets/icons/icons";
 
 function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
   const [selectedRoute, setSelectedRoute] = useState(street?.route || "");
 
   function handleConfirm() {
@@ -20,7 +22,7 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
         <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-large p-6 max-w-lg w-full mx-4 border border-secondary">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-secondaryDark">
-              Move Street
+              {t('modals:si_move_street.title')}
             </h3>
             <button
               onClick={onCancel}
@@ -35,22 +37,22 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
           
           <div className="mb-6">
             <div className="bg-background rounded-medium p-4 mb-4">
-              <p className="text-xs text-secondaryDark/60 mb-1">Street Name</p>
+              <p className="text-xs text-secondaryDark/60 mb-1">{t('modals:si_move_street.street_name_label')}</p>
               <p className="text-sm font-bold text-secondaryDark">
                 {street?.street_name}
               </p>
               <p className="text-xs text-secondaryDark mt-2">
-                {street?.households} Households
+                {t('modals:si_move_street.households_count', { count: street?.households })}
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-bold text-secondaryDark mb-3">
-                Current Route: <span className="text-primary">{street?.route}</span>
+                {t('modals:si_move_street.current_route')} <span className="text-primary">{street?.route}</span>
               </label>
               
               <p className="text-sm font-bold text-secondaryDark mb-2">
-                Select New Route
+                {t('modals:si_move_street.select_new_route')}
               </p>
               
               <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -78,7 +80,7 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
                             {route.name}
                           </p>
                           <p className="text-xs text-secondaryDark/60 mt-1">
-                            {route.streets.length} Street{route.streets.length !== 1 ? 's' : ''}
+                            {t('modals:si_move_street.street_count', { count: route.streets.length })}
                           </p>
                         </div>
                         {isSelected && !isCurrentRoute && (
@@ -88,7 +90,7 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
                         )}
                         {isCurrentRoute && (
                           <span className="text-xs text-secondaryDark/60 font-bold">
-                            Current
+                            {t('common:current')}
                           </span>
                         )}
                       </div>
@@ -107,7 +109,7 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20
                         transition-all duration-200 ease-in-out"
             >
-              Cancel
+              {t('common:cancel')}
             </button>
             
             <button
@@ -119,7 +121,7 @@ function MoveStreetModal({ street, routes, onConfirm, onCancel }) {
                           ? "bg-secondary text-secondaryDark/40 cursor-not-allowed"
                           : "bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"}`}
             >
-              Move Street
+              {t('modals:si_move_street.move_street')}
             </button>
           </div>
         </div>

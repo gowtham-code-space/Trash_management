@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Check, X, RightArrow, LeftArrow } from "../../../assets/icons/icons";
 
 function ReviewQuizModal({ isOpen, quizData, onClose }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
 
   if (!isOpen || !quizData) return null;
@@ -69,10 +71,10 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
           ${isDarkTheme ? "border-darkBorder" : "border-gray-200"}`}>
           <div className="flex-1 min-w-0">
             <h2 className={`text-base sm:text-lg font-bold truncate ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-              Quiz Review - #{quizData.quiz_id}
+              {t('modals:review_quiz.title_prefix')}{quizData.quiz_id}
             </h2>
             <p className={`text-xs sm:text-sm mt-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-600"}`}>
-              Score: {quizData.score}/{quizData.total_score} ({quizData.percentage}%)
+              {t('modals:review_quiz.score_label')} {quizData.score}/{quizData.total_score} ({quizData.percentage}%)
             </p>
           </div>
           <button
@@ -94,7 +96,7 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
                 : "bg-secondary border-gray-200"}`}>
               <h3 className={`text-xs sm:text-sm font-semibold mb-2 sm:mb-3
                 ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                Questions
+                {t('modals:review_quiz.questions')}
               </h3>
               <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-3 gap-2">
                 {questions.map(function(q, index) {
@@ -135,14 +137,14 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
               <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
                 <h4 className={`text-xs sm:text-sm font-semibold
                   ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                  Question {currentQuestionIndex + 1} of {totalQuestions}
+                  {t('modals:review_quiz.question_of', { current: currentQuestionIndex + 1, total: totalQuestions })}
                 </h4>
                 <span className={`text-xs font-medium px-2 sm:px-3 py-1 rounded-medium whitespace-nowrap
                   ${currentQuestion.user_answer === currentQuestion.correct_option
                     ? "bg-success/10 text-success"
                     : "bg-error/10 text-error"
                   }`}>
-                  {currentQuestion.user_answer === currentQuestion.correct_option ? "Correct" : "Incorrect"}
+                  {currentQuestion.user_answer === currentQuestion.correct_option ? t('modals:review_quiz.correct') : t('modals:review_quiz.incorrect')}
                 </span>
               </div>
 
@@ -197,7 +199,7 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
                     ? "border-success/40 bg-success/10" 
                     : "border-success/20 bg-success/10"}`}>
                   <p className="text-xs font-medium text-success">
-                    Correct Answer: Option {currentQuestion.correct_option}
+                    {t('modals:review_quiz.correct_answer', { letter: currentQuestion.correct_option })}
                   </p>
                 </div>
               )}
@@ -216,8 +218,8 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
                     : "bg-white text-secondaryDark border-gray-200"}`}
               >
                 <LeftArrow size={14} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
-                <span className="hidden xs:inline">Previous</span>
-                <span className="xs:hidden">Prev</span>
+                <span className="hidden xs:inline">{t('modals:review_quiz.previous')}</span>
+                <span className="xs:hidden">{t('modals:review_quiz.prev')}</span>
               </button>
 
               <button
@@ -228,7 +230,7 @@ function ReviewQuizModal({ isOpen, quizData, onClose }) {
                   transition-all duration-200 ease-in-out
                   disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next
+                {t('modals:review_quiz.next')}
                 <RightArrow size={14} defaultColor="#fff" />
               </button>
             </div>

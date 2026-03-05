@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../../../../utils/Pagination";
 import LogDetailsModal from "../../../../components/Modals/Admin/LogDetailsModal";
 import { RightArrow, DownArrow, Search } from "../../../../assets/icons/icons";
@@ -9,6 +10,7 @@ const LIMIT = 20;
 const SKELETON_ROWS = 8;
 
 export default function AuditLogs({ searchQuery = "", dateRange, onFiltersChange }) {
+  const { t } = useTranslation(["pages", "common"]);
   const [logs, setLogs] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -115,11 +117,11 @@ export default function AuditLogs({ searchQuery = "", dateRange, onFiltersChange
         <div className="p-4 bg-secondary rounded-full">
           <Search size={28} defaultColor="#9CA3AF" />
         </div>
-        <p className="text-sm font-semibold text-secondaryDark">No records found</p>
+        <p className="text-sm font-semibold text-secondaryDark">{t('pages:admin.logs.no_records_found')}</p>
         <p className="text-xs text-secondaryDark/60">
           {Object.values(filters).some(Boolean)
-            ? "Try adjusting or clearing your filters"
-            : "No audit logs available"}
+            ? t('pages:admin.logs.try_adjusting_filters')
+            : t('pages:admin.audit_logs.no_audit_logs')}
         </p>
       </div>
     );
@@ -149,29 +151,29 @@ export default function AuditLogs({ searchQuery = "", dateRange, onFiltersChange
       {/* Active filter chips */}
       {activeFilterCount > 0 && (
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="text-xs text-secondaryDark font-medium">Active filters:</span>
+          <span className="text-xs text-secondaryDark font-medium">{t('pages:admin.logs.active_filters')}</span>
           {filters.entityType && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              Entity: {filters.entityType}
+              {t('pages:admin.audit_logs.filter_entity')} {filters.entityType}
               <button onClick={() => setFilters(p => ({ ...p, entityType: "" }))} className="hover:text-error transition-colors leading-none">×</button>
             </span>
           )}
           {filters.action && (
             <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border
               ${["DELETE", "REVOKE"].includes(filters.action) ? "bg-error/10 text-error border-error/20" : filters.action === "CREATE" ? "bg-success/10 text-success border-success/20" : "bg-primary/10 text-primary border-primary/20"}`}>
-              Action: {filters.action}
+              {t('pages:admin.audit_logs.filter_action')} {filters.action}
               <button onClick={() => setFilters(p => ({ ...p, action: "" }))} className="hover:opacity-60 transition-opacity leading-none">×</button>
             </span>
           )}
           {filters.performedBy && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              By: {filters.performedBy}
+              {t('pages:admin.audit_logs.filter_performed_by')} {filters.performedBy}
               <button onClick={() => setFilters(p => ({ ...p, performedBy: "" }))} className="hover:text-error transition-colors leading-none">×</button>
             </span>
           )}
           {activeFilterCount > 1 && (
             <button onClick={clearAllFilters} className="text-xs text-error hover:underline font-medium transition-colors">
-              Clear all
+              {t('pages:admin.logs.clear_all')}
             </button>
           )}
         </div>
@@ -182,14 +184,14 @@ export default function AuditLogs({ searchQuery = "", dateRange, onFiltersChange
           ref={headerRef}
           className="grid grid-cols-8 gap-4 px-4 py-3 bg-white rounded-medium mb-2 text-xs font-bold text-secondaryDark border border-secondary min-w-200"
         >
-          <div className="text-xs font-bold text-secondaryDark">Audit ID</div>
-          <ColumnHeader label="Entity Type" col="entityType" options={filterOptions.entity_type} />
-          <div className="text-xs font-bold text-secondaryDark">Entity ID</div>
-          <ColumnHeader label="Action" col="action" options={filterOptions.action_type} />
-          <ColumnHeader label="Performed By" col="performedBy" options={filterOptions.performed_by} />
-          <div className="text-xs font-bold text-secondaryDark">Role</div>
-          <div className="text-xs font-bold text-secondaryDark">Date</div>
-          <div className="text-xs font-bold text-secondaryDark text-right">Actions</div>
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.audit_logs.column_audit_id')}</div>
+          <ColumnHeader label={t('pages:admin.audit_logs.column_entity_type')} col="entityType" options={filterOptions.entity_type} />
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.audit_logs.column_entity_id')}</div>
+          <ColumnHeader label={t('pages:admin.audit_logs.column_action')} col="action" options={filterOptions.action_type} />
+          <ColumnHeader label={t('pages:admin.audit_logs.column_performed_by')} col="performedBy" options={filterOptions.performed_by} />
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.audit_logs.column_role')}</div>
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.audit_logs.column_date')}</div>
+          <div className="text-xs font-bold text-secondaryDark text-right">{t('common:actions')}</div>
         </div>
         <div className="bg-white rounded-large overflow-hidden border border-secondary min-w-200">
           {loading ? (

@@ -4,8 +4,10 @@ import BarChart from "../../../../components/Statistics/BarChart";
 import ProgressBar from "../../../../components/Statistics/ProgressBar";
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function Overview() {
+    const { t } = useTranslation(["pages", "common"]);
     const [selectedMonth, setSelectedMonth] = useState("January");
     const [selectedYear, setSelectedYear] = useState("2026");
 
@@ -24,8 +26,10 @@ function Overview() {
     ];
 
     const monthDropDown = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        t('common:months.january'), t('common:months.february'), t('common:months.march'),
+        t('common:months.april'), t('common:months.may'), t('common:months.june'),
+        t('common:months.july'), t('common:months.august'), t('common:months.september'),
+        t('common:months.october'), t('common:months.november'), t('common:months.december')
     ];
 
     const yearDropDown = ["2024", "2025", "2026"];
@@ -33,13 +37,13 @@ function Overview() {
     function handleMonthChange(event) {
         const newMonth = event.target.value;
         setSelectedMonth(newMonth);
-        ToastNotification(`Loading tasks data for ${newMonth} ${selectedYear}`, "info");
+        ToastNotification(t('pages:inspector.overview.toast_loading_data', { month: newMonth, year: selectedYear }), "info");
     }
 
     function handleYearChange(event) {
         const newYear = event.target.value;
         setSelectedYear(newYear);
-        ToastNotification(`Loading tasks data for ${selectedMonth} ${newYear}`, "info");
+        ToastNotification(t('pages:inspector.overview.toast_loading_data', { month: selectedMonth, year: newYear }), "info");
     }
 
     return (
@@ -51,7 +55,7 @@ function Overview() {
             <div className="bg-secondary p-6 rounded-large border border-secondary shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-base font-semibold text-secondaryDark">
-                        Total Tasks Assigned
+                        {t('pages:inspector.overview.total_tasks_assigned')}
                     </h2>
                     
                     {/* Dropdowns */}
@@ -89,7 +93,7 @@ function Overview() {
                 {/* Total number */}
                 <div className="mb-4">
                     <h3 className="text-5xl font-bold text-secondaryDark mb-2">1,248</h3>
-                    <p className="text-sm text-gray-500">Tasks this month</p>
+                    <p className="text-sm text-gray-500">{t('pages:inspector.overview.tasks_this_month')}</p>
                 </div>
 
                 {/* Progress Bar using ProgressBar component */}
@@ -97,8 +101,8 @@ function Overview() {
                     <ProgressBar item={{ stars: 5, percentage: 75 }} defaultColor={"bg-primaryLight"}/>
                     
                     <div className="flex justify-between text-sm mt-2">
-                        <span className="text-gray-600">Resolved: 936</span>
-                        <span className="font-semibold text-secondaryDark">75% Completion</span>
+                        <span className="text-gray-600">{t('pages:inspector.overview.resolved_count', { count: 936 })}</span>
+                        <span className="font-semibold text-secondaryDark">{t('pages:inspector.overview.completion_rate')}</span>
                     </div>
                 </div>
             </div>
@@ -108,7 +112,7 @@ function Overview() {
                 data={taskCompletionData} 
                 monthDropDown={monthDropDown} 
                 yearDropDown={yearDropDown}
-                Heading="Avg Task Completion Time"
+                Heading={t('pages:inspector.overview.avg_task_completion_time')}
             />
 
             <ToastContainer />

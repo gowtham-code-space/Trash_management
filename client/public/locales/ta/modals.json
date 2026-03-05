@@ -1,0 +1,325 @@
+{
+  "calendar": {
+    "select_date": "தேதியைத் தேர்ந்தெடு",
+    "clear": "அழி",
+    "apply": "பயன்படுத்து"
+  },
+  "date_range": {
+    "select_date": "தேதியைத் தேர்ந்தெடு",
+    "from": "முதல்:",
+    "to": "வரை:",
+    "cancel": "ரத்து",
+    "apply": "பயன்படுத்து"
+  },
+  "assign_task": {
+    "title": "பணி ஒதுக்கீடு",
+    "confirm_message": "நீங்கள் நிச்சயமாக ஒதுக்க விரும்புகிறீர்களா",
+    "close": "மூடு",
+    "yes_confirm": "ஆம், உறுதிப்படுத்து",
+    "toast_assigned_success": "குப்பை ஊழியர் வெற்றிகரமாக ஒதுக்கப்பட்டார்"
+  },
+  "attendance_confirmation": {
+    "verify_title": "வருகையைச் சரிபார்",
+    "reject_title": "வருகையை நிராகரி",
+    "verify_message": "இவரின் வருகையைச் சரிபார்க்க விரும்புகிறீர்களா",
+    "reject_message": "இவரின் வருகையை நிராகரிக்க விரும்புகிறீர்களா",
+    "reject_suffix": "இது அவர்களை வராதவராகக் குறிக்கும்.",
+    "name": "பெயர்:",
+    "employee_id": "ஊழியர் ID:",
+    "check_in_time": "செக்-இன் நேரம்:",
+    "location": "இடம்:",
+    "cancel": "ரத்து",
+    "verify": "சரிபார்",
+    "reject": "நிராகரி"
+  },
+  "priority": {
+    "label": "முன்னுரிமை:",
+    "community_vote": "சமூக வாக்கு",
+    "reported_by": "புகாரளித்தவர்",
+    "trash_type": "குப்பை வகை",
+    "escalation_history": "எஸ்கலேஷன் வரலாறு",
+    "l2_badge": "L2",
+    "escalated_by_supervisor": "மேற்பார்வையாளரால் எஸ்கலேட் செய்யப்பட்டது",
+    "supervisor": "மேற்பார்வையாளர்",
+    "l3_badge": "L3",
+    "escalated_by_inspector": "சுகாதார ஆய்வாளரால் மேலும் எஸ்கலேட்",
+    "inspector": "சுகாதார ஆய்வாளர்",
+    "description": "விளக்கம்",
+    "reported_on": "புகார் தேதி",
+    "close": "மூடு"
+  },
+  "image_viewer": {
+    "alt_full_size": "முழு அளவு",
+    "click_outside_to_close": "மூட வெளியே கிளிக் செய்யவும்"
+  },
+  "attendance_submitted": {
+    "title": "வருகை பதிவு செய்யப்பட்டது",
+    "message": "உங்கள் வருகை பதிவு செய்யப்பட்டது. நிலையைக் கண்காணிக்க வரலாற்றைப் பாருங்கள்.",
+    "view_history": "வரலாறு பார்",
+    "done": "முடிந்தது"
+  },
+  "resolve_confirmation": {
+    "title": "தீர்வை உறுதிப்படுத்து",
+    "message": "இந்தப் பணியை தீர்க்கப்பட்டதாகக் குறிக்க விரும்புகிறீர்களா? இந்தச் செயலை மீட்க இயலாது.",
+    "cancel": "ரத்து",
+    "confirm": "உறுதிப்படுத்து"
+  },
+  "task_detail": {
+    "task_id": "பணி ID:",
+    "location": "இடம்",
+    "reported_at": "புகார் தேதி",
+    "resolved_at": "தீர்வு தேதி",
+    "resolved_by": "தீர்த்தவர்",
+    "close": "மூடு"
+  },
+  "deleted_config": {
+    "title": "நீக்கப்பட்ட அமைப்புகள்",
+    "subtitle": "மீட்டெடுக்க அமைப்பை மீட்டமை",
+    "empty": "நீக்கப்பட்ட அமைப்புகள் இல்லை",
+    "config_prefix": "அமைப்பு",
+    "restoring": "மீட்டமைக்கப்படுகிறது…",
+    "restore": "மீட்டமை",
+    "time": "நேரம்",
+    "questions": "கேள்விகள்",
+    "total_score": "மொத்த மதிப்பெண்",
+    "pass_mark": "தேர்ச்சி மதிப்பெண்",
+    "correct_mark": "+மதிப்பெண்",
+    "wrong_mark": "-மதிப்பெண்",
+    "close": "மூடு",
+    "toast_load_failed": "நீக்கப்பட்ட அமைப்புகளை ஏற்றுவதில் தோல்வி",
+    "toast_restored": "அமைப்பு {{id}} மீட்டமைக்கப்பட்டது",
+    "toast_restore_failed": "அமைப்பை மீட்டமைப்பதில் தோல்வி"
+  },
+  "delete_question": {
+    "title": "கேள்வியை நீக்கு",
+    "message": "இந்தக் கேள்வியை நீக்க விரும்புகிறீர்களா? இந்தச் செயலை மீட்க இயலாது.",
+    "cancel": "ரத்து",
+    "delete": "நீக்கு"
+  },
+  "log_details": {
+    "title": "லாக் விவரங்கள்",
+    "api_request_log": "API கோரிக்கை லாக்",
+    "audit_trail_log": "ஆடிட் ட்ரெயில் லாக்",
+    "event_log": "நிகழ்வு லாக்",
+    "log_id": "லாக் ID",
+    "user_id": "பயனர் ID",
+    "role_id": "பங்கு ID",
+    "endpoint": "எண்ட்பாயிண்ட்",
+    "http_method": "HTTP முறை",
+    "status_code": "நிலைக் குறியீடு",
+    "response_time": "பதில் நேரம்",
+    "ip_address": "IP முகவரி",
+    "user_agent": "யூசர் ஏஜென்ட்",
+    "request_body": "கோரிக்கை உடல்",
+    "response_body": "பதில் உடல்",
+    "created_at": "உருவாக்கப்பட்டது",
+    "audit_id": "ஆடிட் ID",
+    "entity_type": "என்டிட்டி வகை",
+    "entity_id": "என்டிட்டி ID",
+    "action_type": "செயல் வகை",
+    "old_value": "பழைய மதிப்பு",
+    "new_value": "புதிய மதிப்பு",
+    "performed_by": "செய்தவர்",
+    "performed_role": "செயல்படுத்திய பங்கு",
+    "remarks": "குறிப்புகள்",
+    "event_id": "நிகழ்வு ID",
+    "event_type": "நிகழ்வு வகை",
+    "severity": "தீவிரம்",
+    "metadata": "மெட்டாடேட்டா"
+  },
+  "update_question": {
+    "edit_title": "கேள்வியைத் திருத்து",
+    "add_title": "புதிய கேள்வி சேர்",
+    "edit_subtitle": "கீழே கேள்வி விவரங்களைப் புதுப்பிக்கவும்",
+    "add_subtitle": "புதிய கேள்வி சேர்க்க விவரங்களை நிரப்பவும்",
+    "question_text": "கேள்வி உரை",
+    "question_placeholder": "கேள்வி உரையை உள்ளிடவும்...",
+    "answer_options": "பதில் விருப்பங்கள்",
+    "option_placeholder": "விருப்பம் {{number}}",
+    "correct_answer_hint": "சரியான பதிலைக் குறிக்க வட்டத்தைக் கிளிக் செய்யவும்",
+    "cancel": "ரத்து",
+    "save_changes": "மாற்றங்களைச் சேமி",
+    "add_question": "கேள்வி சேர்"
+  },
+  "transfer_employee": {
+    "title": "ஊழியர் இடமாற்றம்",
+    "current_zone": "தற்போதைய மண்டலம்:",
+    "current_division": "தற்போதைய கோட்டம்:",
+    "transfer_to_zone": "மண்டலத்திற்கு மாற்று",
+    "select_zone": "மண்டலம் தேர்ந்தெடு",
+    "transfer_to_division": "கோட்டத்திற்கு மாற்று",
+    "select_division": "கோட்டம் தேர்ந்தெடு",
+    "cancel": "ரத்து",
+    "transfer": "இடமாற்றம்",
+    "toast_select_zone": "ஒரு மண்டலத்தைத் தேர்ந்தெடுக்கவும்",
+    "toast_select_division": "ஒரு கோட்டத்தைத் தேர்ந்தெடுக்கவும்",
+    "toast_transfer_success": "{{name}} வெற்றிகரமாக இடமாற்றம் செய்யப்பட்டார்"
+  },
+  "confirm": {
+    "confirm": "உறுதிப்படுத்து",
+    "cancel": "ரத்து"
+  },
+  "quiz_result": {
+    "title": "வினாடி வினா முடிந்தது!",
+    "quiz_id_prefix": "வினாடி வினா #",
+    "score_label": "மதிப்பெண்",
+    "passed": "தேர்ச்சி!",
+    "failed": "தோல்வி",
+    "your_score": "உங்கள் மதிப்பெண்",
+    "total_score": "மொத்த மதிப்பெண்",
+    "great_job": "மிக நன்று!",
+    "keep_practicing": "பயிற்சி தொடருங்கள்!",
+    "passed_message": "நீங்கள் {{percentage}}% மதிப்பெண் பெற்று தேர்ச்சி பெற்றீர்கள்! (தேர்ச்சி: {{passMarkPercentage}}%)",
+    "failed_message": "நீங்கள் {{percentage}}% பெற்றீர்கள். தேர்ச்சிக்கு {{passMarkPercentage}}% தேவை.",
+    "back_to_quiz": "வினாடி வினாவிற்குத் திரும்பு",
+    "retake_quiz": "மீண்டும் எழுது"
+  },
+  "review_quiz": {
+    "title_prefix": "வினாடி வினா மறுபரிசீலனை - #",
+    "score_label": "மதிப்பெண்:",
+    "questions": "கேள்விகள்",
+    "question_of": "கேள்வி {{current}} / {{total}}",
+    "correct": "சரி",
+    "incorrect": "தவறு",
+    "correct_answer": "சரி பதில்: விருப்பம் {{letter}}",
+    "previous": "முந்தைய",
+    "prev": "முந்தைய",
+    "next": "அடுத்து"
+  },
+  "show_certificate": {
+    "title": "சாதனைச் சான்றிதழ்",
+    "quiz_id_prefix": "வினாடி வினா #",
+    "download_certificate": "சான்றிதழைப் பதிவிறக்கு",
+    "toast_download_failed": "சான்றிதழ் பதிவிறக்குவதில் தோல்வி. மீண்டும் முயற்சிக்கவும்.",
+    "toast_download_success": "சான்றிதழ் வெற்றிகரமாகப் பதிவிறக்கப்பட்டது!"
+  },
+  "feedback": {
+    "id_prefix": "ID:",
+    "rate_experience": "உங்கள் அனுபவத்தை மதிப்பிடுங்கள்",
+    "share_feedback": "உங்கள் கருத்தைப் பகிருங்கள்",
+    "placeholder": "கழிவு சேகரிப்பு சேவையுடனான உங்கள் அனுபவத்தைப் பற்றி கூறுங்கள்...",
+    "cancel": "ரத்து",
+    "submitting": "சமர்ப்பிக்கப்படுகிறது...",
+    "submit_feedback": "கருத்தைச் சமர்ப்பி",
+    "toast_select_rating": "ஒரு நட்சத்திர மதிப்பீட்டைத் தேர்ந்தெடுக்கவும்",
+    "toast_submit_success": "கருத்து வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது!"
+  },
+  "report_submitted": {
+    "title": "புகார் சமர்ப்பிக்கப்பட்டது",
+    "message": "உங்கள் புகார் சமூக வரைபடத்தில் தெரியும். எங்கள் குழு விரைவில் பரிசீலிக்கும்.",
+    "view_on_map": "வரைபடத்தில் பார்",
+    "submit_another": "மற்றொன்றைச் சமர்ப்பி"
+  },
+  "all_complaints": {
+    "title": "அனைத்து புகார்கள்"
+  },
+  "selected_complaint": {
+    "reported_by": "{{time}} முன் {{name}} புகாரளித்தார்",
+    "is_info_correct": "இந்தத் தகவல் சரியா?",
+    "confirm_message": "குப்பை இன்னும் இருப்பதையும் இடம் சரியானது என்பதையும் உறுதிப்படுத்தவும்.",
+    "yes_correct": "ஆம், சரி",
+    "no_gone": "இல்லை, அகற்றப்பட்டது",
+    "community": "சமூகம்",
+    "yes": "ஆம்",
+    "no": "இல்லை",
+    "toast_confirmed": "புகாரை உறுதிப்படுத்தியதற்கு நன்றி",
+    "toast_feedback": "உங்கள் கருத்துக்கு நன்றி"
+  },
+  "update_address": {
+    "title": "முகவரி மாற்ற அறிவிப்பு",
+    "subtitle": "முகவரி புதுப்பிப்பு பற்றிய முக்கிய தகவல்",
+    "monthly_limit": "மாதாந்திர புதுப்பிப்பு வரம்பு",
+    "limit_message": "முகவரி மாற்றம் மாதம் ஒரு முறை மட்டுமே. சேமிப்பதற்கு முன் தகவல்கள் சரியா என உறுதிப்படுத்தவும்.",
+    "cancel": "ரத்து",
+    "agree": "நான் ஒப்புக்கொள்கிறேன்"
+  },
+  "update_contact": {
+    "title": "உங்கள் தொடர்பை சரிபார்க்கவும்",
+    "subtitle": "சரிபார்ப்புக் குறியீடு அனுப்பப்பட்டது",
+    "code_sent_phone": "தொலைபேசி எண்ணுக்கு குறியீடு அனுப்பப்பட்டது",
+    "code_sent_email": "மின்னஞ்சல் முகவரிக்கு குறியீடு அனுப்பப்பட்டது",
+    "enter_code": "சரிபார்ப்புக் குறியீட்டை உள்ளிடவும்",
+    "didnt_receive": "குறியீடு வரவில்லையா?",
+    "resend_otp": "OTP மீண்டும் அனுப்பு",
+    "cancel": "ரத்து",
+    "verifying": "சரிபார்க்கப்படுகிறது...",
+    "verify_continue": "சரிபார்த்து தொடரவும்"
+  },
+  "view_profile": {
+    "title": "சுயவிவர படம்",
+    "alt_profile": "சுயவிவரம்"
+  },
+  "si_street_filter": {
+    "title": "வழித்தடம் மூலம் வடிகட்டு"
+  },
+  "si_move_street": {
+    "title": "தெருவை நகர்த்து",
+    "street_name_label": "தெரு பெயர்",
+    "households_count": "{{count}} வீடுகள்",
+    "current_route": "தற்போதைய வழித்தடம்:",
+    "select_new_route": "புதிய வழித்தடம் தேர்ந்தெடு",
+    "street_count_one": "{{count}} தெரு",
+    "street_count_other": "{{count}} தெருக்கள்",
+    "move_street": "தெருவை நகர்த்து"
+  },
+  "si_trashman_filter": {
+    "title": "வழித்தடம் மூலம் வடிகட்டு"
+  },
+  "si_move_trashman": {
+    "title": "குப்பை ஊழியரை மறுஒதுக்கீடு செய்",
+    "current_route": "தற்போதைய வழித்தடம்:",
+    "select_new_route": "புதிய வழித்தடம் தேர்ந்தெடு",
+    "trashman_count_one": "{{count}} குப்பை ஊழியர்",
+    "trashman_count_other": "{{count}} குப்பை ஊழியர்கள்",
+    "reassign": "மறுஒதுக்கீடு"
+  },
+  "config_route": {
+    "delete_title": "வழித்தடம் நீக்கு",
+    "delete_confirm_prefix": "நீக்க விரும்புகிறீர்களா",
+    "delete_confirm_suffix": "? இந்தச் செயலை மீட்க இயலாது."
+  },
+  "config_zone": {
+    "delete_title": "மண்டலம் நீக்கு",
+    "delete_confirm_prefix": "நீக்க விரும்புகிறீர்களா",
+    "delete_confirm_suffix": "? இந்தச் செயலை மீட்க இயலாது."
+  },
+  "mho_division_filter": {
+    "title": "மண்டலம் மூலம் வடிகட்டு"
+  },
+  "mho_move_division": {
+    "title": "கோட்டத்தை நகர்த்து",
+    "division_name_label": "கோட்டப் பெயர்",
+    "wards_streets_count": "{{wards}} வார்டுகள் • {{streets}} தெருக்கள்",
+    "current_zone": "தற்போதைய மண்டலம்:",
+    "select_new_zone": "புதிய மண்டலம் தேர்ந்தெடு",
+    "division_count_one": "{{count}} கோட்டம்",
+    "division_count_other": "{{count}} கோட்டங்கள்",
+    "move_division": "கோட்டத்தை நகர்த்து"
+  },
+  "mho_ward_filter": {
+    "title": "கோட்டம் மூலம் வடிகட்டு"
+  },
+  "mho_move_ward": {
+    "title": "வார்டை நகர்த்து",
+    "ward_label": "வார்டு",
+    "streets_count": "{{count}} தெருக்கள்",
+    "current_division": "தற்போதைய கோட்டம்:",
+    "select_new_division": "புதிய கோட்டம் தேர்ந்தெடு",
+    "ward_count_one": "{{count}} வார்டு",
+    "ward_count_other": "{{count}} வார்டுகள்",
+    "move_ward": "வார்டை நகர்த்து"
+  },
+  "mho_street_filter": {
+    "title": "வார்டு மூலம் வடிகட்டு"
+  },
+  "mho_move_street": {
+    "title": "தெருவை நகர்த்து",
+    "street_name_label": "தெரு பெயர்",
+    "households_count": "{{count}} வீடுகள்",
+    "current_ward": "தற்போதைய வார்டு:",
+    "select_new_ward": "புதிய வார்டு தேர்ந்தெடு",
+    "street_count_one": "{{count}} தெரு",
+    "street_count_other": "{{count}} தெருக்கள்",
+    "move_street": "தெருவை நகர்த்து"
+  }
+}

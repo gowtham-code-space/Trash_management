@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { X, Download } from "../../../assets/icons/icons";
 import { downloadCertificate } from "../../../services/features/quizService";
@@ -6,6 +7,7 @@ import ToastNotification from "../../Notification/ToastNotification";
 
 function ShowCertificateModal({ isOpen, onClose, certificateUrl, quizId }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
 
     console.log('ShowCertificateModal render:', { isOpen, certificateUrl, quizId });
 
@@ -18,13 +20,13 @@ function ShowCertificateModal({ isOpen, onClose, certificateUrl, quizId }) {
             const result = await downloadCertificate(quizId);
             if (!result.success) {
                 console.error('Failed to download certificate:', result.error);
-                ToastNotification('Failed to download certificate. Please try again.', 'error');
+                ToastNotification(t('modals:show_certificate.toast_download_failed'), 'error');
             } else {
-                ToastNotification('Certificate downloaded successfully!', 'success');
+                ToastNotification(t('modals:show_certificate.toast_download_success'), 'success');
             }
         } catch (error) {
             console.error('Error downloading certificate:', error);
-            ToastNotification('Failed to download certificate. Please try again.', 'error');
+            ToastNotification(t('modals:show_certificate.toast_download_failed'), 'error');
         }
     }
 
@@ -42,7 +44,7 @@ function ShowCertificateModal({ isOpen, onClose, certificateUrl, quizId }) {
                     <div className="flex justify-between items-center mb-6">
                         <div>
                             <h2 className="text-xl font-bold text-secondaryDark">
-                                Certificate of Achievement
+                                {t('modals:show_certificate.title')}
                             </h2>
                             <p className="text-sm text-gray-500">
                                 Quiz #{quizId}
@@ -79,7 +81,7 @@ function ShowCertificateModal({ isOpen, onClose, certificateUrl, quizId }) {
                                     focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
                     >
                         <Download size={18} defaultColor="#fff" />
-                        Download Certificate
+                        {t('modals:show_certificate.download_certificate')}
                     </button>
                 </div>
             </div>

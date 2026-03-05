@@ -1,7 +1,9 @@
 import React from "react";
 import { Check, X } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClose }) {
+  const { t } = useTranslation(["modals", "common"]);
   if (!isOpen || !worker) return null;
 
   const isVerify = action === "verify";
@@ -28,12 +30,12 @@ function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClos
           
           <div className="flex-1">
             <h3 className="text-lg font-bold text-secondaryDark mb-1">
-              {isVerify ? "Verify Attendance" : "Reject Attendance"}
+              {isVerify ? t('modals:attendance_confirmation.verify_title') : t('modals:attendance_confirmation.reject_title')}
             </h3>
             <p className="text-sm text-secondaryDark">
               {isVerify 
-                ? `Are you sure you want to verify attendance for ${worker.name}?`
-                : `Are you sure you want to reject attendance for ${worker.name}? This will mark them as absent.`
+                ? `${t('modals:attendance_confirmation.verify_message')} ${worker.name}?`
+                : `${t('modals:attendance_confirmation.reject_message')} ${worker.name}? ${t('modals:attendance_confirmation.reject_suffix')}`
               }
             </p>
           </div>
@@ -41,19 +43,19 @@ function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClos
 
         <div className="bg-secondary p-4 rounded-medium space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-secondaryDark">Name:</span>
+            <span className="text-secondaryDark">{t('modals:attendance_confirmation.name')}</span>
             <span className="font-medium text-secondaryDark">{worker.name}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-secondaryDark">Employee ID:</span>
+            <span className="text-secondaryDark">{t('modals:attendance_confirmation.employee_id')}</span>
             <span className="font-medium text-secondaryDark">{worker.empId}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-secondaryDark">Check-in Time:</span>
+            <span className="text-secondaryDark">{t('modals:attendance_confirmation.check_in_time')}</span>
             <span className="font-medium text-secondaryDark">{worker.checkInTime}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-secondaryDark">Location:</span>
+            <span className="text-secondaryDark">{t('modals:attendance_confirmation.location')}</span>
             <span className="font-medium text-secondaryDark">{worker.location}</span>
           </div>
         </div>
@@ -65,7 +67,7 @@ function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClos
                     hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                     transition-all duration-200 ease-in-out"
           >
-            Cancel
+            {t('modals:attendance_confirmation.cancel')}
           </button>
           <button
             onClick={onConfirm}
@@ -75,7 +77,7 @@ function AttendanceConfirmationModal({ isOpen, worker, action, onConfirm, onClos
                       isVerify ? 'bg-success' : 'bg-error'
                     }`}
           >
-            {isVerify ? "Verify" : "Reject"}
+            {isVerify ? t('modals:attendance_confirmation.verify') : t('modals:attendance_confirmation.reject')}
           </button>
         </div>
       </div>

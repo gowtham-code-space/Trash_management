@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 //tabs
 import AboutMe from "./Tabs/AboutMe";
@@ -7,11 +8,12 @@ import Preference from "./Tabs/Preference";
 
 function SettingsHeader() {
   const [activeTab, setActiveTab] = useState("about");
+  const { t } = useTranslation('settings');
 
   const tabs = [
-    { id: "about", label: "About me" },
-    { id: "address", label: "Address" },
-    { id: "preference", label: "Preference & Logout" }
+    { id: "about", label: t('tab_about') },
+    { id: "address", label: t('tab_address') },
+    { id: "preference", label: t('tab_preference') }
   ];
 
   function handleTabClick(tabId) {
@@ -20,7 +22,7 @@ function SettingsHeader() {
 
   return (
     <div className="bg-background">
-      <h1 className="text-2xl font-bold text-secondaryDark mb-8">Settings</h1>
+      <h1 className="text-2xl font-bold text-secondaryDark mb-8">{t('title')}</h1>
 
       <div className="flex gap-12 mb-0">
         {tabs.map(function (tab) {

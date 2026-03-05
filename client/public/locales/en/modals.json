@@ -1,0 +1,325 @@
+{
+  "calendar": {
+    "select_date": "Select Date",
+    "clear": "Clear",
+    "apply": "Apply"
+  },
+  "date_range": {
+    "select_date": "Select Date",
+    "from": "From:",
+    "to": "To:",
+    "cancel": "Cancel",
+    "apply": "Apply"
+  },
+  "assign_task": {
+    "title": "Task assignment",
+    "confirm_message": "Are you sure, do you want to assign",
+    "close": "Close",
+    "yes_confirm": "Yes, confirm",
+    "toast_assigned_success": "Trashman assigned successfully"
+  },
+  "attendance_confirmation": {
+    "verify_title": "Verify Attendance",
+    "reject_title": "Reject Attendance",
+    "verify_message": "Are you sure you want to verify attendance for",
+    "reject_message": "Are you sure you want to reject attendance for",
+    "reject_suffix": "This will mark them as absent.",
+    "name": "Name:",
+    "employee_id": "Employee ID:",
+    "check_in_time": "Check-in Time:",
+    "location": "Location:",
+    "cancel": "Cancel",
+    "verify": "Verify",
+    "reject": "Reject"
+  },
+  "priority": {
+    "label": "Priority:",
+    "community_vote": "Community Vote",
+    "reported_by": "Reported By",
+    "trash_type": "Trash Type",
+    "escalation_history": "Escalation History",
+    "l2_badge": "L2",
+    "escalated_by_supervisor": "Escalated by Supervisor",
+    "supervisor": "Supervisor",
+    "l3_badge": "L3",
+    "escalated_by_inspector": "Further escalated by Sanitary Inspector",
+    "inspector": "Sanitary Inspector",
+    "description": "Description",
+    "reported_on": "Reported on",
+    "close": "Close"
+  },
+  "image_viewer": {
+    "alt_full_size": "Full size",
+    "click_outside_to_close": "Click outside to close"
+  },
+  "attendance_submitted": {
+    "title": "Attendance submitted",
+    "message": "Your attendance has been recorded. Check your history to track the status.",
+    "view_history": "View history",
+    "done": "Done"
+  },
+  "resolve_confirmation": {
+    "title": "Confirm Resolution",
+    "message": "Are you sure you want to mark this task as resolved? This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
+  "task_detail": {
+    "task_id": "Task ID:",
+    "location": "Location",
+    "reported_at": "Reported At",
+    "resolved_at": "Resolved At",
+    "resolved_by": "Resolved By",
+    "close": "Close"
+  },
+  "deleted_config": {
+    "title": "Deleted Configurations",
+    "subtitle": "Restore a config to bring it back",
+    "empty": "No deleted configurations",
+    "config_prefix": "Config",
+    "restoring": "Restoring…",
+    "restore": "Restore",
+    "time": "Time",
+    "questions": "Questions",
+    "total_score": "Total Score",
+    "pass_mark": "Pass Mark",
+    "correct_mark": "+Mark",
+    "wrong_mark": "-Mark",
+    "close": "Close",
+    "toast_load_failed": "Failed to load deleted configurations",
+    "toast_restored": "Config {{id}} restored",
+    "toast_restore_failed": "Failed to restore configuration"
+  },
+  "delete_question": {
+    "title": "Delete Question",
+    "message": "Are you sure you want to delete this question? This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "log_details": {
+    "title": "Log Details",
+    "api_request_log": "API Request Log",
+    "audit_trail_log": "Audit Trail Log",
+    "event_log": "Event Log",
+    "log_id": "Log ID",
+    "user_id": "User ID",
+    "role_id": "Role ID",
+    "endpoint": "Endpoint",
+    "http_method": "HTTP Method",
+    "status_code": "Status Code",
+    "response_time": "Response Time",
+    "ip_address": "IP Address",
+    "user_agent": "User Agent",
+    "request_body": "Request Body",
+    "response_body": "Response Body",
+    "created_at": "Created At",
+    "audit_id": "Audit ID",
+    "entity_type": "Entity Type",
+    "entity_id": "Entity ID",
+    "action_type": "Action Type",
+    "old_value": "Old Value",
+    "new_value": "New Value",
+    "performed_by": "Performed By",
+    "performed_role": "Performed Role",
+    "remarks": "Remarks",
+    "event_id": "Event ID",
+    "event_type": "Event Type",
+    "severity": "Severity",
+    "metadata": "Metadata"
+  },
+  "update_question": {
+    "edit_title": "Edit Question",
+    "add_title": "Add New Question",
+    "edit_subtitle": "Update the question details below",
+    "add_subtitle": "Fill in the details to add a new question",
+    "question_text": "Question Text",
+    "question_placeholder": "Enter question text...",
+    "answer_options": "Answer Options",
+    "option_placeholder": "Option {{number}}",
+    "correct_answer_hint": "Click the circle to mark the correct answer",
+    "cancel": "Cancel",
+    "save_changes": "Save Changes",
+    "add_question": "Add Question"
+  },
+  "transfer_employee": {
+    "title": "Transfer Employee",
+    "current_zone": "Current Zone:",
+    "current_division": "Current Division:",
+    "transfer_to_zone": "Transfer to Zone",
+    "select_zone": "Select Zone",
+    "transfer_to_division": "Transfer to Division",
+    "select_division": "Select Division",
+    "cancel": "Cancel",
+    "transfer": "Transfer",
+    "toast_select_zone": "Please select a zone",
+    "toast_select_division": "Please select a division",
+    "toast_transfer_success": "{{name}} transferred successfully"
+  },
+  "confirm": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "quiz_result": {
+    "title": "Quiz Completed!",
+    "quiz_id_prefix": "Quiz #",
+    "score_label": "Score",
+    "passed": "Passed!",
+    "failed": "Failed",
+    "your_score": "Your Score",
+    "total_score": "Total Score",
+    "great_job": "Great Job!",
+    "keep_practicing": "Keep Practicing!",
+    "passed_message": "You've scored {{percentage}}% and passed the quiz! (Pass mark: {{passMarkPercentage}}%)",
+    "failed_message": "You've scored {{percentage}}%. You need {{passMarkPercentage}}% to pass. Review the topics and try again!",
+    "back_to_quiz": "Back to Quiz",
+    "retake_quiz": "Retake Quiz"
+  },
+  "review_quiz": {
+    "title_prefix": "Quiz Review - #",
+    "score_label": "Score:",
+    "questions": "Questions",
+    "question_of": "Question {{current}} of {{total}}",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "correct_answer": "Correct Answer: Option {{letter}}",
+    "previous": "Previous",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "show_certificate": {
+    "title": "Certificate of Achievement",
+    "quiz_id_prefix": "Quiz #",
+    "download_certificate": "Download Certificate",
+    "toast_download_failed": "Failed to download certificate. Please try again.",
+    "toast_download_success": "Certificate downloaded successfully!"
+  },
+  "feedback": {
+    "id_prefix": "ID:",
+    "rate_experience": "Rate Your Experience",
+    "share_feedback": "Share Your Feedback",
+    "placeholder": "Tell us about your experience with the waste collection service...",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "submit_feedback": "Submit Feedback",
+    "toast_select_rating": "Please select a star rating",
+    "toast_submit_success": "Feedback submitted successfully!"
+  },
+  "report_submitted": {
+    "title": "Report submitted",
+    "message": "Your concern is now visible in the community map. Our teams will review it shortly.",
+    "view_on_map": "View on map",
+    "submit_another": "Submit another"
+  },
+  "all_complaints": {
+    "title": "All Complaints"
+  },
+  "selected_complaint": {
+    "reported_by": "Reported {{time}} by {{name}}",
+    "is_info_correct": "Is this information correct?",
+    "confirm_message": "Confirm that the trash is still present and the location is accurate.",
+    "yes_correct": "Yes, it's correct",
+    "no_gone": "No, it's gone",
+    "community": "Community",
+    "yes": "Yes",
+    "no": "No",
+    "toast_confirmed": "Thank you for confirming the complaint",
+    "toast_feedback": "Thank you for your feedback"
+  },
+  "update_address": {
+    "title": "Address Change Notice",
+    "subtitle": "Important information about address updates",
+    "monthly_limit": "Monthly Update Limit",
+    "limit_message": "Address changes can be done only once a month. Please ensure all the information you enter is accurate before saving.",
+    "cancel": "Cancel",
+    "agree": "I Agree"
+  },
+  "update_contact": {
+    "title": "Verify Your Contact",
+    "subtitle": "We sent a verification code",
+    "code_sent_phone": "Code sent to phone number",
+    "code_sent_email": "Code sent to email address",
+    "enter_code": "Enter Verification Code",
+    "didnt_receive": "Didn't receive code?",
+    "resend_otp": "Resend OTP",
+    "cancel": "Cancel",
+    "verifying": "Verifying...",
+    "verify_continue": "Verify & Continue"
+  },
+  "view_profile": {
+    "title": "Profile Picture",
+    "alt_profile": "Profile"
+  },
+  "si_street_filter": {
+    "title": "Filter by Route"
+  },
+  "si_move_street": {
+    "title": "Move Street",
+    "street_name_label": "Street Name",
+    "households_count": "{{count}} Households",
+    "current_route": "Current Route:",
+    "select_new_route": "Select New Route",
+    "street_count_one": "{{count}} Street",
+    "street_count_other": "{{count}} Streets",
+    "move_street": "Move Street"
+  },
+  "si_trashman_filter": {
+    "title": "Filter by Route"
+  },
+  "si_move_trashman": {
+    "title": "Reassign Trashman",
+    "current_route": "Current Route:",
+    "select_new_route": "Select New Route",
+    "trashman_count_one": "{{count}} Trashman",
+    "trashman_count_other": "{{count}} Trashmen",
+    "reassign": "Reassign"
+  },
+  "config_route": {
+    "delete_title": "Delete Route",
+    "delete_confirm_prefix": "Are you sure you want to delete",
+    "delete_confirm_suffix": "? This action cannot be undone."
+  },
+  "config_zone": {
+    "delete_title": "Delete Zone",
+    "delete_confirm_prefix": "Are you sure you want to delete",
+    "delete_confirm_suffix": "? This action cannot be undone."
+  },
+  "mho_division_filter": {
+    "title": "Filter by Zone"
+  },
+  "mho_move_division": {
+    "title": "Move Division",
+    "division_name_label": "Division Name",
+    "wards_streets_count": "{{wards}} Wards • {{streets}} Streets",
+    "current_zone": "Current Zone:",
+    "select_new_zone": "Select New Zone",
+    "division_count_one": "{{count}} Division",
+    "division_count_other": "{{count}} Divisions",
+    "move_division": "Move Division"
+  },
+  "mho_ward_filter": {
+    "title": "Filter by Division"
+  },
+  "mho_move_ward": {
+    "title": "Move Ward",
+    "ward_label": "Ward",
+    "streets_count": "{{count}} Streets",
+    "current_division": "Current Division:",
+    "select_new_division": "Select New Division",
+    "ward_count_one": "{{count}} Ward",
+    "ward_count_other": "{{count}} Wards",
+    "move_ward": "Move Ward"
+  },
+  "mho_street_filter": {
+    "title": "Filter by Ward"
+  },
+  "mho_move_street": {
+    "title": "Move Street",
+    "street_name_label": "Street Name",
+    "households_count": "{{count}} Households",
+    "current_ward": "Current Ward:",
+    "select_new_ward": "Select New Ward",
+    "street_count_one": "{{count}} Street",
+    "street_count_other": "{{count}} Streets",
+    "move_street": "Move Street"
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import CurrentPriorityModal from "../../../components/Modals/SuperVisor/CurrentPriorityModal";
 import CalendarModal from "../../../components/Modals/Calendar/CalendarModal";
@@ -8,6 +9,7 @@ import TaskCard from "../../../components/Cards/Supervisor/TaskCard";
 
 function AllTasks() {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -164,33 +166,33 @@ function AllTasks() {
     return (
         <div className={isDarkTheme ? "dark" : ""}>
                     <div className="mt-8 bg-secondary rounded-veryLarge p-6 border-2 border-primary mb-5">
-                <h2 className="text-lg font-bold text-primary mb-4">Priority Level Guide</h2>
+                <h2 className="text-lg font-bold text-primary mb-4">{t('pages:common.all_tasks.priority_level_guide')}</h2>
                 <div className="space-y-3">
                 <div className="flex items-start gap-3">
                     <span className="bg-warning text-white px-3 py-1 rounded-medium text-xs font-medium shrink-0">
-                    Level 1
+                    {t('common:level_1')}
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">Resident ⟶ supervisor: </span>
-                    Issues requiring attention within 3 days. failing to complete, will forward to Sanitary inspector (SI)
+                    <span className="font-semibold text-primary">{t('pages:common.all_tasks.level_1_origin')}</span>
+                    {t('pages:common.all_tasks.level_1_desc')}
                     </p>
                 </div>
                 <div className="flex items-start gap-3">
                     <span className="bg-[#FF8C42] text-white px-3 py-1 rounded-medium text-xs font-medium shrink-0">
-                    Level 2
+                    {t('common:level_2')}
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">Sanitary inspector (SI) ⟶ supervisor: </span>
-                    Issues requiring attention within 2 days. failing to complete, will forward to Municipal Health Officer (MHO)
+                    <span className="font-semibold text-primary">{t('pages:common.all_tasks.level_2_origin')}</span>
+                    {t('pages:common.all_tasks.level_2_desc')}
                     </p>
                 </div>
                 <div className="flex items-start gap-3">
                     <span className="bg-error text-white px-3 py-1 rounded-medium text-xs font-medium shrink-0">
-                    Level 3
+                    {t('common:level_3')}
                     </span>
                     <p className="text-sm text-secondaryDark">
-                    <span className="font-semibold text-primary">Municipal Health Officer (MHO) ⟶ Sanitary inspector (SI): </span>
-                    Issues requiring attention within 1 day. failing to complete, results in remarks
+                    <span className="font-semibold text-primary">{t('pages:common.all_tasks.level_3_origin')}</span>
+                    {t('pages:common.all_tasks.level_3_desc')}
                     </p>
                 </div>
                 </div>
@@ -200,7 +202,7 @@ function AllTasks() {
                     <div className="flex-1">
                     <input
                         type="text"
-                        placeholder="Search by title, location, or reporter..."
+                        placeholder={t('pages:common.all_tasks.search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-white border-2 border-secondary rounded-large px-4 py-3 pl-12 text-sm text-secondaryDark placeholder-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ease-in-out"
@@ -216,13 +218,13 @@ function AllTasks() {
                             <div className="mr-2">
                                 <Calendar size={20} defaultColor="white" isDarkTheme={isDarkTheme}/>
                             </div>
-                            {selectedDate ? formatDate(selectedDate) : "Pick Date"}
+                            {selectedDate ? formatDate(selectedDate) : t('common:pick_date')}
                         </div>
                 </div>
 
             {filteredComplaints.length === 0 ? (
                 <div className="bg-secondary rounded-veryLarge p-8 text-center">
-                <p className="text-secondaryDark text-base">No complaints found matching your criteria.</p>
+                <p className="text-secondaryDark text-base">{t('pages:common.all_tasks.no_complaints_found')}</p>
                 </div>
             ) : (
                 <div className="space-y-4 mb-6">

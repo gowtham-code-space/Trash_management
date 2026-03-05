@@ -1,7 +1,9 @@
 import React from "react";
 import { X } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function ImageViewerModal({ isOpen, imageUrl, onClose }) {
+  const { t } = useTranslation(["modals", "common"]);
   if (!isOpen) return null;
 
   return (
@@ -27,13 +29,13 @@ function ImageViewerModal({ isOpen, imageUrl, onClose }) {
         <div className="relative w-full bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-white">
           <img
             src={imageUrl}
-            alt="Full size"
+            alt={t('modals:image_viewer.alt_full_size')}
             className="w-full h-auto max-h-[85vh] object-contain"
           />
           
           {/* Image Info Bar */}
           <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-4">
-            <p className="text-xs text-white font-medium text-center">Click outside to close</p>
+            <p className="text-xs text-white font-medium text-center">{t('modals:image_viewer.click_outside_to_close')}</p>
           </div>
         </div>
       </div>

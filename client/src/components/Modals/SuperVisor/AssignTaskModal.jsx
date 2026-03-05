@@ -2,8 +2,10 @@ import React from "react";
 import { Info } from "../../../assets/icons/icons";
 import ToastNotification from "../../Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function AssignTaskModal({ onClose , role }) {
+const { t } = useTranslation(["modals", "common"]);
 
 return (
 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -19,9 +21,9 @@ return (
         <Info size={32} isPressed={false} isDarkTheme={true} />
     </div>
 
-    <h2 className="text-xl font-bold text-black mb-2 tracking-tight">Task assignment</h2>
+    <h2 className="text-xl font-bold text-black mb-2 tracking-tight">{t('modals:assign_task.title')}</h2>
     <p className="text-sm text-black mb-8 leading-relaxed">
-        Are you sure, do you want to assign {role}
+        {t('modals:assign_task.confirm_message')} {role}
     </p>
 
     <div className="flex gap-3">
@@ -29,14 +31,14 @@ return (
         onClick={onClose}
         className="flex-1 bg-secondary text-primary py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
         >
-        Close
+        {t('modals:assign_task.close')}
         </button>
 
         <button 
-        onClick={()=>{ onClose(); ToastNotification("Trashman assigned successfully","success"); }}
+        onClick={()=>{ onClose(); ToastNotification(t('modals:assign_task.toast_assigned_success'),"success"); }}
         className="flex-1 bg-primary text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
         >
-        Yes, confirm
+        {t('modals:assign_task.yes_confirm')}
         </button>
     </div>
     </div>

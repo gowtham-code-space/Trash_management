@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../../../utils/Pagination";
 
 function AttendanceHistory({ isDarkTheme }) {
+    const { t } = useTranslation(["pages", "common"]);
     const [filterStatus, setFilterStatus] = useState("all");
     // Mock attendance history data for individual worker
     const attendanceHistory = [
@@ -85,14 +87,14 @@ function AttendanceHistory({ isDarkTheme }) {
             return (
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 border border-success/20">
                     <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                    <span className="text-xs font-bold text-success uppercase tracking-tight">Approved</span>
+                    <span className="text-xs font-bold text-success uppercase tracking-tight">{t('common:approved')}</span>
                 </div>
             );
         }
         return (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warning/10 border border-warning/20">
                 <div className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse" />
-                <span className="text-xs font-bold text-warning uppercase tracking-tight">Pending</span>
+                <span className="text-xs font-bold text-warning uppercase tracking-tight">{t('common:pending')}</span>
             </div>
         );
     }
@@ -158,7 +160,7 @@ function AttendanceHistory({ isDarkTheme }) {
             {/* Filters */}
             <div className="bg-white border border-secondary/50 rounded-large p-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">Filter by Status</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">{t('pages:shared.filter_by_status')}</p>
                     <div className="flex gap-2">
                         <button
                             onClick={() => setFilterStatus("all")}
@@ -168,7 +170,7 @@ function AttendanceHistory({ isDarkTheme }) {
                                     : "bg-background text-gray-600 hover:bg-gray-100"
                             }`}
                         >
-                            All
+                            {t('common:all')}
                         </button>
                         <button
                             onClick={() => setFilterStatus("approved")}
@@ -178,7 +180,7 @@ function AttendanceHistory({ isDarkTheme }) {
                                     : "bg-background text-gray-600 hover:bg-gray-100"
                             }`}
                         >
-                            Approved
+                            {t('common:approved')}
                         </button>
                         <button
                             onClick={() => setFilterStatus("pending")}
@@ -188,7 +190,7 @@ function AttendanceHistory({ isDarkTheme }) {
                                     : "bg-background text-gray-600 hover:bg-gray-100"
                             }`}
                         >
-                            Pending
+                            {t('common:pending')}
                         </button>
                     </div>
                 </div>
@@ -203,14 +205,14 @@ function AttendanceHistory({ isDarkTheme }) {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                         </div>
-                        <p className="text-sm font-bold text-gray-600">No records found</p>
-                        <p className="text-xs text-gray-400 mt-1">Try adjusting your filter</p>
+                        <p className="text-sm font-bold text-gray-600">{t('pages:trashman.attendance_history.no_records')}</p>
+                        <p className="text-xs text-gray-400 mt-1">{t('pages:trashman.attendance_history.try_different_filter')}</p>
                     </div>
                 ) : (
                     <div className="space-y-1">
                         <div className="flex items-center justify-between mb-3 pb-3 border-b border-secondary/30">
                             <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-                                Showing {filteredData.length} {filteredData.length === 1 ? 'record' : 'records'}
+                                {t('pages:trashman.attendance_history.showing_records', { count: filteredData.length })}
                             </p>
                         </div>
                         <Pagination 

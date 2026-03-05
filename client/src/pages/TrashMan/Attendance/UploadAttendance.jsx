@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { 
     Camera, 
@@ -13,6 +14,7 @@ import AttendanceHistory from "./AttendanceHistory";
 import AttendanceSubmittedModal from "../../../components/Modals/TrashMan/AttendanceSubmittedModal";
 
 function UploadAttendance() {
+    const { t } = useTranslation(["pages", "common"]);
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
     const cameraInputRef = useRef(null);
@@ -26,7 +28,7 @@ function UploadAttendance() {
     const [submittedWorkerData, setSubmittedWorkerData] = useState(null);
 
     function openCamera() {
-        ToastNotification("Opening camera...", "info");
+        ToastNotification(t('pages:trashman.attendance.toast_opening_camera'), "info");
         setTimeout(function() {
             if (cameraInputRef.current) {
                 cameraInputRef.current.click();
@@ -40,7 +42,7 @@ function UploadAttendance() {
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
             detectLocation();
-            ToastNotification("Photo captured successfully", "success");
+            ToastNotification(t('pages:trashman.attendance.toast_photo_captured'), "success");
         }
         e.target.value = null;
     }
@@ -50,32 +52,32 @@ function UploadAttendance() {
         if (file) {
             setSelectedImage(URL.createObjectURL(file));
             detectLocation();
-            ToastNotification("Image uploaded successfully", "success");
+            ToastNotification(t('pages:trashman.attendance.toast_image_uploaded'), "success");
         }
     }
 
     function detectLocation() {
-        ToastNotification("Detecting GPS coordinates...", "info");
+        ToastNotification(t('pages:trashman.attendance.toast_detecting_gps'), "info");
         setTimeout(function() {
             setGeoTag("24, Main Street, San Francisco, CA • 37.7749° N, 122.4194° W");
-            ToastNotification("Location detected", "success");
+            ToastNotification(t('pages:trashman.attendance.toast_location_detected'), "success");
         }, 1500);
     }
 
     function handleSubmit() {
         if (!selectedImage) {
-            ToastNotification("Please capture your photo", "error");
+            ToastNotification(t('pages:trashman.attendance.toast_capture_photo'), "error");
             return;
         }
         if (!geoTag) {
-            ToastNotification("Please wait for location detection", "error");
+            ToastNotification(t('pages:trashman.attendance.toast_wait_location'), "error");
             return;
         }
 
         setIsSubmitting(true);
         setTimeout(function() {
             setIsSubmitting(false);
-            ToastNotification("Attendance submitted successfully!", "success");
+            ToastNotification(t('pages:trashman.attendance.toast_submitted_success'), "success");
             
             // Set worker data for the modal
             const workerData = {
@@ -134,22 +136,22 @@ function UploadAttendance() {
             if (file.type.startsWith('image/')) {
                 setSelectedImage(URL.createObjectURL(file));
                 detectLocation();
-                ToastNotification("Image uploaded successfully", "success");
+                ToastNotification(t('pages:trashman.attendance.toast_image_uploaded'), "success");
             } else {
-                ToastNotification("Please drop an image file", "error");
+                ToastNotification(t('pages:trashman.attendance.toast_drop_image'), "error");
             }
         }
     }
 
     const instructions = [
-        "Attendance is allowed only between 6:00 AM and 7:00 AM",
-        "You must be physically present at your assigned work location",
-        "Location (GPS) must be enabled on your device",
-        "Your face must be clearly visible in the photo",
-        "Wear your official uniform while taking the selfie",
-        "Attendance can be submitted only once per day",
-        "Late submissions are not allowed",
-        "Attendance will be verified by your supervisor"
+        t('pages:trashman.attendance.instruction_1'),
+        t('pages:trashman.attendance.instruction_2'),
+        t('pages:trashman.attendance.instruction_3'),
+        t('pages:trashman.attendance.instruction_4'),
+        t('pages:trashman.attendance.instruction_5'),
+        t('pages:trashman.attendance.instruction_6'),
+        t('pages:trashman.attendance.instruction_7'),
+        t('pages:trashman.attendance.instruction_8')
     ];
 
     return (
@@ -161,8 +163,8 @@ function UploadAttendance() {
                 {/* LEFT SECTION: Photo Upload */}
                 <div className="lg:col-span-7 bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-5">
                     <div className="border-b border-secondary pb-4">
-                        <h1 className="text-lg font-bold text-primary">Upload attendance photo</h1>
-                        <p className="text-xs text-gray-500 mt-1 font-medium">Capture a clear selfie at your work location to mark your attendance.</p>
+                        <h1 className="text-lg font-bold text-primary">{t('pages:trashman.attendance.upload_heading')}</h1>
+                        <p className="text-xs text-gray-500 mt-1 font-medium">{t('pages:trashman.attendance.upload_subtitle')}</p>
                     </div>
 
                     <div 
@@ -201,8 +203,8 @@ function UploadAttendance() {
                                     <Camera size={24} isPressed={false} isDarkTheme={false} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-primary">Click to capture selfie</p>
-                                    <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">or drag & drop image</p>
+                                    <p className="text-sm font-bold text-primary">{t('pages:trashman.attendance.click_to_capture')}</p>
+                                    <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">{t('pages:trashman.attendance.or_drag_drop')}</p>
                                 </div>
                             </button>
                         )}
@@ -230,14 +232,14 @@ function UploadAttendance() {
                             className="bg-primaryLight text-white py-3 rounded-veryLarge text-xs font-bold flex items-center justify-center gap-2 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 shadow-sm shadow-primaryLight/20"
                         >
                             <Add size={16} isPressed={false} isDarkTheme={true} />
-                            Upload image
+                            {t('pages:trashman.attendance.upload_image_btn')}
                         </button>
                         <button 
                             onClick={openCamera}
                             className="bg-primary text-white py-3 rounded-veryLarge text-xs font-bold flex items-center justify-center gap-2 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 shadow-sm shadow-primary/20"
                         >
                             <Camera size={16} isPressed={false} isDarkTheme={true} />
-                            Capture selfie
+                            {t('pages:trashman.attendance.capture_selfie_btn')}
                         </button>
                     </div>
                 </div>
@@ -249,7 +251,7 @@ function UploadAttendance() {
                     <div className="bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-4">
                         <div className="flex items-center gap-2 border-b border-secondary pb-3">
                             <Check size={18} defaultColor="#145B47" />
-                            <h2 className="text-sm font-bold text-primary uppercase tracking-wide">Instructions</h2>
+                            <h2 className="text-sm font-bold text-primary uppercase tracking-wide">{t('pages:trashman.attendance.instructions_heading')}</h2>
                         </div>
                         
                         <ol className="space-y-3">
@@ -273,9 +275,9 @@ function UploadAttendance() {
                                 <Add size={18} isDarkTheme={true} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-sm font-bold text-error mb-2">Important Warning</h3>
+                                <h3 className="text-sm font-bold text-error mb-2">{t('pages:trashman.attendance.important_warning')}</h3>
                                 <p className="text-xs text-gray-700 leading-relaxed font-medium">
-                                    Failure to follow the above instructions may result in attendance being marked as <span className="font-bold text-error">absent</span>.
+                                    {t('pages:trashman.attendance.warning_message')}
                                 </p>
                             </div>
                         </div>
@@ -288,11 +290,11 @@ function UploadAttendance() {
                         className="w-full bg-primary text-white py-4 rounded-veryLarge font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {isSubmitting ? (
-                            "Submitting..."
+                            t('common:submitting')
                         ) : (
                             <>
                                 <Check size={18} isDarkTheme={true} />
-                                Submit attendance
+                                {t('pages:trashman.attendance.submit_attendance_btn')}
                             </>
                         )}
                     </button>

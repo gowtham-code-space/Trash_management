@@ -1,4 +1,5 @@
 ﻿import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../../../../utils/Pagination";
 import LogDetailsModal from "../../../../components/Modals/Admin/LogDetailsModal";
 import { RightArrow, DownArrow, Search } from "../../../../assets/icons/icons";
@@ -9,6 +10,7 @@ const LIMIT = 20;
 const SKELETON_ROWS = 8;
 
 export default function ApiRequestLogs({ searchQuery = "", dateRange, onFiltersChange }) {
+  const { t } = useTranslation(["pages", "common"]);
   const [logs, setLogs] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -115,11 +117,11 @@ export default function ApiRequestLogs({ searchQuery = "", dateRange, onFiltersC
         <div className="p-4 bg-secondary rounded-full">
           <Search size={28} defaultColor="#9CA3AF" />
         </div>
-        <p className="text-sm font-semibold text-secondaryDark">No records found</p>
+        <p className="text-sm font-semibold text-secondaryDark">{t('pages:admin.logs.no_records_found')}</p>
         <p className="text-xs text-secondaryDark/60">
           {Object.values(filters).some(Boolean)
-            ? "Try adjusting or clearing your filters"
-            : "No API request logs available"}
+            ? t('pages:admin.logs.try_adjusting_filters')
+            : t('pages:admin.api_logs.no_api_logs')}
         </p>
       </div>
     );
@@ -148,28 +150,28 @@ export default function ApiRequestLogs({ searchQuery = "", dateRange, onFiltersC
       {/* Active filter chips */}
       {activeFilterCount > 0 && (
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="text-xs text-secondaryDark font-medium">Active filters:</span>
+          <span className="text-xs text-secondaryDark font-medium">{t('pages:admin.logs.active_filters')}</span>
           {filters.method && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              Method: {filters.method}
+              {t('pages:admin.api_logs.filter_method')} {filters.method}
               <button onClick={() => setFilters(p => ({ ...p, method: "" }))} className="hover:text-error transition-colors leading-none">×</button>
             </span>
           )}
           {filters.status && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/20">
-              Status: {filters.status}
+              {t('pages:admin.api_logs.filter_status')} {filters.status}
               <button onClick={() => setFilters(p => ({ ...p, status: "" }))} className="hover:opacity-60 transition-opacity leading-none">×</button>
             </span>
           )}
           {filters.userId && (
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-              User: {filters.userId}
+              {t('pages:admin.api_logs.filter_user')} {filters.userId}
               <button onClick={() => setFilters(p => ({ ...p, userId: "" }))} className="hover:text-error transition-colors leading-none">×</button>
             </span>
           )}
           {activeFilterCount > 1 && (
             <button onClick={clearAllFilters} className="text-xs text-error hover:underline font-medium transition-colors">
-              Clear all
+              {t('pages:admin.logs.clear_all')}
             </button>
           )}
         </div>
@@ -180,13 +182,13 @@ export default function ApiRequestLogs({ searchQuery = "", dateRange, onFiltersC
           ref={headerRef}
           className="grid grid-cols-8 gap-4 px-4 py-3 bg-white rounded-medium mb-2 text-xs font-bold text-secondaryDark border border-secondary min-w-200"
         >
-          <div className="text-xs font-bold text-secondaryDark">Log ID</div>
-          <ColumnHeader label="Method" col="method" options={filterOptions.http_method} />
-          <div className="col-span-2 text-xs font-bold text-secondaryDark">Endpoint</div>
-          <ColumnHeader label="Status" col="status" options={["2xx", "4xx", "5xx"]} />
-          <div className="text-xs font-bold text-secondaryDark">Resp Time</div>
-          <ColumnHeader label="User" col="userId" options={filterOptions.user_id} />
-          <div className="text-xs font-bold text-secondaryDark text-right">Actions</div>
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.api_logs.column_log_id')}</div>
+          <ColumnHeader label={t('pages:admin.api_logs.column_method')} col="method" options={filterOptions.http_method} />
+          <div className="col-span-2 text-xs font-bold text-secondaryDark">{t('pages:admin.api_logs.column_endpoint')}</div>
+          <ColumnHeader label={t('pages:admin.api_logs.column_status')} col="status" options={["2xx", "4xx", "5xx"]} />
+          <div className="text-xs font-bold text-secondaryDark">{t('pages:admin.api_logs.column_resp_time')}</div>
+          <ColumnHeader label={t('pages:admin.api_logs.column_user')} col="userId" options={filterOptions.user_id} />
+          <div className="text-xs font-bold text-secondaryDark text-right">{t('common:actions')}</div>
         </div>
         <div className="bg-white rounded-large overflow-hidden border border-secondary min-w-200">
           {loading ? (

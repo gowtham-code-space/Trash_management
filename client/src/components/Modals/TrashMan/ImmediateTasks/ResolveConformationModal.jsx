@@ -1,7 +1,9 @@
 import React from "react";
 import { Info } from "../../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function ResolveConfirmationModal({ isOpen, onClose, onConfirm, task }) {
+  const { t } = useTranslation(["modals", "common"]);
   if (!isOpen) return null;
 
   return (
@@ -16,9 +18,9 @@ function ResolveConfirmationModal({ isOpen, onClose, onConfirm, task }) {
           <Info size={32} isPressed={false} isDarkTheme={true} />
         </div>
 
-        <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">Confirm Resolution</h2>
+        <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">{t('modals:resolve_confirmation.title')}</h2>
         <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-          Are you sure you want to mark this task as resolved? This action cannot be undone.
+          {t('modals:resolve_confirmation.message')}
         </p>
 
         <div className="flex gap-3">
@@ -26,13 +28,13 @@ function ResolveConfirmationModal({ isOpen, onClose, onConfirm, task }) {
             onClick={onClose}
             className="flex-1 bg-secondary text-secondaryDark py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
           >
-            Cancel
+            {t('modals:resolve_confirmation.cancel')}
           </button>
           <button 
             onClick={onConfirm}
             className="flex-1 bg-success text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
           >
-            Confirm
+            {t('modals:resolve_confirmation.confirm')}
           </button>
         </div>
       </div>

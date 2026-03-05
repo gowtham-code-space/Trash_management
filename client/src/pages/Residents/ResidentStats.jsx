@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     RadarChart as RechartsRadar,
     PolarGrid,
@@ -52,10 +53,11 @@ const communityData = [
 
 // Contribution Summary Component
 function ContributionSummary({ data }) {
+    const { t } = useTranslation(["pages", "common"]);
     return (
         <div className="bg-secondary p-6 rounded-large border border-secondary">
         <h2 className="text-base font-semibold text-secondaryDark mb-6">
-            My Contribution Summary
+            {t('pages:resident.stats.contribution_summary')}
         </h2>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -79,17 +81,45 @@ function ContributionSummary({ data }) {
 
 // Main Component
 export default function ResidentStats() {
+    const { t } = useTranslation(["pages", "common"]);
+
+    const translatedContributionData = [
+        { label: t('pages:resident.stats.raised'), value: 42, color: "#145B47" },
+        { label: t('common:resolved'), value: 18, color: "#1E8E54" },
+        { label: t('pages:resident.stats.votes_given'), value: 156, color: "#316F5D" },
+        { label: t('pages:resident.stats.valid_reports'), value: 38, color: "#145B47" },
+    ];
+
+    const translatedRadarData = [
+        { category: t('common:resolved'), value: 85 },
+        { category: t('common:in_progress'), value: 65 },
+        { category: t('common:pending'), value: 45 },
+        { category: t('common:rejected'), value: 25 },
+    ];
+
+    const translatedCommunityData = [
+        { name: t('common:accepted'), value: 85, color: "#1E8E54" },
+        { name: t('common:declined'), value: 15, color: "#E75A4C" },
+    ];
+
+    const translatedTrendData = [
+        { week: t('common:week_labels.week_1'), complaints: 12 },
+        { week: t('common:week_labels.week_2'), complaints: 19 },
+        { week: t('common:week_labels.week_3'), complaints: 15 },
+        { week: t('common:week_labels.week_4'), complaints: 22 },
+    ];
+
     return (
         <div className="min-h-screen bg-background">
         <div className="max-w-7xl mx-auto space-y-6">
             {/* Top Section */}
-            <ContributionSummary data={contributionData} />
+            <ContributionSummary data={translatedContributionData} />
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <RadarChart data={radarData} yearDropDown={['2025','2026']}/>
-            <LineChart data={trendData} yearDropDown={['2025','2026']} monthDropDown={["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]}/>
-            <PieChart data={communityData} yearDropDown={['2025','2026']} />
+            <RadarChart data={translatedRadarData} yearDropDown={['2025','2026']}/>
+            <LineChart data={translatedTrendData} yearDropDown={['2025','2026']} monthDropDown={["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]}/>
+            <PieChart data={translatedCommunityData} yearDropDown={['2025','2026']} />
             </div>
         </div>
         </div>

@@ -4,39 +4,55 @@ import { Language, Brightness, LogOut } from "../../../../../assets/icons/icons"
 import ThemeStore from "../../../../../store/ThemeStore";
 import ToastNotification from "../../../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../../../i18n.js";
+import { clearSession } from "../../../../../services/core/session";
+import { logout } from "../../../../../services/features/authService";
 
 function Preference() {
   const navigate = useNavigate();
   const { isDarkTheme, toggleTheme } = ThemeStore();
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const { t } = useTranslation('settings');
 
   const languages = [
-    "English",
-    "Tamil",
-    "Hindi",
-    "Malayalam",
-    "Telugu",
-    "Kannada"
+    { code: "en", label: "English" },
+    { code: "ta", label: "தமிழ் (Tamil)" },
+    { code: "hi", label: "हिंदी (Hindi)" },
+    { code: "es", label: "Español (Spanish)" }
   ];
 
+  const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
+  const [selectedCode, setSelectedCode] = useState(currentLang.code);
+
   function handleLanguageChange(e) {
-    setSelectedLanguage(e.target.value);
-    ToastNotification(`Language changed to ${e.target.value}`, "success");
+    const code = e.target.value;
+    const lang = languages.find(l => l.code === code);
+    setSelectedCode(code);
+    i18n.changeLanguage(code);
+    localStorage.setItem('preferred_language', code);
+    ToastNotification(t('preference.lang_changed', { language: lang?.label || code }), "success");
   }
 
   function handleThemeToggle() {
     toggleTheme();
     ToastNotification(
-      isDarkTheme ? "Switched to Light Mode" : "Switched to Dark Mode",
+      isDarkTheme ? t('preference.switched_light') : t('preference.switched_dark'),
       "success"
     );
   }
 
-  function handleLogout() {
-    ToastNotification("Logging out...", "info");
-    setTimeout(function () {
-      navigate("/login");
-    }, 1000);
+  async function handleLogout() {
+    ToastNotification(t('preference.logging_out'), "info");
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      clearSession();
+      setTimeout(function () {
+        navigate("/login");
+      }, 800);
+    }
   }
 
   return (
@@ -46,21 +62,21 @@ function Preference() {
           {/* Preferred Language */}
           <div>
             <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-              Preferred Language
+              {t('preference.preferred_language')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Language size={18} defaultColor="#316F5D" />
               </div>
               <select
-                value={selectedLanguage}
+                value={selectedCode}
                 onChange={handleLanguageChange}
                 className="w-full pl-10 pr-10 py-3 bg-background border border-secondary rounded-medium text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer appearance-none"
               >
-                {languages.map(function (language) {
+                {languages.map(function (lang) {
                   return (
-                    <option key={language} value={language}>
-                      {language}
+                    <option key={lang.code} value={lang.code}>
+                      {lang.label}
                     </option>
                   );
                 })}
@@ -90,11 +106,11 @@ function Preference() {
                 <div className="flex items-center gap-2 mb-1">
                   <Brightness size={18} defaultColor="#316F5D" />
                   <label className="text-xs font-semibold text-secondaryDark/60">
-                    Dark Mode
+                    {t('preference.dark_mode')}
                   </label>
                 </div>
                 <p className="text-xs text-secondaryDark/60 ml-6">
-                  Switch between light and dark themes
+                  {t('preference.dark_mode_desc')}
                 </p>
               </div>
 
@@ -120,7 +136,7 @@ function Preference() {
           className="w-full mt-6 bg-error/10 text-error py-3 rounded-large text-sm font-bold flex items-center justify-center gap-2 hover:bg-error/20 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-error/20 transition-all duration-200 ease-in-out"
         >
           <LogOut size={18} defaultColor="#E75A4C" />
-          Log Out
+          {t('preference.logout')}
         </button>
       </div>
       <ToastContainer />

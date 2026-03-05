@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { Search, Filter, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import ConfigWardModal from "../../../../components/Modals/MHO/ConfigWard/ConfigWardModal";
@@ -9,6 +10,7 @@ import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
 
 function ConfigWard() {
+  const { t } = useTranslation(["pages", "common"]);
   const { isDarkTheme } = ThemeStore();
   
   const [searchVisible, setSearchVisible] = useState(false);
@@ -77,7 +79,7 @@ function ConfigWard() {
   function handleFilterApply(selectedDivisions) {
     setSelectedDivisionFilters(selectedDivisions);
     setFilterVisible(false);
-    ToastNotification("Filter applied successfully", "success");
+    ToastNotification(t('common:filter_applied'), "success");
   }
 
   function handleDivisionSelect(divisionName) {
@@ -90,7 +92,7 @@ function ConfigWard() {
 
   function handleAddWard() {
     if (!selectedDivision) {
-      ToastNotification("Please select a division first", "error");
+      ToastNotification(t('pages:commissioner.config_ward.toast_select_division_first'), "error");
       return;
     }
 
@@ -104,7 +106,7 @@ function ConfigWard() {
     };
 
     setWards([...wards, newWard]);
-    ToastNotification("Draft ward added to " + selectedDivision, "success");
+    ToastNotification(t('pages:commissioner.config_ward.toast_draft_ward_added', { divisionName: selectedDivision }), "success");
   }
 
   function handleEditStart(ward) {
@@ -118,7 +120,7 @@ function ConfigWard() {
     }));
     setEditingWard(null);
     setEditValue("");
-    ToastNotification("Ward updated successfully", "success");
+    ToastNotification(t('pages:commissioner.config_ward.toast_ward_updated'), "success");
   }
 
   function handleEditCancel() {
@@ -129,7 +131,7 @@ function ConfigWard() {
   function handleDeleteConfirm(wardId) {
     setWards(wards.filter(function(w) { return w.id !== wardId; }));
     setDeleteModal({ visible: false, wardId: null });
-    ToastNotification("Ward deleted successfully", "success");
+    ToastNotification(t('pages:commissioner.config_ward.toast_ward_deleted'), "success");
   }
 
   function handleMoveWard(wardId, newDivision) {
@@ -137,7 +139,7 @@ function ConfigWard() {
       return w.id === wardId ? { ...w, division: newDivision } : w;
     }));
     setMoveModal({ visible: false, ward: null });
-    ToastNotification("Ward moved to " + newDivision + " successfully", "success");
+    ToastNotification(t('pages:commissioner.config_ward.toast_ward_moved', { divisionName: newDivision }), "success");
   }
 
   function handleWardClick(ward, event) {
@@ -214,14 +216,14 @@ function ConfigWard() {
                     {ward.ward_name}
                   </p>
                   <p className="text-xs text-secondaryDark mt-1">
-                    {ward.streets} Streets
+                    {ward.streets} {t('common:streets')}
                   </p>
                   <p className="text-xs text-primary font-bold mt-1">
                     {ward.division}
                   </p>
                   {ward.isDraft && (
                     <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
-                      Draft
+                      {t('common:draft')}
                     </span>
                   )}
                 </>
@@ -258,7 +260,7 @@ function ConfigWard() {
                              transition-all duration-200 ease-in-out"
                   >
                     <Edit size={14} />
-                    <span>Edit</span>
+                    <span>{t('common:edit')}</span>
                   </button>
                   <button
                     onClick={function() {
@@ -272,7 +274,7 @@ function ConfigWard() {
                              transition-all duration-200 ease-in-out"
                   >
                     <Trash size={14} defaultColor="#E75A4C" />
-                    <span>Delete</span>
+                    <span>{t('common:delete')}</span>
                   </button>
                 </div>
               )}
@@ -291,14 +293,14 @@ function ConfigWard() {
             <div className="bg-white rounded-large p-6 border border-secondary">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-secondaryDark">
-                  ALL WARDS ({filteredWards.length})
+                  {t('pages:commissioner.config_ward.all_wards')} ({filteredWards.length})
                 </h2>
                 
                 <div className="flex items-center gap-2">
                   {searchVisible && (
                     <input
                       type="text"
-                      placeholder="Search wards..."
+                      placeholder={t('pages:commissioner.config_ward.search_placeholder')}
                       value={searchQuery}
                       onChange={function(e) { setSearchQuery(e.target.value); }}
                       className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -343,7 +345,7 @@ function ConfigWard() {
             <div className="bg-white rounded-large p-6 border border-secondary">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-secondaryDark">
-                  TARGET DIVISIONS ({divisions.length})
+                  {t('pages:commissioner.config_ward.target_divisions')} ({divisions.length})
                 </h2>
                 
                 <button
@@ -353,7 +355,7 @@ function ConfigWard() {
                            focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                            transition-all duration-200 ease-in-out"
                 >
-                  Add Ward
+                  {t('pages:commissioner.config_ward.add_ward_btn')}
                 </button>
               </div>
 
@@ -376,7 +378,7 @@ function ConfigWard() {
                           {division.name}
                         </h3>
                         <span className="text-xs text-secondaryDark">
-                          {division.wards.length} Wards
+                          {division.wards.length} {t('common:wards')}
                         </span>
                       </div>
 
@@ -418,8 +420,8 @@ function ConfigWard() {
 
         {deleteModal.visible && (
           <ConfigWardModal
-            title="Delete Ward"
-            message="Are you sure you want to delete this ward? This action cannot be undone."
+            title={t('pages:commissioner.config_ward.delete_ward_title')}
+            message={t('pages:commissioner.config_ward.delete_ward_message')}
             onConfirm={function() { handleDeleteConfirm(deleteModal.wardId); }}
             onCancel={function() { setDeleteModal({ visible: false, wardId: null }); }}
           />

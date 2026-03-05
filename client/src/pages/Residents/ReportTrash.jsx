@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { 
     Camera, 
@@ -38,6 +39,7 @@ function ReportTrash() {
     const fileInputRef = useRef(null);
     const cameraInputRef = useRef(null);
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [locationText, setLocationText] = useState("");
@@ -48,7 +50,7 @@ function ReportTrash() {
     const [isDragging, setIsDragging] = useState(false);
 
     function openCamera() {
-        ToastNotification("Opening camera...", "info");
+        ToastNotification(t('pages:resident.report_trash.toast_opening_camera'), "info");
         setTimeout(function() {
             if (cameraInputRef.current) {
                 cameraInputRef.current.click();
@@ -61,7 +63,7 @@ function ReportTrash() {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setSelectedImage(imageUrl);
-            ToastNotification("Photo captured successfully", "success");
+            ToastNotification(t('pages:resident.report_trash.toast_photo_captured'), "success");
         }
         e.target.value = null;
     }
@@ -70,29 +72,29 @@ function ReportTrash() {
         const file = e.target.files[0];
         if (file) {
             setSelectedImage(URL.createObjectURL(file));
-            ToastNotification("Image uploaded successfully", "success");
+            ToastNotification(t('pages:resident.report_trash.toast_image_uploaded'), "success");
         }
     }
 
     function handleDetectLocation() {
-        ToastNotification("Detecting GPS coordinates...", "info");
+        ToastNotification(t('pages:resident.report_trash.toast_detecting_gps'), "info");
         setTimeout(function() {
             setLocationText("24, Main Street, San Francisco, CA");
-            ToastNotification("Location detected", "success");
+            ToastNotification(t('pages:resident.report_trash.toast_location_detected'), "success");
         }, 1500);
     }
 
     function handleSubmit() {
         if (!selectedImage) {
-            ToastNotification("Please provide a photo as evidence", "error");
+            ToastNotification(t('pages:resident.report_trash.toast_photo_required'), "error");
             return;
         }
         if (!selectedType) {
-            ToastNotification("Please select a trash type", "error");
+            ToastNotification(t('pages:resident.report_trash.toast_trash_type_required'), "error");
             return;
         }
         if(!locationText){
-            ToastNotification("Please set your location", "error");
+            ToastNotification(t('pages:resident.report_trash.toast_location_required'), "error");
             return;
         }
 
@@ -130,9 +132,9 @@ function ReportTrash() {
             const file = files[0];
             if (file.type.startsWith('image/')) {
                 setSelectedImage(URL.createObjectURL(file));
-                ToastNotification("Image uploaded successfully", "success");
+                ToastNotification(t('pages:resident.report_trash.toast_image_uploaded'), "success");
             } else {
-                ToastNotification("Please drop an image file", "error");
+                ToastNotification(t('pages:resident.report_trash.toast_drop_image_file'), "error");
             }
         }
     }
@@ -146,8 +148,8 @@ function ReportTrash() {
                 {/* LEFT SECTION: Image Evidence */}
                 <div className="lg:col-span-7 bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-5">
                     <div className="border-b border-secondary pb-4">
-                        <h1 className="text-lg font-bold text-primary">Upload evidence</h1>
-                        <p className="text-xs text-gray-500 mt-1 font-medium">A clear photo helps city teams respond faster.</p>
+                        <h1 className="text-lg font-bold text-primary">{t('pages:resident.report_trash.upload_evidence')}</h1>
+                        <p className="text-xs text-gray-500 mt-1 font-medium">{t('pages:resident.report_trash.upload_evidence_sub')}</p>
                     </div>
 
                     <div 
@@ -178,8 +180,8 @@ function ReportTrash() {
                                     <Camera size={24} isPressed={false} isDarkTheme={false} />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-primary">Click to capture photo</p>
-                                    <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">or drag & drop image</p>
+                                    <p className="text-sm font-bold text-primary">{t('pages:resident.report_trash.click_to_capture')}</p>
+                                    <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest font-bold">{t('pages:resident.report_trash.or_drag_drop')}</p>
                                 </div>
                             </button>
                         )}
@@ -207,14 +209,14 @@ function ReportTrash() {
                             className="bg-primaryLight text-white py-3 rounded-veryLarge text-xs font-bold flex items-center justify-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 shadow-sm shadow-primaryLight/20 focus:outline-none focus:ring-2 focus:ring-primary/20"
                         >
                             <Add size={16} isPressed={false} isDarkTheme={true} />
-                            Upload image
+                            {t('pages:resident.report_trash.upload_image')}
                         </button>
                         <button 
                             onClick={() => openCamera()}
                             className="bg-primary text-white py-3 rounded-veryLarge text-xs font-bold flex items-center justify-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 shadow-sm shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/20"
                         >
                             <Camera size={16} isPressed={false} isDarkTheme={true} />
-                            Capture photo
+                            {t('pages:resident.report_trash.capture_photo')}
                         </button>
                     </div>
                 </div>
@@ -224,7 +226,7 @@ function ReportTrash() {
                     
                     {/* Location Section */}
                     <div className="bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-4">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Location</label>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('common:location')}</label>
                         
                         <button 
                             onClick={() => handleDetectLocation()}
@@ -232,7 +234,7 @@ function ReportTrash() {
                         >
                             <div className="flex items-center gap-3">
                                 <Location size={18} isPressed={false} isDarkTheme={false} />
-                                <span className="text-sm font-medium text-primary">Auto-detect my location</span>
+                                <span className="text-sm font-medium text-primary">{t('pages:resident.report_trash.auto_detect_location')}</span>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
                         </button>
@@ -241,14 +243,14 @@ function ReportTrash() {
                             type="text" 
                             value={locationText}
                             onChange={(e) => setLocationText(e.target.value)}
-                            placeholder="Or search / enter address..."
+                            placeholder={t('pages:resident.report_trash.search_address_placeholder')}
                             className="w-full p-3 bg-background border border-secondary rounded-large text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[1.02] transition-all duration-200"
                         />
                     </div>
 
                     {/* Trash Type Section */}
                     <div className="bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-4">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Trash type</label>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('pages:resident.report_trash.trash_type')}</label>
                         <div className="relative">
                             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 <Trash size={18} isPressed={false} isDarkTheme={false} />
@@ -258,7 +260,7 @@ function ReportTrash() {
                                 onChange={(e) => setSelectedType(e.target.value)}
                                 className="w-full p-3 pl-11 bg-background border border-secondary rounded-large text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[1.02] transition-all duration-200 cursor-pointer"
                             >
-                                <option value="">Select type</option>
+                                <option value="">{t('pages:resident.report_trash.select_type')}</option>
                                 {trashTypes.map(function(type) {
                                     return (
                                         <option key={type} value={type}>
@@ -275,12 +277,12 @@ function ReportTrash() {
 
                     {/* Details Section */}
                     <div className="bg-white border border-secondary rounded-veryLarge p-5 shadow-sm space-y-4">
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Details</label>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('pages:resident.report_trash.details')}</label>
                         <textarea 
                             rows="4"
                             value={details}
                             onChange={(e) => setDetails(e.target.value)}
-                            placeholder="Describe what you see..."
+                            placeholder={t('pages:resident.report_trash.describe_placeholder')}
                             className="w-full p-3 bg-background border border-secondary rounded-large text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[1.02] transition-all duration-200 resize-none"
                         ></textarea>
                     </div>
@@ -290,7 +292,7 @@ function ReportTrash() {
                         disabled={isSubmitting}
                         className="w-full bg-primaryLight text-white py-4 rounded-veryLarge font-bold text-sm shadow-lg shadow-primaryLight/20 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
                     >
-                        {isSubmitting ? "Processing..." : "Submit report"}
+                        {isSubmitting ? t('common:processing') : t('pages:resident.report_trash.submit_report_btn')}
                     </button>
                 </div>
 

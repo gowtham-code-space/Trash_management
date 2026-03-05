@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { X, Check } from "../../../../assets/icons/icons";
 
 function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
     const [selectedRoute, setSelectedRoute] = useState(trashman?.route || "");
 
     function handleConfirm() {
@@ -20,7 +22,7 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
             <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-large p-6 max-w-lg w-full mx-4 border border-secondary">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-secondaryDark">
-                Reassign Trashman
+                {t('modals:si_move_trashman.title')}
                 </h3>
                 <button
                 onClick={onCancel}
@@ -54,11 +56,11 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
 
                 <div>
                 <label className="block text-sm font-bold text-secondaryDark mb-3">
-                    Current Route: <span className="text-primary">{trashman?.route}</span>
+                    {t('modals:si_move_trashman.current_route')} <span className="text-primary">{trashman?.route}</span>
                 </label>
                 
                 <p className="text-sm font-bold text-secondaryDark mb-2">
-                    Select New Route
+                    {t('modals:si_move_trashman.select_new_route')}
                 </p>
                 
                 <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -86,7 +88,7 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
                                 {route.name}
                             </p>
                             <p className="text-xs text-secondaryDark/60 mt-1">
-                                {route.trashmen?.length || 0} Trashm{(route.trashmen?.length || 0) !== 1 ? 'en' : 'an'}
+                                {t('modals:si_move_trashman.trashman_count', { count: route.trashmen?.length || 0 })}
                             </p>
                             </div>
                             {isSelected && !isCurrentRoute && (
@@ -96,7 +98,7 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
                             )}
                             {isCurrentRoute && (
                             <span className="text-xs text-secondaryDark/60 font-bold">
-                                Current
+                                {t('common:current')}
                             </span>
                             )}
                         </div>
@@ -115,7 +117,7 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
                             focus:outline-none focus:ring-2 focus:ring-primary/20
                             transition-all duration-200 ease-in-out"
                 >
-                Cancel
+                {t('common:cancel')}
                 </button>
                 
                 <button
@@ -127,7 +129,7 @@ function MoveTrashManModal({ trashman, routes, onConfirm, onCancel }) {
                             ? "bg-secondary text-secondaryDark/40 cursor-not-allowed"
                             : "bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"}`}
                 >
-                Reassign
+                {t('modals:si_move_trashman.reassign')}
                 </button>
             </div>
             </div>

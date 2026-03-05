@@ -9,6 +9,7 @@ import {
 } from "../../assets/icons/icons";
 import { ToastContainer } from "react-toastify";
 import AssignTaskModal from "../../components/Modals/SuperVisor/AssignTaskModal";
+import { useTranslation } from "react-i18next";
 
 const selectedTaskDetails = {
   id: 1,
@@ -94,6 +95,7 @@ const allSupervisors = [
 ];
 
 function AssignToSupervisor() {
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedSupervisors, setSelectedSupervisors] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -120,7 +122,7 @@ function AssignToSupervisor() {
 
   function handleAssignTask() {
     if (selectedSupervisors.length === 0) {
-      ToastNotification("Please select at least one supervisor to assign the task", "error");
+      ToastNotification(t('pages:inspector.assign_supervisor.toast_select_required'), "error");
       return;
     }
     console.log("Assigning task to supervisors:", selectedSupervisors);
@@ -134,9 +136,9 @@ function AssignToSupervisor() {
   }
 
   function getPriorityLabel(level) {
-    if (level === 1) return "Level 1";
-    if (level === 2) return "Level 2";
-    return "Level 3";
+    if (level === 1) return t('common:level_1');
+    if (level === 2) return t('common:level_2');
+    return t('common:level_3');
   }
 
   function getSupervisorInitial(name) {
@@ -172,7 +174,7 @@ function AssignToSupervisor() {
             </h4>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs text-secondaryDark/60">
-                Attendance {supervisor.attendance}%
+                {t('common:attendance')} {supervisor.attendance}%
               </span>
               <span className="text-secondaryDark/40">•</span>
               <span className="text-xs text-secondaryDark/60">
@@ -189,7 +191,7 @@ function AssignToSupervisor() {
                 : 'bg-secondary text-primary'
             }`}
           >
-            {isSelected ? 'Selected' : 'Select'}
+            {isSelected ? t('common:selected') : t('common:select')}
           </button>
         </div>
       </div>
@@ -223,15 +225,15 @@ function AssignToSupervisor() {
 
               <div className="flex flex-wrap gap-4 text-xs">
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Location: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:location_prefix')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.location}</span>
                 </div>
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Type: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:type_prefix')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.trashType}</span>
                 </div>
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Reported: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:reported')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.date}</span>
                 </div>
               </div>
@@ -269,9 +271,9 @@ function AssignToSupervisor() {
           <div className="w-full lg:w-96 bg-white border border-secondary rounded-medium">
             <div className="p-4 sm:p-5 lg:p-6">
               <div className="mb-4">
-                <h2 className="text-base sm:text-lg font-bold text-secondaryDark">Available Supervisors</h2>
+                <h2 className="text-base sm:text-lg font-bold text-secondaryDark">{t('pages:inspector.assign_supervisor.available_supervisors')}</h2>
                 <p className="text-xs sm:text-sm text-secondaryDark mt-1">
-                  Select supervisors for this task
+                  {t('pages:inspector.assign_supervisor.select_for_task')}
                 </p>
               </div>
 
@@ -281,7 +283,7 @@ function AssignToSupervisor() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search supervisors..."
+                  placeholder={t('pages:inspector.assign_supervisor.search_placeholder')}
                   value={searchQuery}
                   onChange={function (e) {
                     setSearchQuery(e.target.value);
@@ -302,7 +304,7 @@ function AssignToSupervisor() {
                 />
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-sm text-secondaryDark">No supervisors found</p>
+                  <p className="text-sm text-secondaryDark">{t('pages:inspector.assign_supervisor.no_supervisors_found')}</p>
                 </div>
               )}
 
@@ -310,7 +312,7 @@ function AssignToSupervisor() {
                 onClick={handleAssignTask}
                 className="w-full bg-primary text-white py-3 rounded-large text-sm font-bold hover:bg-primaryLight hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out mt-4"
               >
-                Assign Task {selectedSupervisors.length > 0 && `(${selectedSupervisors.length} selected)`}
+                {selectedSupervisors.length > 0 ? t('pages:inspector.assign_supervisor.assign_task_selected', { count: selectedSupervisors.length }) : t('pages:inspector.assign_supervisor.assign_task')}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import PieChart from "../../components/Statistics/PieChart";
 import Rating from "../../components/Statistics/Rating";
 import { Star } from "../../assets/icons/icons";
@@ -41,6 +42,7 @@ const trashmanFeedbackData = {
 
 // Main Component
 export default function SupervisorStats() {
+    const { t } = useTranslation(["pages", "common"]);
     return (
         <div className="min-h-screen bg-background">
             <div className="max-w-7xl mx-auto space-y-6">
@@ -84,19 +86,19 @@ export default function SupervisorStats() {
                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {/* Zone */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Assigned Zone</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.assigned_zone')}</span>
                                 <p className="text-sm font-bold text-primary">{supervisorProfile.zone}</p>
                             </div>
 
                             {/* Joined Date */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Joined</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.joined')}</span>
                                 <p className="text-sm font-bold text-secondaryDark">{supervisorProfile.joinedDate}</p>
                             </div>
 
                             {/* Attendance */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Attendance</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:attendance')}</span>
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg font-bold text-success">{supervisorProfile.attendance}%</span>
                                     <div className="flex-1 bg-secondary rounded-full h-2 overflow-hidden">
@@ -110,19 +112,19 @@ export default function SupervisorStats() {
 
                             {/* Tasks Assigned */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Tasks Assigned</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.tasks_assigned')}</span>
                                 <p className="text-lg font-bold text-primary">{supervisorProfile.tasksAssigned}</p>
                             </div>
 
                             {/* Phone */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Phone</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:phone')}</span>
                                 <p className="text-sm font-bold text-secondaryDark">{supervisorProfile.phone}</p>
                             </div>
 
                             {/* Email */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Email</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:email')}</span>
                                 <p className="text-sm font-bold text-secondaryDark truncate" title={supervisorProfile.email}>
                                     {supervisorProfile.email}
                                 </p>
@@ -137,7 +139,7 @@ export default function SupervisorStats() {
                     <div className="bg-white border border-secondary rounded-large p-6 shadow-sm">
                         <div className="flex flex-col items-center justify-center h-full">
                             <span className="text-sm font-bold text-secondaryDark/60 uppercase tracking-wide mb-2">
-                                Total Days
+                                {t('pages:shared.total_days')}
                             </span>
                             <p className="text-4xl font-bold text-primary">
                                 {supervisorProfile.totalDays}
@@ -149,7 +151,7 @@ export default function SupervisorStats() {
                     <div className="bg-white border border-secondary rounded-large p-6 shadow-sm">
                         <div className="flex flex-col items-center justify-center h-full">
                             <span className="text-sm font-bold text-secondaryDark/60 uppercase tracking-wide mb-2">
-                                Present
+                                {t('common:present')}
                             </span>
                             <p className="text-4xl font-bold text-success">
                                 {supervisorProfile.present}
@@ -161,7 +163,7 @@ export default function SupervisorStats() {
                     <div className="bg-white border border-secondary rounded-large p-6 shadow-sm">
                         <div className="flex flex-col items-center justify-center h-full">
                             <span className="text-sm font-bold text-secondaryDark/60 uppercase tracking-wide mb-2">
-                                Absent
+                                {t('common:absent')}
                             </span>
                             <p className="text-4xl font-bold text-error">
                                 {supervisorProfile.absent}
@@ -181,7 +183,7 @@ export default function SupervisorStats() {
                         totalReviews={trashmanFeedbackData.totalReviews}
                         ratingBreakdown={trashmanFeedbackData.ratingBreakdown}
                         yearDropDown={['2025', '2026']}
-                        monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+                        monthDropDown={[t('common:months.january'), t('common:months.february'), t('common:months.march'), t('common:months.april'), t('common:months.may'), t('common:months.june'), t('common:months.july'), t('common:months.august'), t('common:months.september'), t('common:months.october'), t('common:months.november'), t('common:months.december')]}
                     />
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import Pagination from "../../../utils/Pagination";
 import ReviewQuizModal from "../../../components/Modals/Quiz/ReviewQuizModal";
@@ -14,6 +15,7 @@ import { SkeletonLine, SkeletonCard, SkeletonBlock, SkeletonButton } from "../..
 function Quiz() {
   const navigate = useNavigate();
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
   const [hoveredCert, setHoveredCert] = useState(null);
   const [stats, setStats] = useState(null);
   const [quizHistory, setQuizHistory] = useState([]);
@@ -120,7 +122,7 @@ function Quiz() {
         }
       } catch (error) {
         console.error('Error fetching quiz data:', error);
-        ToastNotification('Failed to load quiz data', 'error');
+        ToastNotification(t('pages:common.quiz.toast_failed_load'), 'error');
       } finally {
         setIsLoading(false);
         setIsLoadingHistory(false);
@@ -138,14 +140,14 @@ function Quiz() {
       if (response.success) {
         navigate("/take-quiz", { state: { quizData: response.data } });
       } else if (response.hasIncomplete) {
-        ToastNotification('Resuming your incomplete quiz...', 'info');
+        ToastNotification(t('pages:common.quiz.toast_resuming'), 'info');
         navigate("/take-quiz", { state: { resumeQuizId: response.incompleteQuizId } });
       } else {
-        ToastNotification(response.message || 'Failed to start quiz', 'error');
+        ToastNotification(response.message || t('pages:common.quiz.toast_failed_start'), 'error');
       }
     } catch (error) {
       console.error('Error starting quiz:', error);
-      ToastNotification('Failed to start quiz', 'error');
+      ToastNotification(t('pages:common.quiz.toast_failed_start'), 'error');
     } finally {
       setIsStarting(false);
     }
@@ -214,11 +216,11 @@ function Quiz() {
         setSelectedQuizReview(response.data);
         setShowReviewModal(true);
       } else {
-        ToastNotification(response.message || 'Failed to load quiz review', 'error');
+        ToastNotification(response.message || t('pages:common.quiz.toast_failed_review'), 'error');
       }
     } catch (error) {
       console.error('Error loading quiz review:', error);
-      ToastNotification('Failed to load quiz review', 'error');
+      ToastNotification(t('pages:common.quiz.toast_failed_review'), 'error');
     } finally {
       setIsLoadingReview(false);
     }
@@ -332,18 +334,18 @@ function Quiz() {
       <ToastContainer/>
       <div className="p-6 rounded-large mb-6 bg-primary">
         <h3 className="text-base font-semibold text-white mb-2">
-          Ready to test your knowledge?
+          {t('pages:common.quiz.ready_heading')}
         </h3>
         
         <p className="text-sm text-white/90 mb-4">
-          Take the quiz to test your knowledge and earn certificates.
+          {t('pages:common.quiz.quiz_desc')}
         </p>
         <button 
           onClick={handleStartQuiz} 
           disabled={isStarting}
           className="text:xs md:text-base bg-primaryLight p-2 px-3 rounded-medium text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isStarting ? 'Starting...' : 'Start Quiz'}
+          {isStarting ? t('pages:common.quiz.starting_btn') : t('pages:common.quiz.start_quiz_btn')}
         </button>
       </div>
 
@@ -356,7 +358,7 @@ function Quiz() {
           <p className={`text-xl font-semibold ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
             {stats?.total_attempts || 0}
           </p>
-          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>Quizzes Taken</p>
+          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>{t('pages:common.quiz.quizzes_taken')}</p>
         </div>
 
         <div className={`p-4 rounded-large ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
@@ -366,7 +368,7 @@ function Quiz() {
           <p className={`text-xl font-semibold ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
             {stats?.average_score || 0}
           </p>
-          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>Avg. Score</p>
+          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>{t('pages:common.quiz.avg_score')}</p>
         </div>
 
         <div className={`p-4 rounded-large ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
@@ -376,7 +378,7 @@ function Quiz() {
           <p className={`text-xl font-semibold ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
             {stats?.passed_attempts || 0}
           </p>
-          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>Certificates</p>
+          <p className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>{t('pages:common.quiz.certificates')}</p>
         </div>
       </div>
 
@@ -384,7 +386,7 @@ function Quiz() {
       <div className={`p-6 rounded-large mb-6 ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
         <div className="flex justify-between items-center mb-4">
           <h2 className={`text-lg font-semibold ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
-            Recent Quiz History
+            {t('pages:common.quiz.recent_history')}
           </h2>
         </div>
 
@@ -397,7 +399,7 @@ function Quiz() {
                 : isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-background text-secondaryDark border border-secondary"
             }`}
           >
-            All
+            {t('pages:common.quiz.filter_all')}
           </button>
           <button
             onClick={() => handleDateFilterChange('today')}
@@ -407,7 +409,7 @@ function Quiz() {
                 : isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-background text-secondaryDark border border-secondary"
             }`}
           >
-            Today
+            {t('pages:common.quiz.filter_today')}
           </button>
           <button
             onClick={() => handleDateFilterChange('week')}
@@ -417,7 +419,7 @@ function Quiz() {
                 : isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-background text-secondaryDark border border-secondary"
             }`}
           >
-            This Week
+            {t('pages:common.quiz.filter_this_week')}
           </button>
           <button
             onClick={() => handleDateFilterChange('month')}
@@ -427,7 +429,7 @@ function Quiz() {
                 : isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-background text-secondaryDark border border-secondary"
             }`}
           >
-            This Month
+            {t('pages:common.quiz.filter_this_month')}
           </button>
           
           <div className="relative">
@@ -440,7 +442,7 @@ function Quiz() {
               }`}
             >
               <Calendar size={14} defaultColor={dateFilter === 'custom' ? '#FFFFFF' : isDarkTheme ? '#B7D6C9' : '#316F5D'} />
-              {dateFilter === 'custom' && customStartDate && customEndDate ? formatDateRange() : 'Custom Range'}
+              {dateFilter === 'custom' && customStartDate && customEndDate ? formatDateRange() : t('pages:common.quiz.filter_custom_range')}
             </button>
 
             {showDatePicker && (
@@ -480,10 +482,10 @@ function Quiz() {
               <Task size={32} defaultColor={isDarkTheme ? "#1E8E54" : "#145B47"} isDarkTheme={isDarkTheme} />
             </div>
             <p className={`text-base font-semibold mb-1 ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
-              No Quiz Record Found
+              {t('pages:common.quiz.no_quiz_record')}
             </p>
             <p className={`text-sm ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}`}>
-              {dateFilter ? 'Try adjusting your filters' : 'Start taking quizzes to see your history'}
+              {dateFilter ? t('pages:common.quiz.try_adjusting_filters') : t('pages:common.quiz.start_taking_quizzes')}
             </p>
           </div>
         ) : (
@@ -546,7 +548,7 @@ function Quiz() {
       {/* Certificates Horizontal Scroll */}
       <div className={`p-6 rounded-large ${isDarkTheme ? "bg-darkSurface border border-darkBorder" : "bg-white border border-gray-100"}`}>
         <h2 className={`text-lg font-semibold mb-4 ${isDarkTheme ? "text-darkTextPrimary" : "text-gray-900"}`}>
-          My Certificates
+          {t('pages:common.quiz.my_certificates')}
         </h2>
         
         <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">

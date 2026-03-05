@@ -5,11 +5,11 @@ import { ToastContainer } from "react-toastify";
 import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
 import { useNavigate } from "react-router-dom";
 import { requestOtp } from "../../../services/features/authService";
-
-//Themeprovider
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 
 function Login() {
+  const { t } = useTranslation('auth');
   const {isDarkTheme , toggleTheme} = ThemeStore();
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -32,7 +32,7 @@ function Login() {
     if (isLoading) return;
 
     if (selectedMethod === "SMS") {
-      ToastNotification("OTP via phone is under construction", "info");
+      ToastNotification(t('login.otp_phone_construction'), "info");
       return;
     }
 
@@ -40,14 +40,14 @@ function Login() {
     
     if (selectedMethod === "SMS") {
       if (!phoneNumber || phoneNumber.length !== 10) {
-        ToastNotification("Please enter a valid 10-digit phone number", "error");
+        ToastNotification(t('login.invalid_phone'), "error");
         return;
       }
       identifier = phoneNumber;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailInput || !emailRegex.test(emailInput)) {
-        ToastNotification("Please enter a valid email address", "error");
+        ToastNotification(t('login.invalid_email'), "error");
         return;
       }
       identifier = emailInput;
@@ -63,7 +63,7 @@ function Login() {
       });
 
       if (response.data.shouldRedirect === 'signup') {
-        ToastNotification(response.message || "Account not found. Please sign up first.", "error");
+        ToastNotification(response.message || t('login.account_not_found'), "error");
         setShowNewUser(true);
         setTimeout(() => {
           navigate("/signup");
@@ -76,7 +76,7 @@ function Login() {
       setShowOtpModal(true);
     } catch (error) {
       console.error("Error sending OTP:", error);
-      const errorMsg = error.response?.data?.message || error.message || "Failed to send OTP";
+      const errorMsg = error.response?.data?.message || error.message || t('login.failed_otp');
       ToastNotification(errorMsg, "error");
       
       if (errorMsg.includes("not found") || errorMsg.includes("sign up")) {
@@ -99,9 +99,9 @@ function Login() {
         </div>
         {/* Titles */}
         <div className="text-center mb-10">
-          <h1 className="text-2xl font-bold text-black mb-3">Welcome Back</h1>
+          <h1 className="text-2xl font-bold text-black mb-3">{t('login.welcome_back')}</h1>
           <p className="text-sm text-gray-400 px-8">
-            {selectedMethod === "SMS" ? "Enter your mobile number to access your dashboard." : "Enter your email address to access your dashboard."}
+            {selectedMethod === "SMS" ? t('login.subtitle_sms') : t('login.subtitle_gmail')}
           </p>
         </div>
 
@@ -114,7 +114,7 @@ function Login() {
             }`}
           >
             <Mobile isPressed={selectedMethod === "SMS"} isDarkTheme={isDarkTheme} />
-            SMS
+            {t('login.method_sms')}
           </button>
           <button
             onClick={function() { setSelectedMethod("Gmail"); }}
@@ -123,14 +123,14 @@ function Login() {
             }`}
           >
             <Email isPressed={selectedMethod === "Gmail"} isDarkTheme={isDarkTheme} />
-            Gmail
+            {t('login.method_gmail')}
           </button>
         </div>
 
         {/* Input Field */}
         <div className="mb-8">
           <label className="block text-sm font-semibold text-black mb-2">
-            {selectedMethod === "SMS" ? "Mobile Number" : "Email Address"}
+            {selectedMethod === "SMS" ? t('login.label_phone') : t('login.label_email')}
           </label>
           {selectedMethod === "SMS" ? (
             <div className="flex bg-background border border-gray-100 rounded-lg overflow-hidden focus-within:border-primary transition-colors">
@@ -141,7 +141,7 @@ function Login() {
                 type="text"
                 value={phoneNumber}
                 onChange={function(e) { handlePhoneInput(e.target.value); }}
-                placeholder="98765 43210"
+                placeholder={t('login.placeholder_phone')}
                 className="w-full px-4 py-4 bg-transparent outline-none text-base font-medium placeholder:text-gray-300"
               />
             </div>
@@ -150,12 +150,12 @@ function Login() {
               type="email"
               value={emailInput}
               onChange={function(e) { setEmailInput(e.target.value); if (showNewUser) setShowNewUser(false); }}
-              placeholder="yourname@gmail.com"
+              placeholder={t('login.placeholder_email')}
               className="w-full px-4 py-4 bg-background border border-gray-100 rounded-lg outline-none text-base font-medium placeholder:text-gray-300 focus-within:border-primary transition-colors"
             />
           )}
           {showNewUser && (
-            <p className="text-xs text-error mt-2 font-medium">User not found. Redirecting to signup...</p>
+            <p className="text-xs text-error mt-2 font-medium">{t('login.user_not_found')}</p>
           )}
         </div>
 
@@ -169,7 +169,7 @@ function Login() {
               : 'bg-primaryLight text-white hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
           }`}
         >
-          {isLoading ? "Sending..." : "Send Secure OTP"}
+          {isLoading ? t('login.sending') : t('login.send_otp')}
         </button>
       </div>
 

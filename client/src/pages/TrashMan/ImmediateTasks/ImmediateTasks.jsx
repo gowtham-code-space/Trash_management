@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import Pagination from "../../../utils/Pagination";
@@ -64,6 +65,7 @@ const immediateTasks = [
 
 
 function ImmediateTasks() {
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [taskToResolve, setTaskToResolve] = useState(null);
@@ -90,20 +92,20 @@ function ImmediateTasks() {
     if (taskToResolve) {
       setShowConfirmModal(false);
       setTaskToResolve(null);
-      ToastNotification(`Task ${taskToResolve.id} marked as resolved!`, "success");
+      ToastNotification(t('pages:trashman.tasks.toast_task_resolved', { id: taskToResolve.id }), "success");
     }
   }
 
   function handleZoomInClick() {
-    ToastNotification("Zooming in", "success");
+    ToastNotification(t('pages:shared.zoom_in_toast'), "success");
   }
 
   function handleZoomOutClick() {
-    ToastNotification("Zooming out", "success");
+    ToastNotification(t('pages:shared.zoom_out_toast'), "success");
   }
 
   function handleRecenterClick() {
-    ToastNotification("Map recentered", "success");
+    ToastNotification(t('pages:shared.map_recentered'), "success");
   }
 
   function renderTaskCard(task) {
@@ -147,7 +149,7 @@ function ImmediateTasks() {
 
           <div>
             <p className="text-xs text-secondaryDark mb-2 font-medium">
-              Assigned Team
+              {t('pages:trashman.tasks.assigned_team')}
             </p>
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               {task.assignedTeam.map(function (member, idx) {
@@ -178,7 +180,7 @@ function ImmediateTasks() {
               <div className="grid grid-cols-1 gap-2 sm:gap-3">
                 <div>
                   <p className="text-xs text-secondaryDark font-semibold mb-1">
-                    Task ID
+                    {t('pages:trashman.tasks.task_id')}
                   </p>
                   <p className="text-xs text-secondaryDark">
                     {task.id}
@@ -186,7 +188,7 @@ function ImmediateTasks() {
                 </div>
                 <div>
                   <p className="text-xs text-secondaryDark font-semibold mb-1">
-                    Reported At
+                    {t('pages:trashman.tasks.reported_at')}
                   </p>
                   <p className="text-xs text-secondaryDark">
                     {task.createdAt}
@@ -203,7 +205,7 @@ function ImmediateTasks() {
             className="w-full bg-success text-white py-2.5 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2"
           >
             <Check size={18} isPressed={false} isDarkTheme={true} />
-            Mark as Resolved
+            {t('pages:trashman.tasks.mark_as_resolved')}
           </button>
         </div>
       </div>
@@ -246,15 +248,15 @@ function ImmediateTasks() {
           <div className="mt-2 lg:mt-0 lg:ml-2 rounded-medium w-full lg:w-96 bg-white border-t lg:border-t-0 lg:border-l border-secondary">
             <div className="p-4 sm:p-5 lg:p-6">
               <div className="mb-6">
-                <h2 className="text-base sm:text-lg font-bold text-secondaryDark">My Immediate Tasks</h2>
+                <h2 className="text-base sm:text-lg font-bold text-secondaryDark">{t('pages:trashman.tasks.my_immediate_tasks')}</h2>
                 <p className="text-xs sm:text-sm text-secondaryDark mt-1">
-                  {myTasks.length} pending {myTasks.length === 1 ? 'task' : 'tasks'}
+                  {t('pages:trashman.tasks.pending_count', { count: myTasks.length })}
                 </p>
               </div>
 
               {myTasks.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-sm text-secondaryDark">No immediate tasks assigned</p>
+                  <p className="text-sm text-secondaryDark">{t('pages:trashman.tasks.no_immediate_tasks')}</p>
                 </div>
               ) : (
                 <Pagination 

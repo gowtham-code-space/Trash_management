@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Check } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function AttendanceSubmittedModal({ isOpen, onClose, isDarkTheme, workerData }) {
+    const { t } = useTranslation(["modals", "common"]);
     const navigate = useNavigate();
 
     function handleViewHistory() {
@@ -26,9 +28,9 @@ function AttendanceSubmittedModal({ isOpen, onClose, isDarkTheme, workerData }) 
                     <Check size={32} isPressed={false} isDarkTheme={true} />
                 </div>
 
-                <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">Attendance submitted</h2>
+                <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">{t('modals:attendance_submitted.title')}</h2>
                 <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-                    Your attendance has been recorded. Check your history to track the status.
+                    {t('modals:attendance_submitted.message')}
                 </p>
 
                 <div className="flex gap-3">
@@ -36,13 +38,13 @@ function AttendanceSubmittedModal({ isOpen, onClose, isDarkTheme, workerData }) 
                         onClick={handleViewHistory}
                         className="flex-1 bg-primaryLight text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
                     >
-                        View history
+                        {t('modals:attendance_submitted.view_history')}
                     </button>
                     <button 
                         onClick={onClose}
                         className="flex-1 bg-primary text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
                     >
-                        Done
+                        {t('modals:attendance_submitted.done')}
                     </button>
                 </div>
             </div>

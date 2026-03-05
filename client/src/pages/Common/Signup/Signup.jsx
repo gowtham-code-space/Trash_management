@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import OtpVerificationModal from "../../../components/Modals/Login/OtpVerificationModal";
 import { requestOtp, completeSignup, checkContact, getDistricts, getWardsByDistrict, getStreetsByWard } from "../../../services/features/authService";
 import { getUser } from "../../../services/core/session";
+import { useTranslation } from "react-i18next";
 
 function SignUp() {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
@@ -43,10 +45,10 @@ function SignUp() {
   const [selectedWardId, setSelectedWardId] = useState();
 
   const steps = [
-    { id: 0, title: "Verify Identity", description: "Verify your phone or email" },
-    { id: 1, title: "Tell me about yourself", description: "Basic information" },
-    { id: 2, title: "Contact", description: "Communication details" },
-    { id: 3, title: "Where do you live", description: "Address information" }
+    { id: 0, title: t('signup.steps.0.title'), description: t('signup.steps.0.description') },
+    { id: 1, title: t('signup.steps.1.title'), description: t('signup.steps.1.description') },
+    { id: 2, title: t('signup.steps.2.title'), description: t('signup.steps.2.description') },
+    { id: 3, title: t('signup.steps.3.title'), description: t('signup.steps.3.description') }
   ];
 
   useEffect(function() {
@@ -56,7 +58,7 @@ function SignUp() {
         setDistricts(response.data || []);
       } catch (error) {
         console.error("Error fetching districts:", error);
-        ToastNotification("Failed to load districts", "error");
+        ToastNotification(t('signup.failed_districts'), "error");
       }
     }
     fetchDistricts();
@@ -75,7 +77,7 @@ function SignUp() {
         setWards(response.data || []);
       } catch (error) {
         console.error("Error fetching wards:", error);
-        ToastNotification("Failed to load wards", "error");
+        ToastNotification(t('signup.failed_wards'), "error");
       }
     }
   }
@@ -91,7 +93,7 @@ function SignUp() {
         setStreets(response.data || []);
       } catch (error) {
         console.error("Error fetching streets:", error);
-        ToastNotification("Failed to load streets", "error");
+        ToastNotification(t('signup.failed_streets'), "error");
       }
     }
   }
@@ -107,7 +109,7 @@ function SignUp() {
     if (isSendingOtp) return;
 
     if (selectedMethod === "SMS") {
-      ToastNotification("OTP via phone is under construction", "info");
+      ToastNotification(t('signup.otp_under_construction'), "info");
       return;
     }
 
@@ -115,14 +117,14 @@ function SignUp() {
     
     if (selectedMethod === "SMS") {
       if (!phoneNumberInput || phoneNumberInput.length !== 10) {
-        ToastNotification("Please enter a valid 10-digit phone number", "error");
+        ToastNotification(t('signup.invalid_phone'), "error");
         return;
       }
       identifier = phoneNumberInput;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailInputVerify || !emailRegex.test(emailInputVerify)) {
-        ToastNotification("Please enter a valid email address", "error");
+        ToastNotification(t('signup.invalid_email'), "error");
         return;
       }
       identifier = emailInputVerify;
@@ -136,7 +138,7 @@ function SignUp() {
       });
 
       if (response.data.shouldRedirect === 'login') {
-        ToastNotification(response.message || "Account already exists. Please login instead.", "info");
+        ToastNotification(response.message || t('signup.already_exists'), "info");
         setTimeout(() => {
           navigate("/login");
         }, 2000);
@@ -145,11 +147,11 @@ function SignUp() {
 
       setUserEmail(identifier);
       setIsOtpSent(true);
-      ToastNotification(response.message || `OTP sent to ${identifier}`, "success");
+      ToastNotification(response.message || t('signup.otp_sent', { identifier }), "success");
       setShowOtpModal(true);
     } catch (error) {
       console.error("Error sending OTP:", error);
-      const errorMsg = error.response?.data?.message || error.message || "Failed to send OTP";
+      const errorMsg = error.response?.data?.message || error.message || t('signup.failed_send_otp');
       ToastNotification(errorMsg, "error");
     } finally {
       setIsSendingOtp(false);
@@ -164,7 +166,7 @@ function SignUp() {
     setCurrentStep(1);
     setIsOtpSent(false);
     setIsSendingOtp(false);
-    ToastNotification("Verification successful! Please complete your profile.", "success");
+    ToastNotification(t('signup.verification_successful'), "success");
   }
 
   function handleImageUpload(e) {
@@ -188,7 +190,7 @@ function SignUp() {
       return false;
     } else if (step === 1) {
       if (!formData.firstName || !formData.lastName) {
-        ToastNotification("Please enter your first and last name", "error");
+        ToastNotification(t('signup.first_last_required'), "error");
         return false;
       }
     } else if (step === 2) {
@@ -196,51 +198,51 @@ function SignUp() {
       
       if (isEmailSignup) {
         if (!formData.phoneNumber) {
-          ToastNotification("Please enter your phone number", "error");
+          ToastNotification(t('signup.enter_phone'), "error");
           return false;
         }
         if (formData.phoneNumber.length < 10) {
-          ToastNotification("Please enter a valid phone number (at least 10 digits)", "error");
+          ToastNotification(t('signup.valid_phone_10'), "error");
           return false;
         }
         
         try {
           const response = await checkContact(formData.phoneNumber, 'phone');
           if (response.data.exists) {
-            ToastNotification("Phone number already exists", "info");
+            ToastNotification(t('signup.phone_exists'), "info");
             return false;
           }
         } catch (error) {
           console.error("Error checking phone:", error);
-          ToastNotification("Failed to verify phone number", "error");
+          ToastNotification(t('signup.failed_verify_phone'), "error");
           return false;
         }
       } else {
         if (!formData.email) {
-          ToastNotification("Please enter your email address", "error");
+          ToastNotification(t('signup.enter_email'), "error");
           return false;
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
-          ToastNotification("Please enter a valid email address", "error");
+          ToastNotification(t('signup.invalid_email'), "error");
           return false;
         }
         
         try {
           const response = await checkContact(formData.email, 'email');
           if (response.data.exists) {
-            ToastNotification("Email already exists", "info");
+            ToastNotification(t('signup.email_exists'), "info");
             return false;
           }
         } catch (error) {
           console.error("Error checking email:", error);
-          ToastNotification("Failed to verify email address", "error");
+          ToastNotification(t('signup.failed_verify_email'), "error");
           return false;
         }
       }
     } else if (step === 3) {
       if (!formData.district || !formData.wardNumber || !formData.wardName || !formData.streetName || !formData.houseNumber) {
-        ToastNotification("Please fill in all address fields", "error");
+        ToastNotification(t('signup.fill_address'), "error");
         return false;
       }
     }
@@ -265,7 +267,7 @@ function SignUp() {
           try {
           const user = getUser();
           if (!user || !user.user_id) {
-            ToastNotification("Session expired. Please start again.", "error");
+            ToastNotification(t('signup.session_expired'), "error");
             navigate("/signup");
             return;
           }
@@ -302,7 +304,7 @@ function SignUp() {
             }
           });
 
-          ToastNotification(response.message || "Account created successfully! Welcome aboard.", "success");
+          ToastNotification(response.message || t('signup.account_created'), "success");
           setTimeout(function() {
             setFormData({
               profilePic: null,
@@ -323,7 +325,7 @@ function SignUp() {
           }, 1500);
           } catch (error) {
             console.error("Error completing signup:", error);
-            ToastNotification(error.response?.data?.message || "Failed to complete signup. Please try again.", "error");
+            ToastNotification(error.response?.data?.message || t('signup.signup_failed'), "error");
           }
         }
       }
@@ -395,9 +397,9 @@ function SignUp() {
           
           {/* Titles */}
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-black mb-3">Create Account</h1>
+            <h1 className="text-2xl font-bold text-black mb-3">{t('signup.create_account_title')}</h1>
             <p className="text-sm text-gray-400 px-8">
-              {selectedMethod === "SMS" ? "Enter your mobile number to verify your identity." : "Enter your email address to verify your identity."}
+              {selectedMethod === "SMS" ? t('signup.step_sms_verify') : t('signup.step_email_verify')}
             </p>
           </div>
 
@@ -410,7 +412,7 @@ function SignUp() {
               }`}
             >
               <Mobile isPressed={selectedMethod === "SMS"} isDarkTheme={isDarkTheme} />
-              SMS
+              {t('signup.method_sms')}
             </button>
             <button
               onClick={function() { setSelectedMethod("Gmail"); }}
@@ -419,14 +421,14 @@ function SignUp() {
               }`}
             >
               <Email isPressed={selectedMethod === "Gmail"} isDarkTheme={isDarkTheme} />
-              Gmail
+              {t('signup.method_gmail')}
             </button>
           </div>
 
           {/* Input Field */}
           <div>
             <label className="block text-sm font-semibold text-black mb-2">
-              {selectedMethod === "SMS" ? "Mobile Number" : "Email Address"}
+              {selectedMethod === "SMS" ? t('signup.phone_number') : t('signup.email_address')}
             </label>
             {selectedMethod === "SMS" ? (
               <div className="flex bg-background border border-gray-100 rounded-lg overflow-hidden focus-within:border-primary transition-colors">
@@ -437,7 +439,7 @@ function SignUp() {
                   type="text"
                   value={phoneNumberInput}
                   onChange={function(e) { handlePhoneInputVerify(e.target.value); }}
-                  placeholder="98765 43210"
+                  placeholder={t('login.placeholder_phone')}
                   className="w-full px-4 py-4 bg-transparent outline-none text-base font-medium placeholder:text-gray-300"
                 />
               </div>
@@ -446,7 +448,7 @@ function SignUp() {
                 type="email"
                 value={emailInputVerify}
                 onChange={function(e) { setEmailInputVerify(e.target.value); }}
-                placeholder="yourname@gmail.com"
+                placeholder={t('login.placeholder_email')}
                 className="w-full px-4 py-4 bg-background border border-gray-100 rounded-lg outline-none text-base font-medium placeholder:text-gray-300 focus-within:border-primary transition-colors"
               />
             )}
@@ -462,7 +464,7 @@ function SignUp() {
                 : 'bg-primaryLight text-white hover:bg-primary hover:cursor-pointer active:scale-[0.98]'
             }`}
           >
-            {isSendingOtp ? 'Sending...' : isOtpSent ? 'OTP Sent' : 'Send OTP'}
+            {isSendingOtp ? t('login.sending') : isOtpSent ? t('signup.otp_sent_label') : t('login.send_otp')}
           </button>
         </div>
       );
@@ -492,20 +494,20 @@ function SignUp() {
                 />
               </label>
             </div>
-            <p className="text-xs text-secondaryDark">Upload profile picture</p>
+            <p className="text-xs text-secondaryDark">{t('signup.upload_photo')}</p>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
                 <People size={16} defaultColor="#316F5D" />
-                First Name
+                {t('signup.first_name')}
               </label>
               <input 
                 type="text"
                 value={formData.firstName}
                 onChange={function(e) { handleInputChange("firstName", e.target.value); }}
-                placeholder="Enter first name"
+                placeholder={t('signup.placeholder_first_name')}
                 className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
               />
             </div>
@@ -513,13 +515,13 @@ function SignUp() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
                 <People size={16} defaultColor="#316F5D" />
-                Last Name
+                {t('signup.last_name')}
               </label>
               <input 
                 type="text"
                 value={formData.lastName}
                 onChange={function(e) { handleInputChange("lastName", e.target.value); }}
-                placeholder="Enter last name"
+                placeholder={t('signup.placeholder_last_name')}
                 className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
               />
             </div>
@@ -534,7 +536,7 @@ function SignUp() {
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               {isEmailSignup ? <Email size={16} defaultColor="#316F5D" /> : <Mobile size={16} defaultColor="#316F5D" />}
-              Primary Contact (Verified)
+              {t('signup.primary_contact')}
             </label>
             <input 
               type="text"
@@ -542,20 +544,20 @@ function SignUp() {
               disabled
               className="w-full px-4 py-3 bg-gray-100 rounded-medium text-sm text-gray-500 border border-gray-200 cursor-not-allowed"
             />
-            <p className="text-xs text-gray-400 mt-1">This is your verified contact from step 1</p>
+            <p className="text-xs text-gray-400 mt-1">{t('signup.verified_contact_hint')}</p>
           </div>
 
           {isEmailSignup ? (
             <div className="space-y-2">
               <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
                 <Mobile size={16} defaultColor="#316F5D" />
-                Phone Number
+                {t('signup.phone_number')}
               </label>
               <input 
                 type="tel"
                 value={formData.phoneNumber}
                 onChange={function(e) { handleInputChange("phoneNumber", e.target.value); }}
-                placeholder="Enter phone number"
+                placeholder={t('signup.placeholder_phone')}
                 className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
               />
             </div>
@@ -563,13 +565,13 @@ function SignUp() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
                 <Email size={16} defaultColor="#316F5D" />
-                Email Address
+                {t('signup.email_address')}
               </label>
               <input 
                 type="email"
                 value={formData.email}
                 onChange={function(e) { handleInputChange("email", e.target.value); }}
-                placeholder="Enter email address"
+                placeholder={t('signup.placeholder_email')}
                 className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
               />
             </div>
@@ -582,7 +584,7 @@ function SignUp() {
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               <Location size={16} defaultColor="#316F5D" />
-              District
+              {t('signup.district')}
             </label>
 <select
               value={selectedDistrictId}
@@ -594,7 +596,7 @@ function SignUp() {
               }}
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none"
             >
-              <option value="">Select district</option>
+              <option value="">{t('signup.select_district')}</option>
               {districts.map(function(district) {
                 return <option key={district.district_id} value={district.district_id}>{district.district_name}</option>;
               })}
@@ -604,7 +606,7 @@ function SignUp() {
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               <Location size={16} defaultColor="#316F5D" />
-              Ward Name
+              {t('signup.ward_name')}
             </label>
 <select
               value={selectedWardId}
@@ -617,7 +619,7 @@ function SignUp() {
               disabled={!selectedDistrictId}
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="">Select ward</option>
+              <option value="">{t('signup.select_ward')}</option>
               {wards.map(function(ward) {
                 return <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>;
               })}
@@ -627,7 +629,7 @@ function SignUp() {
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               <Location size={16} defaultColor="#316F5D" />
-              Street Name
+              {t('signup.street_name')}
             </label>
 <select
               value={formData.streetName}
@@ -635,7 +637,7 @@ function SignUp() {
               disabled={!selectedWardId}
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out cursor-pointer appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="">Select street</option>
+              <option value="">{t('signup.select_street')}</option>
               {streets.map(function(street) {
                 return <option key={street.street_id} value={street.street_name}>{street.street_name}</option>;
               })}
@@ -645,13 +647,13 @@ function SignUp() {
           <div className="space-y-2">
             <label className="text-sm font-medium text-secondaryDark flex items-center gap-2">
               <Home size={16} defaultColor="#316F5D" />
-              House Number / Flat Number
+              {t('signup.house_number_label')}
             </label>
             <input 
               type="text"
               value={formData.houseNumber}
               onChange={function(e) { handleInputChange("houseNumber", e.target.value); }}
-              placeholder="Enter house or flat number"
+              placeholder={t('signup.placeholder_house_number')}
               className="w-full px-4 py-3 bg-secondary rounded-medium text-sm text-secondaryDark placeholder:text-secondaryDark/50 border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
             />
           </div>
@@ -694,7 +696,7 @@ function SignUp() {
                       onClick={handleBack}
                       className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                     >
-                      Back
+                      {t('common:back')}
                     </button>
                   )}
                   <button
@@ -707,7 +709,7 @@ function SignUp() {
                         : 'bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]'
                     }`}
                   >
-                    {isLoading ? "Loading..." : (currentStep === 3 ? "Create Account" : "Continue")}
+                    {isLoading ? t('signup.loading') : (currentStep === 3 ? t('signup.create_account_btn') : t('signup.continue'))}
                   </button>
                 </div>
               )}
@@ -715,7 +717,7 @@ function SignUp() {
 
             <div className="mt-6 text-center">
               <p className="text-xs text-secondaryDark">
-                Step {currentStep + 1} of 4
+                {t('signup.step_label', { current: currentStep + 1, total: 4 })}
               </p>
             </div>
           </div>
@@ -724,8 +726,8 @@ function SignUp() {
         <div className="hidden lg:flex min-h-screen">
           <div className="w-1/3 bg-white p-12 flex flex-col justify-center">
             <div className="mb-12">
-              <h2 className="text-xl font-bold text-primary mb-2">Create Account</h2>
-              <p className="text-sm text-secondaryDark">Complete all steps to join our platform</p>
+              <h2 className="text-xl font-bold text-primary mb-2">{t('signup.create_account_title')}</h2>
+              <p className="text-sm text-secondaryDark">{t('signup.complete_all_steps')}</p>
             </div>
 
             <div className="space-y-2">
@@ -764,7 +766,7 @@ function SignUp() {
                         onClick={handleBack}
                         className="flex-1 bg-secondary text-primary py-3 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                       >
-                        Back
+                        {t('common:back')}
                       </button>
                     )}
                     <button
@@ -777,7 +779,7 @@ function SignUp() {
                           : 'bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]'
                       }`}
                     >
-                      {isLoading ? "Loading..." : (currentStep === 3 ? "Create Account" : "Continue")}
+                      {isLoading ? t('signup.loading') : (currentStep === 3 ? t('signup.create_account_btn') : t('signup.continue'))}
                     </button>
                   </div>
                 )}

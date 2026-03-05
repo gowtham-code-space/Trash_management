@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { Search, Filter, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import ConfigDivisionModal from "../../../../components/Modals/MHO/ConfigDivision/ConfigDivisionModal";
@@ -8,6 +9,7 @@ import ToastNotification from "../../../../components/Notification/ToastNotifica
 import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
 function ConfigDivision() {
+    const { t } = useTranslation(["pages", "common"]);
     const { isDarkTheme } = ThemeStore();
     
     const [searchVisible, setSearchVisible] = useState(false);
@@ -71,7 +73,7 @@ function ConfigDivision() {
     function handleFilterApply(selectedZones) {
         setSelectedZoneFilters(selectedZones);
         setFilterVisible(false);
-        ToastNotification("Filter applied successfully", "success");
+        ToastNotification(t('common:filter_applied'), "success");
     }
 
     function handleZoneSelect(zoneName) {
@@ -84,7 +86,7 @@ function ConfigDivision() {
 
     function handleAddDivision() {
         if (!selectedZone) {
-        ToastNotification("Please select a zone first", "error");
+        ToastNotification(t('pages:commissioner.config_division.toast_select_zone_first'), "error");
         return;
         }
 
@@ -98,7 +100,7 @@ function ConfigDivision() {
         };
 
         setDivisions([...divisions, newDivision]);
-        ToastNotification("Draft division added to " + selectedZone, "success");
+        ToastNotification(t('pages:commissioner.config_division.toast_draft_division_added', { zoneName: selectedZone }), "success");
     }
 
     function handleEditStart(division) {
@@ -112,7 +114,7 @@ function ConfigDivision() {
         }));
         setEditingDivision(null);
         setEditValue("");
-        ToastNotification("Division updated successfully", "success");
+        ToastNotification(t('pages:commissioner.config_division.toast_division_updated'), "success");
     }
 
     function handleEditCancel() {
@@ -123,7 +125,7 @@ function ConfigDivision() {
     function handleDeleteConfirm(divisionId) {
         setDivisions(divisions.filter(function(d) { return d.id !== divisionId; }));
         setDeleteModal({ visible: false, divisionId: null });
-        ToastNotification("Division deleted successfully", "success");
+        ToastNotification(t('pages:commissioner.config_division.toast_division_deleted'), "success");
     }
 
     function handleMoveDivision(divisionId, newZone) {
@@ -131,7 +133,7 @@ function ConfigDivision() {
             return d.id === divisionId ? { ...d, zone: newZone } : d;
         }));
         setMoveModal({ visible: false, division: null });
-        ToastNotification("Division moved to " + newZone + " successfully", "success");
+        ToastNotification(t('pages:commissioner.config_division.toast_division_moved', { zoneName: newZone }), "success");
     }
 
     function handleDivisionClick(division, event) {
@@ -204,14 +206,14 @@ function ConfigDivision() {
                         {division.name}
                     </h3>
                     <p className="text-xs text-secondaryDark mt-1">
-                        {division.wards} Wards • {division.streets} Streets
+                        {division.wards} {t('common:wards')} • {division.streets} {t('common:streets')}
                     </p>
                     <p className="text-xs text-primary font-bold mt-1">
                         {division.zone}
                     </p>
                     {division.isDraft && (
                         <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
-                        Draft
+                        {t('common:draft')}
                         </span>
                     )}
                     </>
@@ -248,7 +250,7 @@ function ConfigDivision() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Edit size={14} />
-                        <span>Edit</span>
+                        <span>{t('common:edit')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -262,7 +264,7 @@ function ConfigDivision() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Trash size={14} defaultColor="#E75A4C" />
-                        <span>Delete</span>
+                        <span>{t('common:delete')}</span>
                     </button>
                     </div>
                 )}
@@ -281,14 +283,14 @@ function ConfigDivision() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ALL DIVISIONS ({filteredDivisions.length})
+                    {t('pages:commissioner.config_division.all_divisions')} ({filteredDivisions.length})
                     </h2>
                     
                     <div className="flex items-center gap-2">
                     {searchVisible && (
                         <input
                         type="text"
-                        placeholder="Search divisions..."
+                        placeholder={t('pages:commissioner.config_division.search_placeholder')}
                         value={searchQuery}
                         onChange={function(e) { setSearchQuery(e.target.value); }}
                         className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -333,7 +335,7 @@ function ConfigDivision() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    TARGET ZONES ({zones.length})
+                    {t('pages:commissioner.config_division.target_zones')} ({zones.length})
                     </h2>
                     
                     <button
@@ -343,7 +345,7 @@ function ConfigDivision() {
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             transition-all duration-200 ease-in-out"
                     >
-                    Add Division
+                    {t('pages:commissioner.config_division.add_division_btn')}
                     </button>
                 </div>
 
@@ -366,7 +368,7 @@ function ConfigDivision() {
                             {zone.name}
                             </h3>
                             <span className="text-xs text-secondaryDark">
-                            {zone.divisions.length} Divisions
+                            {zone.divisions.length} {t('common:divisions')}
                             </span>
                         </div>
 
@@ -408,8 +410,8 @@ function ConfigDivision() {
 
             {deleteModal.visible && (
             <ConfigDivisionModal
-                title="Delete Division"
-                message="Are you sure you want to delete this division? This action cannot be undone."
+                title={t('pages:commissioner.config_division.delete_division_title')}
+                message={t('pages:commissioner.config_division.delete_division_message')}
                 onConfirm={function() { handleDeleteConfirm(deleteModal.divisionId); }}
                 onCancel={function() { setDeleteModal({ visible: false, divisionId: null }); }}
             />

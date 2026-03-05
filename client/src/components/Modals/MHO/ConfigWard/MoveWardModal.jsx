@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { X, Check } from "../../../../assets/icons/icons";
 
 function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
   const [selectedDivision, setSelectedDivision] = useState(ward?.division || "");
 
   function handleConfirm() {
@@ -20,7 +22,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
         <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-large p-6 max-w-lg w-full mx-4 border border-secondary">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-secondaryDark">
-              Move Ward
+              {t('modals:mho_move_ward.title')}
             </h3>
             <button
               onClick={onCancel}
@@ -35,7 +37,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
           
           <div className="mb-6">
             <div className="bg-background rounded-medium p-4 mb-4">
-              <p className="text-xs text-secondaryDark/60 mb-1">Ward</p>
+              <p className="text-xs text-secondaryDark/60 mb-1">{t('modals:mho_move_ward.ward_label')}</p>
               <p className="text-sm font-bold text-secondaryDark">
                 {ward?.ward_number}
               </p>
@@ -43,17 +45,17 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
                 {ward?.ward_name}
               </p>
               <p className="text-xs text-secondaryDark mt-2">
-                {ward?.streets} Streets
+                {t('modals:mho_move_ward.streets_count', { count: ward?.streets })}
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-bold text-secondaryDark mb-3">
-                Current Division: <span className="text-primary">{ward?.division}</span>
+                {t('modals:mho_move_ward.current_division')} <span className="text-primary">{ward?.division}</span>
               </label>
               
               <p className="text-sm font-bold text-secondaryDark mb-2">
-                Select New Division
+                {t('modals:mho_move_ward.select_new_division')}
               </p>
               
               <div className="space-y-2">
@@ -81,7 +83,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
                             {division.name}
                           </p>
                           <p className="text-xs text-secondaryDark/60 mt-1">
-                            {division.wards.length} Ward{division.wards.length !== 1 ? 's' : ''}
+                            {t('modals:mho_move_ward.ward_count', { count: division.wards.length })}
                           </p>
                         </div>
                         {isSelected && !isCurrentDivision && (
@@ -91,7 +93,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
                         )}
                         {isCurrentDivision && (
                           <span className="text-xs text-secondaryDark/60 font-bold">
-                            Current
+                            {t('common:current')}
                           </span>
                         )}
                       </div>
@@ -110,7 +112,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20
                         transition-all duration-200 ease-in-out"
             >
-              Cancel
+              {t('common:cancel')}
             </button>
             
             <button
@@ -122,7 +124,7 @@ function MoveWardModal({ ward, divisions, onConfirm, onCancel }) {
                           ? "bg-secondary text-secondaryDark/40 cursor-not-allowed"
                           : "bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"}`}
             >
-              Move Ward
+              {t('modals:mho_move_ward.move_ward')}
             </button>
           </div>
         </div>

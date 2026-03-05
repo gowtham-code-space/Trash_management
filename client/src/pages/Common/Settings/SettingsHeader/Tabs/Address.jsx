@@ -6,8 +6,10 @@ import UpdateAddressInfo from "../../../../../components/Modals/Settings/UpdateA
 import { getAddress, updateAddress } from "../../../../../services/features/settingsService";
 import { getDistricts, getWardsByDistrict, getStreetsByWard } from "../../../../../services/features/authService";
 import { SkeletonLine } from "../../../../../components/skeleton";
+import { useTranslation } from "react-i18next";
 
 function Address() {
+    const { t } = useTranslation('settings');
     const [isEditMode, setIsEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ function Address() {
             }
         } catch (error) {
             console.error('Error fetching address:', error);
-            ToastNotification(error.response?.data?.message || "Failed to load address", "error");
+            ToastNotification(error.response?.data?.message || t('address.failed_load'), "error");
         } finally {
             setLoading(false);
         }
@@ -168,16 +170,16 @@ function Address() {
             });
             
             if (response.sameAsPrevious) {
-                ToastNotification(response.message || "Fields same as previous values", "info");
+                ToastNotification(response.message || t('address.same_as_previous'), "info");
                 setIsEditMode(false);
             } else if (response.success) {
-                ToastNotification("Address updated successfully", "success");
+                ToastNotification(t('address.address_updated'), "success");
                 setIsEditMode(false);
                 await fetchAddress();
             }
         } catch (error) {
             console.error('Error updating address:', error);
-            ToastNotification(error.response?.data?.message || "Failed to update address", "error");
+            ToastNotification(error.response?.data?.message || t('address.failed_update'), "error");
         } finally {
             setIsUpdating(false);
         }
@@ -240,7 +242,7 @@ function Address() {
         <div className="max-w-2xl mx-auto">
             <div className="bg-white border border-secondary rounded-large shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold text-primary">Your Address</h3>
+                <h3 className="text-lg font-bold text-primary">{t('address.title')}</h3>
                 {!isEditMode ? (
                 <button
                     onClick={handleEditButtonClick}
@@ -248,7 +250,7 @@ function Address() {
                     className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <Edit size={16} isDarkTheme={true} />
-                    {isLoadingEdit ? 'Loading...' : (!canEdit && nextEditDate ? `Can edit on ${nextEditDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}` : 'Edit')}
+                    {isLoadingEdit ? t('common:loading') : (!canEdit && nextEditDate ? t('address.can_edit_on', { date: nextEditDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }) : t('common:edit'))}
                 </button>
                 ) : (
                 <div className="flex items-center gap-2">
@@ -258,7 +260,7 @@ function Address() {
                     className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-secondary text-primary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                     <X size={16} defaultColor="#145B47" />
-                    Cancel
+                    {t('common:cancel')}
                     </button>
                     <button
                     onClick={handleDoneClick}
@@ -266,7 +268,7 @@ function Address() {
                     className="px-4 py-2 rounded-large text-sm font-bold flex items-center gap-2 bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                     <Check size={16} isDarkTheme={true} />
-                    {isUpdating ? "Saving..." : "Done"}
+                    {isUpdating ? t('common:saving') : t('common:save')}
                     </button>
                 </div>
                 )}
@@ -275,7 +277,7 @@ function Address() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    District
+                    {t('address.district')}
                 </label>
                 {isEditMode ? (
                     <select
@@ -283,21 +285,21 @@ function Address() {
                     onChange={handleDistrictChange}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer"
                     >
-                    <option value="">Select District</option>
+                    <option value="">{t('address.select_district')}</option>
                     {districts.map(function(district) {
                         return <option key={district.district_id} value={district.district_id}>{district.district_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.districtName || "Not set"}
+                    {addressData.districtName || t('address.not_set')}
                     </div>
                 )}
                 </div>
 
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    Ward Number & Name
+                    {t('address.ward_full')}
                 </label>
                 {isEditMode ? (
                     <select
@@ -306,21 +308,21 @@ function Address() {
                     disabled={!tempDistrictId}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                    <option value="">Select Ward</option>
+                    <option value="">{t('address.select_ward')}</option>
                     {wards.map(function(ward) {
                         return <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_number} - {ward.ward_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.wardName || "Not set"}
+                    {addressData.wardName || t('address.not_set')}
                     </div>
                 )}
                 </div>
 
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    Street Name
+                    {t('address.street')}
                 </label>
                 {isEditMode ? (
                     <select
@@ -329,21 +331,21 @@ function Address() {
                     disabled={!tempWardId}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                    <option value="">Select Street</option>
+                    <option value="">{t('address.select_street')}</option>
                     {streets.map(function(street) {
                         return <option key={street.street_id} value={street.street_id}>{street.street_name}</option>;
                     })}
                     </select>
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.streetName || "Not set"}
+                    {addressData.streetName || t('address.not_set')}
                     </div>
                 )}
                 </div>
 
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    House / Flat Number
+                    {t('address.house_number')}
                 </label>
                 {isEditMode ? (
                     <input
@@ -353,11 +355,11 @@ function Address() {
                         setTempHouseNumber(e.target.value);
                     }}
                     className="w-full bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200"
-                    placeholder="Enter house/flat number"
+                    placeholder={t('address.house_number_placeholder')}
                     />
                 ) : (
                     <div className="bg-background border border-secondary rounded-medium px-3 py-2 text-sm text-secondaryDark">
-                    {addressData.houseNumber || "Not set"}
+                    {addressData.houseNumber || t('address.not_set')}
                     </div>
                 )}
                 </div>

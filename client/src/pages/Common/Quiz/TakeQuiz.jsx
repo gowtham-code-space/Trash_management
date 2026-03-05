@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import QuizResultModal from "../../../components/Modals/Quiz/QuizResultModal";
 import ConfirmModal from "../../../components/Modals/Quiz/ConfirmModal";
@@ -10,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 
 function TakeQuiz() {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
     const location = useLocation();
     const navigate = useNavigate();
     
@@ -60,27 +62,27 @@ function TakeQuiz() {
                         setAnswers(savedAnswers);
                         setMarkedForReview(markedQuestions);
                         
-                        ToastNotification('Quiz resumed successfully', 'success');
+                        ToastNotification(t('pages:common.take_quiz.toast_resumed'), 'success');
                     } else if (response.autoSubmitted && response.result) {
-                        ToastNotification('Quiz was expired and has been auto-submitted', 'info');
+                        ToastNotification(t('pages:common.take_quiz.toast_expired'), 'info');
                         setQuizResult(response.result);
                         setShowResultModal(true);
                         setIsLoading(false);
                         return;
                     } else {
-                        ToastNotification(response.message || 'Failed to resume quiz', 'error');
+                        ToastNotification(response.message || t('pages:common.take_quiz.toast_failed_resume'), 'error');
                         navigate('/quiz');
                         return;
                     }
                 } else {
                     // No quiz data provided
-                    ToastNotification('No quiz data found', 'error');
+                    ToastNotification(t('pages:common.take_quiz.toast_no_data'), 'error');
                     navigate('/quiz');
                     return;
                 }
             } catch (error) {
                 console.error('Error loading quiz:', error);
-                ToastNotification('Failed to load quiz', 'error');
+                ToastNotification(t('pages:common.take_quiz.toast_failed_load'), 'error');
                 navigate('/quiz');
             } finally {
                 setIsLoading(false);
@@ -98,17 +100,17 @@ function TakeQuiz() {
             setTimeRemaining(prev => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    ToastNotification('Time expired! Submitting quiz...', 'warning');
+                    ToastNotification(t('pages:common.take_quiz.toast_time_expired'), 'warning');
                     submitQuiz(quizData.quiz_id).then(response => {
                         if (response.success) {
                             setQuizResult(response.data);
                             setShowResultModal(true);
                         } else {
-                            ToastNotification(response.message || 'Failed to submit quiz', 'error');
+                            ToastNotification(response.message || t('pages:common.take_quiz.toast_failed_submit'), 'error');
                         }
                     }).catch(error => {
                         console.error('Error auto-submitting quiz:', error);
-                        ToastNotification('Failed to submit quiz', 'error');
+                        ToastNotification(t('pages:common.take_quiz.toast_failed_submit'), 'error');
                     });
                     return 0;
                 }
@@ -130,7 +132,7 @@ function TakeQuiz() {
             <div className={`min-h-screen ${isDarkTheme ? "bg-darkBackground" : "bg-background"} flex items-center justify-center`}>
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>Loading quiz...</p>
+                    <p className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>{t('pages:common.take_quiz.loading_quiz')}</p>
                 </div>
             </div>
         );
@@ -167,7 +169,7 @@ function TakeQuiz() {
             });
         } catch (error) {
             console.error('Error marking question:', error);
-            ToastNotification('Failed to mark question for review', 'error');
+            ToastNotification(t('pages:common.take_quiz.toast_failed_mark_review'), 'error');
         }
     }
 
@@ -232,11 +234,11 @@ function TakeQuiz() {
                 setShowResultModal(true);
                 console.log('States updated - modal should show');
             } else {
-                ToastNotification(response.message || 'Failed to submit quiz', 'error');
+                ToastNotification(response.message || t('pages:common.take_quiz.toast_failed_submit'), 'error');
             }
         } catch (error) {
             console.error('Error submitting quiz:', error);
-            ToastNotification('Failed to submit quiz', 'error');
+            ToastNotification(t('pages:common.take_quiz.toast_failed_submit'), 'error');
         } finally {
             setIsSubmitting(false);
         }
@@ -264,11 +266,11 @@ function TakeQuiz() {
                 setShowResultModal(true);
                 console.log('States updated (confirmSubmit) - modal should show');
             } else {
-                ToastNotification(response.message || 'Failed to submit quiz', 'error');
+                ToastNotification(response.message || t('pages:common.take_quiz.toast_failed_submit'), 'error');
             }
         } catch (error) {
             console.error('Error submitting quiz:', error);
-            ToastNotification('Failed to submit quiz', 'error');
+            ToastNotification(t('pages:common.take_quiz.toast_failed_submit'), 'error');
         } finally {
             setIsSubmitting(false);
         }
@@ -320,7 +322,7 @@ function TakeQuiz() {
                         hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]`}
             >
-            {showPaletteMobile ? "Hide" : "Show"} Question Palette
+            {showPaletteMobile ? t('pages:common.take_quiz.hide_palette') : t('pages:common.take_quiz.show_palette')}
             </button>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
@@ -332,7 +334,7 @@ function TakeQuiz() {
                                 : "bg-white border-gray-200"}`}>
                 <h2 className={`text-base font-semibold mb-4
                                 ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                    Question Palette
+                    {t('pages:common.take_quiz.question_palette')}
                 </h2>
 
                 {/* Question Grid */}
@@ -359,19 +361,19 @@ function TakeQuiz() {
                                 ${isDarkTheme ? "border-darkBorder" : "border-gray-200"}`}>
                     <div className="flex justify-between">
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>
-                        Answered:
+                        {t('pages:common.take_quiz.answered_count')}
                     </span>
                     <span className="font-medium text-success">{answeredCount}</span>
                     </div>
                     <div className="flex justify-between">
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>
-                        Not Answered:
+                        {t('pages:common.take_quiz.not_answered_count')}
                     </span>
                     <span className="font-medium text-error">{unansweredCount}</span>
                     </div>
                     <div className="flex justify-between">
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-gray-500"}>
-                        Marked for Review:
+                        {t('pages:common.take_quiz.review_count')}
                     </span>
                     <span className="font-medium text-primaryLight">{markedForReview.size}</span>
                     </div>
@@ -386,7 +388,7 @@ function TakeQuiz() {
                                     : "bg-success/10 border-success/20"}`}>
                     </div>
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}>
-                        Answered
+                        {t('pages:common.take_quiz.legend_answered')}
                     </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -396,7 +398,7 @@ function TakeQuiz() {
                                     : "bg-white border-gray-300"}`}>
                     </div>
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}>
-                        Not Visited
+                        {t('pages:common.take_quiz.legend_not_visited')}
                     </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -406,7 +408,7 @@ function TakeQuiz() {
                                     : "bg-primaryLight border-primaryLight"}`}>
                     </div>
                     <span className={isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}>
-                        Review
+                        {t('pages:common.take_quiz.legend_review')}
                     </span>
                     </div>
                 </div>
@@ -423,10 +425,10 @@ function TakeQuiz() {
                 <div>
                     <h3 className={`text-base font-semibold
                                 ${isDarkTheme ? "text-primaryLight" : "text-primary"}`}>
-                    Question {currentQuestionIndex + 1} of {totalQuestions}
+                    {t('pages:common.take_quiz.question_label')} {currentQuestionIndex + 1} {t('pages:common.take_quiz.of_label')} {totalQuestions}
                     </h3>
                     <p className={`text-xs mt-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-gray-600"}`}>
-                        Time Remaining: {formatTime(timeRemaining)}
+                        {t('pages:common.take_quiz.time_remaining')} {formatTime(timeRemaining)}
                     </p>
                 </div>
                 <button
@@ -437,7 +439,7 @@ function TakeQuiz() {
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isSubmitting ? 'Submitting...' : 'Submit Quiz'}
+                    {isSubmitting ? t('pages:common.take_quiz.submitting_btn') : t('pages:common.take_quiz.submit_quiz_btn')}
                 </button>
                 </div>
 
@@ -511,7 +513,7 @@ function TakeQuiz() {
                                 disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                     <LeftArrow size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
-                    Previous
+                    {t('pages:common.take_quiz.previous_btn')}
                     </button>
 
                     <button
@@ -525,7 +527,7 @@ function TakeQuiz() {
                                 hover:scale-[0.99] active:scale-[0.99]
                                 focus:outline-none focus:ring-2 focus:ring-primaryLight/20 focus:scale-[0.99]`}
                     >
-                    {markedForReview.has(currentQuestionIndex) ? "Unmark Review" : "Mark for Review"}
+                    {markedForReview.has(currentQuestionIndex) ? t('pages:common.take_quiz.unmark_review') : t('pages:common.take_quiz.mark_for_review')}
                     </button>
                 </div>
 
@@ -540,7 +542,7 @@ function TakeQuiz() {
                                 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
                                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]`}
                     >
-                    Clear Response
+                    {t('pages:common.take_quiz.clear_response')}
                     </button>
 
                     <button
@@ -551,7 +553,7 @@ function TakeQuiz() {
                                 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                                 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                    Next
+                    {t('pages:common.take_quiz.next_btn')}
                     <RightArrow size={16} defaultColor="#fff" />
                     </button>
                 </div>
@@ -564,10 +566,10 @@ function TakeQuiz() {
         {showConfirmModal && (
             <ConfirmModal
                 isOpen={showConfirmModal}
-                title="Submit Quiz"
-                message={`You have answered ${Object.keys(answers).length} out of ${totalQuestions} questions. Are you sure you want to submit?`}
-                confirmText="Submit"
-                cancelText="Cancel"
+                title={t('pages:common.take_quiz.submit_quiz_title')}
+                message={t('pages:common.take_quiz.submit_quiz_message', { answered: Object.keys(answers).length, total: totalQuestions })}
+                confirmText={t('common:submit')}
+                cancelText={t('common:cancel')}
                 type="submit"
                 onConfirm={confirmSubmit}
                 onClose={() => setShowConfirmModal(false)}

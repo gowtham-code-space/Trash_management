@@ -17,47 +17,49 @@ import ToastNotification from "../../components/Notification/ToastNotification";
 import ThemeStore from "../../store/ThemeStore";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function SupervisorDashboard() {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
     const [isMapExpanded, setIsMapExpanded] = useState(false);
+    const { t } = useTranslation('pages');
 
     function handleGenerateReport() {
-        ToastNotification("Generating daily zone summary PDF", "info");
+        ToastNotification(t('supervisor.dashboard.toast_report'), "info");
     }
 
     function handleBroadcastAlert() {
-        ToastNotification("Opening broadcast message panel", "info");
+        ToastNotification(t('supervisor.dashboard.toast_broadcast'), "info");
     }
 
     function handleManageShifts() {
-        ToastNotification("Loading weekly roster management", "info");
+        ToastNotification(t('supervisor.dashboard.toast_shifts'), "info");
     }
 
     function handleEmergencyStop() {
-        ToastNotification("Emergency stop initiated", "warning");
+        ToastNotification(t('supervisor.dashboard.toast_emergency'), "warning");
     }
 
     function handleNotificationClick() {
-        ToastNotification("You have 5 new notifications", "info");
+        ToastNotification(t('supervisor.dashboard.toast_notifications', { count: 5 }), "info");
     }
 
     function handleZoomIn() {
-        ToastNotification("Zooming in", "info");
+        ToastNotification(t('shared.zoom_in_toast'), "info");
     }
 
     function handleZoomOut() {
-        ToastNotification("Zooming out", "info");
+        ToastNotification(t('shared.zoom_out_toast'), "info");
     }
 
     function handleLocate() {
-        ToastNotification("Locating supervisor position", "info");
+        ToastNotification(t('supervisor.dashboard.toast_locate'), "info");
     }
 
     function handleExpandMap() {
         setIsMapExpanded(!isMapExpanded);
-        ToastNotification(isMapExpanded ? "Map view minimized" : "Map view expanded", "info");
+        ToastNotification(isMapExpanded ? t('shared.map_minimized') : t('shared.map_expanded'), "info");
     }
 
     return (
@@ -72,20 +74,20 @@ function SupervisorDashboard() {
                     {/* Total Collectors */}
                     <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Collectors</p>
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('supervisor.dashboard.total_collectors')}</p>
                             <People size={18} defaultColor="#145B47" />
                         </div>
                         <h3 className="text-xl font-bold text-black mb-2">32</h3>
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                            <p className="text-xs font-medium text-primary">Full Staff Assigned</p>
+                            <p className="text-xs font-medium text-primary">{t('supervisor.dashboard.full_staff_assigned')}</p>
                         </div>
                     </div>
 
                     {/* Attendance Today */}
                     <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Attendance Today</p>
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('shared.attendance_today')}</p>
                             <Certificate size={18} defaultColor="#145B47" />
                         </div>
                         <h3 className="text-xl font-bold text-black mb-2">
@@ -93,20 +95,20 @@ function SupervisorDashboard() {
                         </h3>
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                            <p className="text-xs font-medium text-yellow-600">3 Absent</p>
+                            <p className="text-xs font-medium text-yellow-600">{t('shared.absent_count', { count: 3 })}</p>
                         </div>
                     </div>
 
                     {/* Pending Complaints */}
                     <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Pending Complaints</p>
+                            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('supervisor.dashboard.pending_complaints')}</p>
                             <Task size={18} defaultColor="#145B47" />
                         </div>
                         <h3 className="text-xl font-bold text-black mb-2">5</h3>
                         <div className="flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                            <p className="text-xs font-medium text-red-500">2 Overdue &gt; 24h</p>
+                            <p className="text-xs font-medium text-red-500">{t('shared.overdue_count', { count: 2 })}</p>
                         </div>
                     </div>
                 </div>
@@ -122,7 +124,7 @@ function SupervisorDashboard() {
                 {/* Live Satellite View Badge */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Live Satellite View</p>
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">{t('shared.live_satellite_view')}</p>
                 </div>
 
                 {/* Expand Button */}
@@ -131,7 +133,7 @@ function SupervisorDashboard() {
                     className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                     <Expand size={14} defaultColor="#145B47" />
-                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Expand</p>
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">{t('shared.expand')}</p>
                 </button>
                 
                 {/* Map Controls */}
@@ -159,7 +161,7 @@ function SupervisorDashboard() {
 
                 {/* MOBILE/MID QUICK ACTIONS */}
                 <div className="lg:hidden space-y-3">
-                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">Quick actions</h2>
+                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">{t('shared.quick_actions')}</h2>
                     <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                         
                         {/* Mark attendance */}
@@ -171,8 +173,8 @@ function SupervisorDashboard() {
                                 <People size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Mark Attendance</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Trashmen attendance</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.mark_attendance_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.mark_attendance_sub')}</p>
                             </div>
                         </div>
 
@@ -185,8 +187,8 @@ function SupervisorDashboard() {
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Immediate Tasks</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View all complaints</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.tasks_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.tasks_sub')}</p>
                             </div>
                         </div>
 
@@ -199,8 +201,8 @@ function SupervisorDashboard() {
                                 <Search size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Search Trashmen</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View all Trashmen</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.search_trashmen_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.search_trashmen_sub')}</p>
                             </div>
                         </div>
 
@@ -213,8 +215,8 @@ function SupervisorDashboard() {
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Create Feedback</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Feedback for Trashman</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.feedback_create_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.feedback_create_sub')}</p>
                             </div>
                         </div>
 
@@ -227,8 +229,8 @@ function SupervisorDashboard() {
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Submit feedback</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Feedback for SI</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.feedback_submit_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.feedback_submit_sub')}</p>
                             </div>
                         </div>
 
@@ -241,8 +243,8 @@ function SupervisorDashboard() {
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Quiz</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Take your Quiz</p>
+                                <p className="text-sm font-bold leading-tight">{t('supervisor.dashboard.quiz_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.quiz_sub')}</p>
                             </div>
                         </div>
 
@@ -255,8 +257,8 @@ function SupervisorDashboard() {
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">ID card</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Checkout your Id card</p>
+                                <p className="text-sm font-bold leading-tight">{t('shared.id_card_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('supervisor.dashboard.id_card_sub')}</p>
                             </div>
                         </div>
 
@@ -269,10 +271,10 @@ function SupervisorDashboard() {
                         <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                         </div>
-                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">Daily eco tip</h3>
+                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.daily_eco_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                        "Efficient route planning can reduce fuel consumption by up to 20% daily."
+                        "{t('supervisor.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
@@ -286,7 +288,7 @@ function SupervisorDashboard() {
                 <div className="bg-white border border-secondary rounded-large p-5 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
                     <div className="w-1.5 h-4 bg-primary rounded-full" />
-                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">Quick actions</h2>
+                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">{t('shared.quick_actions')}</h2>
                     </div>
                     
                     <div className="space-y-3">
@@ -300,8 +302,8 @@ function SupervisorDashboard() {
                                     <People size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Mark Attendance</p>
-                                    <p className="text-xs text-gray-500 font-medium">Trashmen attendance</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('supervisor.dashboard.mark_attendance_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('supervisor.dashboard.mark_attendance_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -317,8 +319,8 @@ function SupervisorDashboard() {
                                     <Notification size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Immediate Tasks</p>
-                                    <p className="text-xs text-gray-500 font-medium">View all complaints</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('supervisor.dashboard.tasks_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('supervisor.dashboard.tasks_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -334,8 +336,8 @@ function SupervisorDashboard() {
                                     <Search size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Search Trashmen</p>
-                                    <p className="text-xs text-gray-500 font-medium">View all Trashmen</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('supervisor.dashboard.search_trashmen_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('supervisor.dashboard.search_trashmen_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -351,8 +353,8 @@ function SupervisorDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Create Feedback session</p>
-                                    <p className="text-xs text-gray-500 font-medium">Feedback for Trashmen</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('supervisor.dashboard.feedback_create_label_long')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('supervisor.dashboard.feedback_create_sub_long')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -368,8 +370,8 @@ function SupervisorDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Submit feedback</p>
-                                    <p className="text-xs text-gray-500 font-medium">Submit feedback for Sanitary inspector</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('supervisor.dashboard.feedback_submit_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('supervisor.dashboard.feedback_submit_sub_long')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -385,8 +387,8 @@ function SupervisorDashboard() {
                                     <Certificate size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">ID Card</p>
-                                    <p className="text-xs text-gray-500 font-medium">Checkout your ID card</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('shared.id_card_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.checkout_id_card')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -400,21 +402,21 @@ function SupervisorDashboard() {
                     <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                     </div>
-                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">Daily eco tip</h3>
+                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.daily_eco_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                    "Efficient route planning can reduce fuel consumption by up to 20% daily."
+                    "{t('supervisor.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
                 {/* Support Action */}
                 <button 
                     onClick={function () {
-                    ToastNotification("Opening Support Contact", "info");
+                    ToastNotification(t('shared.contact_support_toast'), "info");
                     }}
                     className="w-full py-3.5 bg-secondary border border-primary/10 rounded-large text-xs font-bold text-primary uppercase tracking-widest hover:bg-primary hover:text-white hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
                 >
-                    Need Help? Contact Support
+                    {t('shared.contact_support')}
                 </button>
                 </div>
             </div>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { X, Location, Trash, UpArrow, DownArrow } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
+    const { t } = useTranslation(["modals", "common"]);
     const [upvotes, setUpvotes] = useState(complaint?.upvotes || 42);
     const [downvotes, setDownvotes] = useState(complaint?.downvotes || 8);
     const [userVote, setUserVote] = useState(null);
@@ -75,7 +77,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
             </button>
             <div className={`absolute bottom-4 left-4 ${getPriorityColor(complaint.priority)} px-4 py-2 rounded-medium`}>
                 <span className="text-white text-sm font-medium">
-                Priority: {getPriorityLabel(complaint.priority)}
+                {t('modals:priority.label')} {getPriorityLabel(complaint.priority)}
                 </span>
             </div>
             </div>
@@ -94,7 +96,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
 
                 <div className="bg-secondary rounded-large p-3 flex items-center gap-4">
                 <div className="text-center">
-                    <p className="text-xs text-secondaryDark mb-1">Community Vote</p>
+                    <p className="text-xs text-secondaryDark mb-1">{t('modals:priority.community_vote')}</p>
                     <div className="flex items-center gap-2">
                     <button
                         onClick={handleUpvote}
@@ -131,7 +133,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-secondary rounded-large p-4">
-                <p className="text-xs text-secondaryDark mb-1">Reported By</p>
+                <p className="text-xs text-secondaryDark mb-1">{t('modals:priority.reported_by')}</p>
                 <p className="text-base font-semibold text-primary">
                     {complaint.author}
                 </p>
@@ -141,7 +143,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                 </div>
 
                 <div className="bg-secondary rounded-large p-4">
-                <p className="text-xs text-secondaryDark mb-1">Trash Type</p>
+                <p className="text-xs text-secondaryDark mb-1">{t('modals:priority.trash_type')}</p>
                 <div className="flex items-center gap-2">
                     <Trash size={18} defaultColor="#145B47" />
                     <p className="text-base font-semibold text-primary">
@@ -157,7 +159,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                 <div className="flex items-center gap-2 mb-3">
                     <div className={`${getPriorityColor(complaint.priority)} w-2 h-2 rounded-full`}></div>
                     <p className="text-sm font-bold text-primary uppercase tracking-wide">
-                    Escalation History
+                    {t('modals:priority.escalation_history')}
                     </p>
                 </div>
                 
@@ -167,15 +169,15 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                     <div className="bg-white rounded-medium p-3 shadow-sm border border-secondary/50">
                         <div className="flex items-start gap-3">
                         <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-white text-xs font-bold">L2</span>
+                            <span className="text-white text-xs font-bold">{t('modals:priority.l2_badge')}</span>
                         </div>
                         <div className="flex-1">
-                            <p className="text-xs text-secondaryDark mb-1">Escalated by Supervisor</p>
+                            <p className="text-xs text-secondaryDark mb-1">{t('modals:priority.escalated_by_supervisor')}</p>
                             <p className="text-sm font-semibold text-primary">
                             {complaint.supervisorName || "John Smith"}
                             </p>
                             <p className="text-xs text-primaryLight font-medium mt-0.5">
-                            Supervisor
+                            {t('modals:priority.supervisor')}
                             </p>
                         </div>
                         </div>
@@ -187,15 +189,15 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
                     <div className="bg-white rounded-medium p-3 shadow-sm border border-error/30">
                         <div className="flex items-start gap-3">
                         <div className="bg-primary rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-white text-xs font-bold">L3</span>
+                            <span className="text-white text-xs font-bold">{t('modals:priority.l3_badge')}</span>
                         </div>
                         <div className="flex-1">
-                            <p className="text-xs text-secondaryDark mb-1">Further escalated by Sanitary Inspector</p>
+                            <p className="text-xs text-secondaryDark mb-1">{t('modals:priority.escalated_by_inspector')}</p>
                             <p className="text-sm font-semibold text-primary">
                             {complaint.inspectorName || "Dr. Sarah Johnson"}
                             </p>
                             <p className="text-xs text-primary font-medium mt-0.5">
-                            Sanitary Inspector
+                            {t('modals:priority.inspector')}
                             </p>
                         </div>
                         </div>
@@ -206,7 +208,7 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
             )}
 
             <div className="bg-secondary rounded-large p-4">
-                <p className="text-xs text-secondaryDark mb-2">Description</p>
+                <p className="text-xs text-secondaryDark mb-2">{t('modals:priority.description')}</p>
                 <p className="text-sm text-secondaryDark leading-relaxed">
                 {complaint.description}
                 </p>
@@ -214,13 +216,13 @@ function CurrentPriorityModal({ isOpen, onClose, complaint, isDarkTheme }) {
 
             <div className="flex items-center justify-between pt-4 border-t border-secondary">
                 <p className="text-xs text-secondaryDark">
-                Reported on {complaint.date}
+                {t('modals:priority.reported_on')} {complaint.date}
                 </p>
                 <button
                 onClick={onClose}
                 className="bg-primary text-white px-6 py-2 rounded-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                 >
-                Close
+                {t('modals:priority.close')}
                 </button>
             </div>
             </div>

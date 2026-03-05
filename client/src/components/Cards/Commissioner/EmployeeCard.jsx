@@ -1,7 +1,18 @@
 import { More, MapPin, Edit ,Transfer } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 
 function EmployeeCard({ employee, onViewDetails, onTransfer, onEdit, isDarkTheme }) {
+    const { t } = useTranslation(["pages", "common"]);
+
+    function getStatusText(status) {
+        if (status === "Active") return t('common:active');
+        if (status === "Suspended") return t('common:suspended');
+        if (status === "On Leave") return t('common:on_leave');
+        if (status === "Resigned") return t('common:resigned');
+        return status;
+    }
+
     function getStatusColor(status) {
         if (status === "Active") return "text-success";
         if (status === "Suspended") return "text-error";
@@ -41,22 +52,22 @@ function EmployeeCard({ employee, onViewDetails, onTransfer, onEdit, isDarkTheme
         <div className="space-y-2 mb-4">
             <div className="flex items-center gap-2 text-xs">
             <MapPin size={16} isDarkTheme={isDarkTheme} defaultColor="#1E8E54" />
-            <span className="text-secondaryDark">Zone: {employee.zone}</span>
+            <span className="text-secondaryDark">{t('pages:cards.employee.zone')} {employee.zone}</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
             <MapPin size={16} isDarkTheme={isDarkTheme} defaultColor="#1E8E54" />
             <span className="text-secondaryDark">
-                Division: {employee.role === "MHO" ? "-" : employee.division}
+                {t('pages:cards.employee.division')} {employee.role === "MHO" ? "-" : employee.division}
             </span>
             </div>
             <div className="flex items-center justify-between text-xs">
-            <span className="text-secondaryDark">Joined:</span>
+            <span className="text-secondaryDark">{t('pages:cards.employee.joined')}</span>
             <span className="text-secondaryDark font-medium">{employee.joined}</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-            <span className="text-secondaryDark">Status:</span>
+            <span className="text-secondaryDark">{t('pages:cards.employee.status')}</span>
             <span className={`font-medium ${getStatusColor(employee.status)}`}>
-                {employee.status}
+                {getStatusText(employee.status)}
             </span>
             </div>
         </div>
@@ -67,14 +78,14 @@ function EmployeeCard({ employee, onViewDetails, onTransfer, onEdit, isDarkTheme
             className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-secondary text-primary rounded-large text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
             >
             <Transfer size={16} color="#145B47" />
-            <span>Transfer</span>
+            <span>{t('pages:cards.employee.transfer')}</span>
             </button>
             <button
             onClick={() => onEdit(employee)}
             className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-primary text-white rounded-large text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
             >
             <Edit size={16} isDarkTheme={true} />
-            <span>Edit</span>
+            <span>{t('pages:cards.employee.edit')}</span>
             </button>
         </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Search, ZoomIn, DownArrow } from "../../../assets/icons/icons";
 import EmployeeCard from "../../../components/Cards/Commissioner/EmployeeCard";
@@ -9,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function EmployeesOverview() {
+  const { t } = useTranslation(["pages", "common"]);
   const { isDarkTheme } = ThemeStore();
   const [activeTab, setActiveTab] = useState("All Officials");
   const [searchQuery, setSearchQuery] = useState("");
@@ -173,7 +175,7 @@ function EmployeesOverview() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by name or ID..."
+                  placeholder={t('pages:commissioner.manage_employees.search_placeholder')}
                   className="w-full pl-10 pr-4 py-2 md:py-3 bg-white border border-secondary rounded-large text-xs md:text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                 />
                 <div className="absolute left-3 top-2 md:top-3">
@@ -186,8 +188,8 @@ function EmployeesOverview() {
                 className="flex items-center gap-1 md:gap-2 bg-primary text-white px-3 md:px-4 py-2 md:py-3 rounded-large text-xs md:text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out whitespace-nowrap"
               >
                 <ZoomIn size={16} isDarkTheme={true} />
-                <span className="hidden sm:inline">Hire Employee</span>
-                <span className="sm:hidden">Hire</span>
+                <span className="hidden sm:inline">{t('pages:commissioner.manage_employees.hire')}</span>
+                <span className="sm:hidden">{t('pages:commissioner.manage_employees.hire')}</span>
               </button>
             </div>
 

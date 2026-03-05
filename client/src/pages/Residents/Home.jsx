@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import ThemeStore from "../../store/ThemeStore";
 import ToastNotification from "../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // Mock Data declared at component top level
 const mockReports = [
@@ -34,19 +35,20 @@ const mockReports = [
 function Home() {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation('pages');
     const [isMapExpanded, setIsMapExpanded] = useState(false);
 
     function handleZoomIn() {
-        ToastNotification("Zooming in", "info");
+        ToastNotification(t('resident.home.zooming_in'), "info");
     }
 
     function handleZoomOut() {
-        ToastNotification("Zooming out", "info");
+        ToastNotification(t('resident.home.zooming_out'), "info");
     }
 
     function handleExpandMap() {
         setIsMapExpanded(!isMapExpanded);
-        ToastNotification(isMapExpanded ? "Map view minimized" : "Map view expanded", "info");
+        ToastNotification(isMapExpanded ? t('resident.home.map_minimized') : t('resident.home.map_expanded'), "info");
     }
 
     return (
@@ -73,7 +75,7 @@ function Home() {
                     className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                     <Expand size={14} defaultColor="#145B47" />
-                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Expand</p>
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">{t('resident.home.expand')}</p>
                 </button>
                 
                 {/* Map Controls */}
@@ -95,7 +97,7 @@ function Home() {
 
             {/* MOBILE/MID QUICK ACTIONS */}
             <div className="lg:hidden space-y-3">
-                <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">Quick actions</h2>
+                <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">{t('resident.home.quick_actions')}</h2>
                 <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                 
                 {/* Report Trash Action */}
@@ -107,8 +109,8 @@ function Home() {
                         <Camera size={22} isPressed={false} defaultColor="#145B47" />
                         </div>
                         <div className="text-center">
-                        <p className="text-sm font-bold leading-tight">Report trash</p>
-                        <p className="text-xs mt-1 font-medium opacity-80">Photo + location</p>
+                        <p className="text-sm font-bold leading-tight">{t('resident.home.report_trash')}</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">{t('resident.home.report_sub')}</p>
                         </div>
                     </button>
 
@@ -121,8 +123,8 @@ function Home() {
                         <QR size={22} isPressed={false} defaultColor="#145B47" />
                         </div>
                         <div className="text-center">
-                        <p className="text-sm font-bold leading-tight">Scan QR</p>
-                        <p className="text-xs mt-1 font-medium opacity-80">Rate Trashman</p>
+                        <p className="text-sm font-bold leading-tight">{t('resident.home.scan_qr')}</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">{t('resident.home.scan_sub')}</p>
                         </div>
                     </button>
                     {/* Routes & Timings */}
@@ -134,8 +136,8 @@ function Home() {
                         <TrashRoute size={22} isPressed={false} defaultColor="#145B47" />
                         </div>
                         <div className="text-center">
-                        <p className="text-sm font-bold leading-tight">Route & Timings</p>
-                        <p className="text-xs mt-1 font-medium opacity-80">Open Routes</p>
+                        <p className="text-sm font-bold leading-tight">{t('resident.home.route_timings')}</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">{t('resident.home.route_sub')}</p>
                         </div>
                     </button>
                     {/* Quiz Action */}
@@ -147,8 +149,8 @@ function Home() {
                         <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                         </div>
                         <div className="text-center">
-                        <p className="text-sm font-bold leading-tight">Quiz</p>
-                        <p className="text-xs mt-1 font-medium opacity-80">Earn points</p>
+                        <p className="text-sm font-bold leading-tight">{t('resident.home.quiz')}</p>
+                        <p className="text-xs mt-1 font-medium opacity-80">{t('resident.home.earn_points')}</p>
                         </div>
                     </button>
 
@@ -157,7 +159,7 @@ function Home() {
 
             {/* Reports Section */}
             <section className="bg-white border border-secondary rounded-large p-5 shadow-sm">
-                <h2 className="text-sm font-bold text-black uppercase tracking-widest mb-4">Recent Reports</h2>
+                <h2 className="text-sm font-bold text-black uppercase tracking-widest mb-4">{t('resident.home.my_reports')}</h2>
                 <Pagination 
                 data={mockReports}
                 itemsPerPage={5}
@@ -176,7 +178,7 @@ function Home() {
                 <div className="bg-white border border-secondary rounded-large p-5 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                     <div className="w-1.5 h-4 bg-primary rounded-full" />
-                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">Quick actions</h2>
+                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">{t('resident.home.quick_actions')}</h2>
                 </div>
                 
                 <div className="space-y-3">
@@ -186,8 +188,8 @@ function Home() {
                         <Camera size={18} isPressed={false} isDarkTheme={true} />
                         </div>
                         <div className="text-left">
-                        <p className="text-xs font-bold text-black tracking-tight">Report trash</p>
-                        <p className="text-xs text-gray-500 font-medium">Snap and pin concern</p>
+                        <p className="text-xs font-bold text-black tracking-tight">{t('resident.home.report_trash')}</p>
+                        <p className="text-xs text-gray-500 font-medium">{t('resident.home.snap_and_pin')}</p>
                         </div>
                     </div>
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -199,8 +201,8 @@ function Home() {
                         <QR size={18} isPressed={false} isDarkTheme={true} />
                         </div>
                         <div className="text-left">
-                        <p className="text-xs font-bold text-black tracking-tight">Scan QR Code</p>
-                        <p className="text-xs text-gray-500 font-medium">Verify collection</p>
+                        <p className="text-xs font-bold text-black tracking-tight">{t('resident.home.scan_qr_title')}</p>
+                        <p className="text-xs text-gray-500 font-medium">{t('resident.home.verify_collection')}</p>
                         </div>
                     </div>
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -211,8 +213,8 @@ function Home() {
                         <TrashRoute size={18} isPressed={false} isDarkTheme={true} />
                         </div>
                         <div className="text-left">
-                        <p className="text-xs font-bold text-black tracking-tight">Routes & Timings</p>
-                        <p className="text-xs text-gray-500 font-medium">Live Track the Trash truck</p>
+                        <p className="text-xs font-bold text-black tracking-tight">{t('resident.home.routes_and_timings')}</p>
+                        <p className="text-xs text-gray-500 font-medium">{t('resident.home.track_trash_truck')}</p>
                         </div>
                     </div>
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -224,8 +226,8 @@ function Home() {
                         <Certificate size={18} isPressed={false} isDarkTheme={true} />
                         </div>
                         <div className="text-left">
-                        <p className="text-xs font-bold text-black tracking-tight">Eco Quiz</p>
-                        <p className="text-xs text-gray-500 font-medium">Earn daily points</p>
+                        <p className="text-xs font-bold text-black tracking-tight">{t('resident.home.eco_quiz')}</p>
+                        <p className="text-xs text-gray-500 font-medium">{t('resident.home.earn_daily_points')}</p>
                         </div>
                     </div>
                     <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -239,16 +241,16 @@ function Home() {
                     <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                     <Add size={18} isPressed={false} isDarkTheme={false} />
                     </div>
-                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">Daily eco tip</h3>
+                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('resident.home.daily_eco_tip')}</h3>
                 </div>
                 <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                    "Carry a reusable bottle today and avoid using at least 3 plastic bottles."
+                    {t('resident.home.eco_tip_text')}
                 </p>
                 </div>
 
                 {/* Support Action */}
                 <button className="w-full py-3.5 bg-secondary border border-primary/10 rounded-large text-xs font-bold text-primary uppercase tracking-widest hover:bg-primary hover:text-white hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm">
-                Need Help? Contact Support
+                {t('resident.home.need_help')}
                 </button>
             </div>
             </div>

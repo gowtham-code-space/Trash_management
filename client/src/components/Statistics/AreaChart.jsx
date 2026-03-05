@@ -10,13 +10,7 @@ import {
 } from "recharts";
 import ThemeStore from "../../store/ThemeStore";
 import DateRangePicker from "../../components/Modals/Calendar/DateRangePicker";
-
-const TIME_FILTERS = [
-  { label: "Today", value: "today" },
-  { label: "This Week", value: "week" },
-  { label: "This Month", value: "month" },
-  { label: "Custom", value: "custom" },
-];
+import { useTranslation } from "react-i18next";
 
 function AreaChart({ 
   title, 
@@ -32,6 +26,15 @@ function AreaChart({
   syncId
 }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["common"]);
+
+  const TIME_FILTERS = [
+    { label: t('common:today'), value: "today" },
+    { label: t('common:this_week'), value: "week" },
+    { label: t('common:this_month'), value: "month" },
+    { label: t('common:custom'), value: "custom" },
+  ];
+
   const [activeFilter, setActiveFilter] = useState("today");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [customLabel, setCustomLabel] = useState(null);
@@ -75,7 +78,7 @@ function AreaChart({
       onDateApply(from, to);
     } else {
       const fmt = (d) =>
-        `${d.getDate()} ${["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][d.getMonth()]}`;
+        `${d.getDate()} ${[t('common:months_short.jan'),t('common:months_short.feb'),t('common:months_short.mar'),t('common:months_short.apr'),t('common:months_short.may'),t('common:months_short.jun'),t('common:months_short.jul'),t('common:months_short.aug'),t('common:months_short.sep'),t('common:months_short.oct'),t('common:months_short.nov'),t('common:months_short.dec')][d.getMonth()]}`;
       setCustomLabel(`${fmt(from)} – ${fmt(to)}`);
       setActiveFilter("custom");
       setShowDatePicker(false);
@@ -138,7 +141,7 @@ function AreaChart({
       <div className="h-56 mt-4">
         {chartData.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>No data available</p>
+            <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>{t('common:no_data')}</p>
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">

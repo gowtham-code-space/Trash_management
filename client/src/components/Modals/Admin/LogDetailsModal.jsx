@@ -1,27 +1,29 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { X } from "../../../assets/icons/icons";
 import ThemeStore from "../../../store/ThemeStore";
 
 export default function LogDetailsModal({ isOpen, onClose, logData, logType }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
 
   if (!isOpen || !logData) return null;
 
   function renderApiDetails() {
     return (
       <div className="space-y-3">
-        <DetailRow label="Log ID" value={logData.api_log_id || logData.LogID} />
-        <DetailRow label="User ID" value={logData.user_id} />
-        <DetailRow label="Role ID" value={logData.role_id} />
-        <DetailRow label="Endpoint" value={logData.endpoint} />
-        <DetailRow label="HTTP Method" value={logData.http_method} />
-        <DetailRow label="Status Code" value={logData.status_code} />
-        <DetailRow label="Response Time" value={`${logData.response_time_ms}ms`} />
-        <DetailRow label="IP Address" value={logData.ip_address} />
-        <DetailRow label="User Agent" value={logData.user_agent} />
-        <DetailRow label="Request Body" value={logData.request_body} isJson />
-        <DetailRow label="Response Body" value={logData.response_body} isJson />
-        <DetailRow label="Created At" value={logData.created_at} />
+        <DetailRow label={t('modals:log_details.log_id')} value={logData.api_log_id || logData.LogID} />
+        <DetailRow label={t('modals:log_details.user_id')} value={logData.user_id} />
+        <DetailRow label={t('modals:log_details.role_id')} value={logData.role_id} />
+        <DetailRow label={t('modals:log_details.endpoint')} value={logData.endpoint} />
+        <DetailRow label={t('modals:log_details.http_method')} value={logData.http_method} />
+        <DetailRow label={t('modals:log_details.status_code')} value={logData.status_code} />
+        <DetailRow label={t('modals:log_details.response_time')} value={`${logData.response_time_ms}ms`} />
+        <DetailRow label={t('modals:log_details.ip_address')} value={logData.ip_address} />
+        <DetailRow label={t('modals:log_details.user_agent')} value={logData.user_agent} />
+        <DetailRow label={t('modals:log_details.request_body')} value={logData.request_body} isJson />
+        <DetailRow label={t('modals:log_details.response_body')} value={logData.response_body} isJson />
+        <DetailRow label={t('modals:log_details.created_at')} value={logData.created_at} />
       </div>
     );
   }
@@ -29,18 +31,18 @@ export default function LogDetailsModal({ isOpen, onClose, logData, logType }) {
   function renderAuditDetails() {
     return (
       <div className="space-y-3">
-        <DetailRow label="Audit ID" value={logData.audit_log_id || logData.AuditID} />
-        <DetailRow label="Entity Type" value={logData.entity_type} />
-        <DetailRow label="Entity ID" value={logData.entity_id} />
-        <DetailRow label="Action Type" value={logData.action_type} />
-        <DetailRow label="Old Value" value={logData.old_value} isJson />
-        <DetailRow label="New Value" value={logData.new_value} isJson />
-        <DetailRow label="Performed By" value={logData.performed_by} />
-        <DetailRow label="Performed Role" value={logData.performed_role_id} />
-        <DetailRow label="IP Address" value={logData.ip_address} />
-        <DetailRow label="User Agent" value={logData.user_agent} />
-        <DetailRow label="Remarks" value={logData.remarks} />
-        <DetailRow label="Created At" value={logData.created_at} />
+        <DetailRow label={t('modals:log_details.audit_id')} value={logData.audit_log_id || logData.AuditID} />
+        <DetailRow label={t('modals:log_details.entity_type')} value={logData.entity_type} />
+        <DetailRow label={t('modals:log_details.entity_id')} value={logData.entity_id} />
+        <DetailRow label={t('modals:log_details.action_type')} value={logData.action_type} />
+        <DetailRow label={t('modals:log_details.old_value')} value={logData.old_value} isJson />
+        <DetailRow label={t('modals:log_details.new_value')} value={logData.new_value} isJson />
+        <DetailRow label={t('modals:log_details.performed_by')} value={logData.performed_by} />
+        <DetailRow label={t('modals:log_details.performed_role')} value={logData.performed_role_id} />
+        <DetailRow label={t('modals:log_details.ip_address')} value={logData.ip_address} />
+        <DetailRow label={t('modals:log_details.user_agent')} value={logData.user_agent} />
+        <DetailRow label={t('modals:log_details.remarks')} value={logData.remarks} />
+        <DetailRow label={t('modals:log_details.created_at')} value={logData.created_at} />
       </div>
     );
   }
@@ -48,14 +50,14 @@ export default function LogDetailsModal({ isOpen, onClose, logData, logType }) {
   function renderEventDetails() {
     return (
       <div className="space-y-3">
-        <DetailRow label="Event ID" value={logData.event_log_id || logData.EventID} />
-        <DetailRow label="Event Type" value={logData.event_type} />
-        <DetailRow label="Entity Type" value={logData.entity_type} />
-        <DetailRow label="Entity ID" value={logData.entity_id} />
-        <DetailRow label="User ID" value={logData.user_id} />
-        <DetailRow label="Severity" value={logData.severity} />
-        <DetailRow label="Metadata" value={logData.metadata} isJson />
-        <DetailRow label="Created At" value={logData.created_at} />
+        <DetailRow label={t('modals:log_details.event_id')} value={logData.event_log_id || logData.EventID} />
+        <DetailRow label={t('modals:log_details.event_type')} value={logData.event_type} />
+        <DetailRow label={t('modals:log_details.entity_type')} value={logData.entity_type} />
+        <DetailRow label={t('modals:log_details.entity_id')} value={logData.entity_id} />
+        <DetailRow label={t('modals:log_details.user_id')} value={logData.user_id} />
+        <DetailRow label={t('modals:log_details.severity')} value={logData.severity} />
+        <DetailRow label={t('modals:log_details.metadata')} value={logData.metadata} isJson />
+        <DetailRow label={t('modals:log_details.created_at')} value={logData.created_at} />
       </div>
     );
   }
@@ -70,10 +72,10 @@ export default function LogDetailsModal({ isOpen, onClose, logData, logType }) {
             ${isDarkTheme ? "border-darkBorder bg-darkBackground" : "border-secondary bg-background"}`}>
             <div>
               <h2 className={`text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>
-                Log Details
+                {t('modals:log_details.title')}
               </h2>
               <p className={`text-xs mt-0.5 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                {logType === "api" ? "API Request Log" : logType === "audit" ? "Audit Trail Log" : "Event Log"}
+                {logType === "api" ? t('modals:log_details.api_request_log') : logType === "audit" ? t('modals:log_details.audit_trail_log') : t('modals:log_details.event_log')}
               </p>
             </div>
             <button

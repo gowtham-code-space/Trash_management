@@ -1,9 +1,13 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Check, X, Info } from "../../../assets/icons/icons";
 
-function ConfirmModal({ isOpen, title, message, onConfirm, onClose, confirmText = "Confirm", cancelText = "Cancel", type = "submit" }) {
+function ConfirmModal({ isOpen, title, message, onConfirm, onClose, confirmText, cancelText, type = "submit" }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
+  const displayConfirmText = confirmText || t('modals:confirm.confirm');
+  const displayCancelText = cancelText || t('modals:confirm.cancel');
   
   if (!isOpen) return null;
 
@@ -66,7 +70,7 @@ function ConfirmModal({ isOpen, title, message, onConfirm, onClose, confirmText 
                 ? "bg-darkBackground text-darkTextPrimary border-2 border-darkBorder" 
                 : "bg-secondary text-secondaryDark"}`}
           >
-            {cancelText}
+            {displayCancelText}
           </button>
           <button
             onClick={onConfirm}
@@ -74,7 +78,7 @@ function ConfirmModal({ isOpen, title, message, onConfirm, onClose, confirmText 
               hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
               transition-all duration-200 ease-in-out ${getButtonColor()}`}
           >
-            {confirmText}
+            {displayConfirmText}
           </button>
         </div>
       </div>

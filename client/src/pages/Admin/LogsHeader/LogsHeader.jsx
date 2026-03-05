@@ -1,4 +1,5 @@
 ﻿import React, { useState, useMemo, useCallback, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Download, Search, Calendar } from "../../../assets/icons/icons";
 import DateRangePicker from "../../../components/Modals/Calendar/DateRangePicker";
@@ -11,9 +12,12 @@ import { exportToExcel } from "../../../utils/excelExport";
 const TYPE_MAP = { "API Requests": "api", "Audit Logs": "audit", "Event Logs": "event" };
 const tabs = ["API Requests", "Audit Logs", "Event Logs"];
 const dateFilters = ["Today", "This Week", "This Month", "Custom"];
+const TAB_LABELS = { "API Requests": "tab_api_requests", "Audit Logs": "tab_audit_logs", "Event Logs": "tab_event_logs" };
+const DATE_FILTER_LABELS = { "Today": "filter_today", "This Week": "filter_this_week", "This Month": "filter_this_month", "Custom": "filter_custom" };
 
 export default function LogsHeader() {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedTab, setSelectedTab] = useState("API Requests");
   const [searchQuery, setSearchQuery] = useState("");
   const [dateFilter, setDateFilter] = useState("Today");
@@ -81,7 +85,7 @@ export default function LogsHeader() {
                   className={`px-3 sm:px-6 py-2 rounded-medium text-xs sm:text-sm font-medium transition-all duration-200 ease-in-out whitespace-nowrap
                     ${selectedTab === tab ? "bg-primaryLight text-white" : "text-secondaryDark hover:bg-background"}
                     hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]`}>
-                  {tab}
+                  {t(`pages:admin.logs.${TAB_LABELS[tab]}`)}
                 </button>
               ))}
             </div>
@@ -90,7 +94,7 @@ export default function LogsHeader() {
                         hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                         transition-all duration-200 ease-in-out disabled:opacity-60 disabled:pointer-events-none">
               <div className="mr-1"><Download size={20} defaultColor="white" isDarkTheme={true} /></div>
-              {exporting ? "Exporting..." : "Export Logs"}
+              {exporting ? t('pages:admin.logs.exporting') : t('pages:admin.logs.export_logs')}
             </button>
           </div>
 
@@ -99,7 +103,7 @@ export default function LogsHeader() {
               <div className="absolute top-1/2 left-3 -translate-y-1/2">
                 <Search size={18} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
               </div>
-              <input type="text" placeholder="Search logs..." value={searchQuery}
+              <input type="text" placeholder={t('pages:admin.logs.search_placeholder')} value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className={`w-full pl-10 pr-4 py-2.5 rounded-medium text-sm border
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
@@ -122,7 +126,7 @@ export default function LogsHeader() {
                       : "bg-white border-secondary text-secondaryDark hover:bg-background"
                     }`}>
                   {filter === "Custom" && <Calendar size={14} defaultColor={dateFilter === filter ? "#fff" : isDarkTheme ? "#B7D6C9" : "#316F5D"} />}
-                  {filter}
+                  {t(`pages:admin.logs.${DATE_FILTER_LABELS[filter]}`)}
                 </button>
               ))}
               {showDateRangePicker && (

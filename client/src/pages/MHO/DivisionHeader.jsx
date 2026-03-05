@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import SearchWorkers from "../Common/SearchWorkers/SearchWorkers";
 import StatsHeader from "../SanitoryInspector/StatsHeader/StatsHeader";
 import TrashRoute from "../Common/RouteTimings/RouteTimings";
+import { useTranslation } from "react-i18next";
 
 function DivisionHeader() {
+    const { t } = useTranslation(["pages", "common"]);
     const [activeTab, setActiveTab] = useState("Overview");
     const [divisionData, setDivisionData] = useState(null);
 
-    const tabs = ["Overview", "Workers", "Statistics"];
+    const tabs = [
+        { key: "Overview", label: t('pages:mho.division_header.tab_overview') },
+        { key: "Workers", label: t('pages:mho.division_header.tab_workers') },
+        { key: "Statistics", label: t('pages:mho.division_header.tab_statistics') },
+    ];
 
     const mockData = {
         id: "NZ-01",
@@ -29,20 +35,20 @@ function DivisionHeader() {
     if (!divisionData) {
         return (
         <div className="bg-white p-6 rounded-large border border-secondary">
-            <p className="text-sm text-secondaryDark">Loading...</p>
+            <p className="text-sm text-secondaryDark">{t('common:loading')}</p>
         </div>
         );
     }
 
     const statsData = [
-        { value: divisionData.stats.supervisors, label: "SUPERVISORS" },
-        { value: divisionData.stats.sanitaryInspectors, label: "SANITARY INSP." },
+        { value: divisionData.stats.supervisors, label: t('common:supervisors') },
+        { value: divisionData.stats.sanitaryInspectors, label: t('common:sanitary_inspectors') },
         { 
         value: divisionData.stats.urgentTasks, 
-        label: "URGENT TASKS", 
+        label: t('pages:mho.division_header.active_tasks'), 
         color: "text-success" 
         },
-        { value: divisionData.stats.rating, label: "RATING (5)" }
+        { value: divisionData.stats.rating, label: t('pages:mho.division_header.rating') }
     ];
 
     return (
@@ -58,10 +64,10 @@ function DivisionHeader() {
                                 ID: {divisionData.id}
                             </span>
                             <span className="text-sm text-secondaryDark">
-                                {divisionData.wards} Wards
+                                {divisionData.wards} {t('common:wards')}
                             </span>
                             <span className="text-xs font-semibold px-3 py-1 rounded-full bg-success/10 text-success">
-                                {divisionData.healthScore}% Health Score
+                                {divisionData.healthScore}% {t('pages:mho.division_header.health_score')}
                             </span>
                         </div>
                     </div>
@@ -85,18 +91,18 @@ function DivisionHeader() {
 
                 <div className="flex gap-6 border-b border-secondary">
                 {tabs.map(function (tab) {
-                    const isActive = activeTab === tab;
+                    const isActive = activeTab === tab.key;
                     return (
                     <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
+                        key={tab.key}
+                        onClick={() => setActiveTab(tab.key)}
                         className={`pb-3 text-sm font-semibold transition-all duration-200 ease-in-out hover:scale-[0.99] active:scale-[0.99] focus:outline-none ${
                         isActive
                             ? "text-primary border-b-2 border-primary"
                             : "text-secondaryDark"
                         }`}
                     >
-                        {tab}
+                        {tab.label}
                     </button>
                     );
                 })}

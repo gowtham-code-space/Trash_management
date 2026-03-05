@@ -1,10 +1,12 @@
 import {UpArrow,DownArrow,RightArrow, MapPin} from "../../../assets/icons/icons"
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CurrentPriorityModal from "../../../components/Modals/SuperVisor/CurrentPriorityModal";
 import ThemeStore from "../../../store/ThemeStore";
 import { useNavigate } from "react-router-dom";
 
 function TaskCard({ complaint }) {
+    const { t } = useTranslation(["pages", "common"]);
 
     const { isDarkTheme } = ThemeStore();
     const navigate = useNavigate();
@@ -25,9 +27,9 @@ function TaskCard({ complaint }) {
     }
 
     function getPriorityLabel(level) {
-        if (level === 1) return "Level 1";
-        if (level === 2) return "Level 2";
-        return "Level 3";
+        if (level === 1) return t('common:level_1');
+        if (level === 2) return t('common:level_2');
+        return t('common:level_3');
     }
 
     function getStatusColor(status) {
@@ -69,7 +71,7 @@ function TaskCard({ complaint }) {
                         {complaint.date}
                     </p>
                     <p className="text-sm text-secondaryDark">
-                        Reported by <span className="font-semibold text-primary">{complaint.author}</span>
+                        {t('pages:cards.task.reported_by')} <span className="font-semibold text-primary">{complaint.author}</span>
                     </p>
                     <p className="text-xs text-secondaryDark flex flex-row justify-start items-center">
                         <span className="mr-1"><MapPin size={18} defaultColor="#145B47"/> </span>{complaint.location}
@@ -96,7 +98,7 @@ function TaskCard({ complaint }) {
                     onClick={() =>navigate("/assign-task")}
                     className="bg-primary text-white px-5 py-2 rounded-medium text-xs font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out flex items-center gap-2"
                     >
-                    <span>View Details</span>
+                    <span>{t('pages:cards.task.view_details')}</span>
                     <RightArrow size={14} isDarkTheme={true} />
                     </button>
                 </div>

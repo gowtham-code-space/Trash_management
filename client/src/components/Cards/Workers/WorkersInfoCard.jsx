@@ -1,7 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Star, RightArrow } from "../../../assets/icons/icons";
 import { useNavigate } from "react-router-dom";
 function WorkerInfoCard({ worker, isDarkTheme }) {
+  const { t } = useTranslation(["pages", "common"]);
   const navigate = useNavigate();
 
   function getAttendanceColor(attendance) {
@@ -73,7 +75,7 @@ function WorkerInfoCard({ worker, isDarkTheme }) {
         {/* Attendance */}
         <div className="bg-background rounded-medium p-2 border border-secondary/50">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold text-secondaryDark/60 uppercase tracking-wide">Attendance</span>
+            <span className="text-[10px] font-bold text-secondaryDark/60 uppercase tracking-wide">{t('pages:cards.workers.attendance')}</span>
             <span className={`text-xs font-bold ${worker.attendance >= 95 ? 'text-success' : worker.attendance >= 85 ? 'text-warning' : 'text-error'}`}>
               {worker.attendance}%
             </span>
@@ -89,10 +91,10 @@ function WorkerInfoCard({ worker, isDarkTheme }) {
         
         {/* Tasks */}
         <div className="bg-background rounded-medium p-2 border border-secondary/50">
-          <span className="text-[10px] font-bold text-secondaryDark/60 uppercase tracking-wide block mb-1">Tasks Done</span>
+          <span className="text-[10px] font-bold text-secondaryDark/60 uppercase tracking-wide block mb-1">{t('pages:cards.workers.tasks_done')}</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold text-primary leading-none">{worker.tasksCompleted}</span>
-            <span className="text-[10px] text-secondaryDark/60">total</span>
+            <span className="text-[10px] text-secondaryDark/60">{t('pages:cards.workers.total')}</span>
           </div>
         </div>
       </div>
@@ -105,7 +107,7 @@ function WorkerInfoCard({ worker, isDarkTheme }) {
                     transition-all duration-200 hover:scale-[0.99] active:scale-[0.99]
                     focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
       >
-        View Full Profile
+        {t('pages:cards.workers.view_full_profile')}
         <div className="transition-transform group-hover:translate-x-1">
           <RightArrow size={12} isPressed={false} isDarkTheme={true} />
         </div>

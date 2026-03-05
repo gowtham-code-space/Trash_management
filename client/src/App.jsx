@@ -16,7 +16,7 @@ function App() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100vh' }}>Loading...</div>
   }
 
   return (

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../../utils/Pagination";
 import ToastNotification from "../../components/Notification/ToastNotification";
 import {
@@ -104,6 +105,7 @@ const allWorkers = [
 ];
 
 function AssignToTrashmen() {
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("nearby"); // "nearby" or "all"
@@ -135,7 +137,7 @@ function AssignToTrashmen() {
 
   function handleAssignTask() {
     if (selectedWorkers.length === 0) {
-      ToastNotification("Please select at least one worker to assign the task", "error");
+      ToastNotification(t('pages:shared.select_worker_required'), "error");
       return;
     }
     console.log("Assigning task to workers:", selectedWorkers);
@@ -150,9 +152,9 @@ function AssignToTrashmen() {
   }
 
   function getPriorityLabel(level) {
-    if (level === 1) return "Level 1";
-    if (level === 2) return "Level 2";
-    return "Level 3";
+    if (level === 1) return t('common:level_1');
+    if (level === 2) return t('common:level_2');
+    return t('common:level_3');
   }
 
   function getWorkerInitial(name) {
@@ -190,7 +192,7 @@ function AssignToTrashmen() {
             </h4>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs text-secondaryDark/60">
-                Attendance {worker.attendance}%
+                {t('common:attendance')} {worker.attendance}%
               </span>
               <span className="text-secondaryDark/40">•</span>
               <span className="text-xs text-secondaryDark/60">
@@ -208,7 +210,7 @@ function AssignToTrashmen() {
                 : 'bg-secondary text-primary'
             }`}
           >
-            {isSelected ? 'Selected' : 'Select'}
+            {isSelected ? t('common:selected') : t('common:select')}
           </button>
         </div>
       </div>
@@ -242,15 +244,15 @@ function AssignToTrashmen() {
 
               <div className="flex flex-wrap gap-4 text-xs">
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Location: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:location_prefix')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.location}</span>
                 </div>
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Type: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:type_prefix')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.trashType}</span>
                 </div>
                 <div>
-                  <span className="text-secondaryDark/60 font-semibold">Reported: </span>
+                  <span className="text-secondaryDark/60 font-semibold">{t('common:reported')}</span>
                   <span className="text-secondaryDark font-medium">{selectedTaskDetails.date}</span>
                 </div>
               </div>
@@ -294,7 +296,7 @@ function AssignToTrashmen() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search workers..."
+                  placeholder={t('pages:shared.search_workers_placeholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-background border border-secondary rounded-medium py-2 pl-10 pr-4
@@ -314,7 +316,7 @@ function AssignToTrashmen() {
                       : "bg-secondary text-primary hover:bg-primary/10"
                   }`}
                 >
-                  Nearby
+                  {t('pages:shared.nearby')}
                 </button>
                 <button
                   onClick={() => setActiveTab("all")}
@@ -324,7 +326,7 @@ function AssignToTrashmen() {
                       : "bg-secondary text-primary hover:bg-primary/10"
                   }`}
                 >
-                  All
+                  {t('common:all')}
                 </button>
               </div>
 
@@ -350,7 +352,7 @@ function AssignToTrashmen() {
               {((activeTab === "nearby" && nearbyWorkers.length === 0) || 
                 (activeTab === "all" && allFilteredWorkers.length === 0)) && (
                 <div className="text-center py-8">
-                  <p className="text-sm text-secondaryDark">No workers found</p>
+                  <p className="text-sm text-secondaryDark">{t('pages:shared.no_workers_found')}</p>
                 </div>
               )}
 
@@ -359,7 +361,7 @@ function AssignToTrashmen() {
                 onClick={handleAssignTask}
                 className="w-full bg-primary text-white py-3 rounded-large text-sm font-bold hover:bg-primaryLight transition-all active:scale-[0.99] mt-4"
               >
-                Assign Task {selectedWorkers.length > 0 && `(${selectedWorkers.length} selected)`}
+                {selectedWorkers.length > 0 ? t('pages:shared.assign_task_selected', { count: selectedWorkers.length }) : t('pages:shared.assign_task')}
               </button>
             </div>
           </div>

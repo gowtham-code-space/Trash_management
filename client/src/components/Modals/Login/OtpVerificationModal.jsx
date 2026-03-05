@@ -3,8 +3,10 @@ import { Certificate, Email } from "../../../assets/icons/icons";
 import ToastNotification from "../../Notification/ToastNotification";
 import { requestOtp, verifyOtp } from "../../../services/features/authService";
 import { saveAccessToken } from "../../../services/core/session";
+import { useTranslation } from "react-i18next";
 
 function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified, onSuccess }) {
+    const { t } = useTranslation('auth');
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [timer, setTimer] = useState(60);
     const [canResend, setCanResend] = useState(false);
@@ -56,7 +58,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
 
         const fullOtp = otp.join("");
         if (fullOtp.length < 6) {
-            ToastNotification("Please enter complete 6-digit OTP", "warning");
+            ToastNotification(t('otp.incomplete_otp'), "warning");
             return;
         }
 
@@ -68,7 +70,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
                 otp_code: fullOtp
             });
 
-            ToastNotification(response.message || "Verification successful", "success");
+            ToastNotification(response.message || t('otp.verification_success'), "success");
             
             // Save access token
             if (response.data.accessToken) {
@@ -89,7 +91,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
 
         } catch (error) {
             console.error("Error verifying OTP:", error);
-            const errorMsg = error.response?.data?.message || error.message || "Invalid OTP code";
+            const errorMsg = error.response?.data?.message || error.message || t('otp.invalid_otp');
             ToastNotification(errorMsg, "error");
             setOtp(["", "", "", "", "", ""]);
             if (inputRefs[0].current) {
@@ -112,10 +114,10 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
             setTimer(60);
             setCanResend(false);
             setOtp(["", "", "", "", "", ""]);
-            ToastNotification(response.message || "A new OTP has been sent", "success");
+            ToastNotification(response.message || t('otp.new_otp_sent'), "success");
         } catch (error) {
             console.error("Error resending OTP:", error);
-            ToastNotification(error.response?.data?.message || "Failed to resend OTP", "error");
+            ToastNotification(error.response?.data?.message || t('otp.failed_resend'), "error");
         }
     }
 
@@ -139,9 +141,9 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
 
             {/* Titles */}
             <div className="text-center mb-10">
-                <h1 className="text-xl font-bold text-black mb-3">Verify Identity</h1>
+                <h1 className="text-xl font-bold text-black mb-3">{t('otp.title')}</h1>
                 <p className="text-sm text-gray-400 px-6 leading-relaxed">
-                    Enter the 6-digit code sent to<br />
+                    {t('otp.subtitle')}<br />
                     <span className="text-secondaryDark font-bold">{identifier}</span>
                 </p>
             </div>
@@ -170,7 +172,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
                 disabled={isVerifying}
                 className="w-full bg-primaryLight text-white font-bold py-3 rounded-large mb-8 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out shadow-lg shadow-primary/10 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {isVerifying ? "Verifying..." : "Verify & Proceed"}
+                {isVerifying ? t('otp.verifying') : t('otp.verify_proceed')}
             </button>
 
             {/* Footer Actions */}
@@ -181,11 +183,11 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
                     onClick={handleResend}
                     className="text-primary font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                     >
-                    Resend Now
+                    {t('otp.resend_now')}
                     </button>
                 ) : (
                     <span className="flex items-center gap-1">
-                    Resend in <span className="text-secondaryDark font-bold tabular-nums">00:{timer < 10 ? `0${timer}` : timer}</span>
+                    {t('otp.resend_in')} <span className="text-secondaryDark font-bold tabular-nums">00:{timer < 10 ? `0${timer}` : timer}</span>
                     </span>
                 )}
                 </div>
@@ -193,7 +195,7 @@ function OtpVerificationModal({ identifier, method, isLogin, onClose, onVerified
                 onClick={onClose}
                 className="text-sm font-medium text-primary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                Change
+                {t('otp.change')}
                 </button>
             </div>
             </div>

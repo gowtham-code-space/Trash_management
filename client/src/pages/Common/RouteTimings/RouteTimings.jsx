@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import Pagination from "../../../utils/Pagination";
@@ -11,6 +12,7 @@ import {
 
 function TrashRoute() {
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const { t } = useTranslation(["pages", "common"]);
 
   const routes = [
     {
@@ -115,7 +117,7 @@ function TrashRoute() {
 
           <div>
             <p className="text-xs text-secondaryDark mb-2 font-medium">
-              Assigned Team
+              {t('pages:common.route_timings.assigned_team')}
             </p>
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               {route.team.map(function (member, idx) {
@@ -146,7 +148,7 @@ function TrashRoute() {
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 <div>
                   <p className="text-xs text-secondaryDark font-semibold mb-1">
-                    Status
+                    {t('pages:common.route_timings.status')}
                   </p>
                   <p className="text-xs text-secondaryDark">
                     {route.status}
@@ -154,7 +156,7 @@ function TrashRoute() {
                 </div>
                 <div>
                   <p className="text-xs text-secondaryDark font-semibold mb-1">
-                    Time
+                    {t('pages:common.route_timings.time')}
                   </p>
                   <p className="text-xs text-secondaryDark">
                     {route.time}
@@ -163,7 +165,7 @@ function TrashRoute() {
               </div>
               <div className="mt-2 sm:mt-3">
                 <p className="text-xs text-secondaryDark font-semibold mb-1">
-                  Route ID
+                  {t('pages:common.route_timings.route_id')}
                 </p>
                 <p className="text-xs text-secondaryDark">
                   {route.id}
@@ -178,23 +180,28 @@ function TrashRoute() {
 
   function handleRouteClick(routeId) {
     setSelectedRoute(selectedRoute === routeId ? null : routeId);
-    ToastNotification(`Route ${routeId} ${selectedRoute === routeId ? 'collapsed' : 'expanded'}`, "info");
+    ToastNotification(
+      selectedRoute === routeId
+        ? t('pages:common.route_timings.toast_route_collapsed', { id: routeId })
+        : t('pages:common.route_timings.toast_route_expanded', { id: routeId }),
+      "info"
+    );
   }
 
   function handleZoomInClick() {
-    ToastNotification("Zooming in", "success");
+    ToastNotification(t('pages:shared.zoom_in_toast'), "success");
   }
 
   function handleZoomOutClick() {
-    ToastNotification("Zooming out", "success");
+    ToastNotification(t('pages:shared.zoom_out_toast'), "success");
   }
 
   function handleRecenterClick() {
-    ToastNotification("Map recentered", "success");
+    ToastNotification(t('pages:shared.map_recentered'), "success");
   }
 
   function handleAddRoute() {
-    ToastNotification("Add new route", "info");
+    ToastNotification(t('pages:common.route_timings.toast_add_new_route'), "info");
   }
 
   return (
@@ -238,9 +245,9 @@ function TrashRoute() {
 
         <div className="mt-2 lg:mt-0 lg:ml-2 rounded-medium w-full lg:w-96 bg-white border-t lg:border-t-0 lg:border-l border-secondary p-4 sm:p-5 lg:p-6">
           <div className="mb-6">
-            <h2 className="text-base sm:text-lg font-bold text-secondaryDark">Trash Routes</h2>
+            <h2 className="text-base sm:text-lg font-bold text-secondaryDark">{t('pages:common.route_timings.trash_routes')}</h2>
             <p className="text-xs sm:text-sm text-secondaryDark mt-1">
-              {routes.length} active routes
+              {t('pages:common.route_timings.active_routes', { count: routes.length })}
             </p>
           </div>
 

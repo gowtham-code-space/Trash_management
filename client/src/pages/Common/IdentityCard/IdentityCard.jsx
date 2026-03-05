@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import TNgovLogo from "../../../assets/TNgov.png";
 import frontSvg from "../../../assets/front.svg";
 import backSvg from "../../../assets/back.svg";
@@ -9,6 +10,7 @@ import { SkeletonLine, SkeletonAvatar, SkeletonBlock, SkeletonCard } from "../..
 
 export default function IdentityCard() {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
     const [isFlipped, setIsFlipped] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -42,7 +44,7 @@ export default function IdentityCard() {
                     cardStatus: response.cardStatus,
                 });
             } catch (err) {
-                setError(err.message || 'Failed to load ID card');
+                setError(err.message || t('pages:common.id_card.failed_to_load'));
             } finally {
                 setLoading(false);
             }
@@ -68,8 +70,8 @@ export default function IdentityCard() {
                                 <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
                             </div>
                             <div className="text-left">
-                                <h1 className={`text-xl font-bold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Identity Card</h1>
-                                <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Tamil Nadu Government</p>
+                                <h1 className={`text-xl font-bold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{t('pages:common.id_card.title')}</h1>
+                                <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{t('pages:common.id_card.government_name')}</p>
                             </div>
                         </div>
                         <SkeletonLine variant="small" width="1/3" className="mx-auto" />
@@ -140,7 +142,7 @@ export default function IdentityCard() {
                             </svg>
                         </div>
                         <div>
-                            <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Error Loading ID Card</h2>
+                            <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{t('pages:common.id_card.error_loading')}</h2>
                             <p className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{error}</p>
                         </div>
                     </div>
@@ -148,7 +150,7 @@ export default function IdentityCard() {
                         onClick={() => window.location.reload()}
                         className="w-full mt-4 px-4 py-2 bg-primary text-white rounded-large hover:bg-primary/90 transition-colors"
                     >
-                        Retry
+                        {t('pages:common.id_card.retry')}
                     </button>
                 </div>
             </div>
@@ -175,12 +177,12 @@ export default function IdentityCard() {
                 <img src={TNgovLogo} alt="TN Government" className="w-full h-full object-contain"/>
                 </div>
                 <div className="text-left">
-                <h1 className={`text-xl font-bold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Identity Card</h1>
-                <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Tamil Nadu Government</p>
+                <h1 className={`text-xl font-bold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{t('pages:common.id_card.title')}</h1>
+                <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{t('pages:common.id_card.government_name')}</p>
                 </div>
             </div>
             <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>
-                Official identification card for government employees. Click card to flip.
+                {t('pages:common.id_card.card_description')}
             </p>
             </div>
 
@@ -229,21 +231,21 @@ export default function IdentityCard() {
                                 <span className="text-[#37474F]">{cardData.firstName} </span>
                                 <span className="text-[#43A047]">{cardData.lastName}</span>
                             </h1>
-                            <p className="text-[12px] text-[#6B7280] font-normal">{cardData.position}</p>
+                            <p className="text-[12px] text-[#6B7280] font-normal">{t('pages:common.id_card.government_employee')}</p>
                         </div>
 
                         {/* Details */}
                         <div className="space-y-2 px-4 w-full">
                             <div className="flex justify-between items-center">
-                                <span className="text-[#43A047] font-semibold text-[12px]">ID no :</span>
+                                <span className="text-[#43A047] font-semibold text-[12px]">{t('pages:common.id_card.id_no')}</span>
                                 <span className="text-[#37474F] font-medium text-[12px]">{cardData.idNo}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[#43A047] font-semibold text-[12px]">Join Date :</span>
+                                <span className="text-[#43A047] font-semibold text-[12px]">{t('pages:common.id_card.join_date_label')}</span>
                                 <span className="text-[#37474F] font-medium text-[12px]">{cardData.joinDate}</span>
                             </div>
                             <div className="flex justify-between items-center">
-                                <span className="text-[#43A047] font-semibold text-[12px]">Phone :</span>
+                                <span className="text-[#43A047] font-semibold text-[12px]">{t('pages:common.id_card.phone_label')}</span>
                                 <span className="text-[#37474F] font-medium text-[12px]">{cardData.phone}</span>
                             </div>
                         </div>
@@ -263,7 +265,7 @@ export default function IdentityCard() {
                     <div className="relative z-10 h-full flex flex-col px-8 py-10">
                         {/* Header */}
                         <div className="mb-5">
-                            <h2 className="text-[16px] font-bold text-[#43A047]">Address:</h2>
+                            <h2 className="text-[16px] font-bold text-[#43A047]">{t('pages:common.id_card.address_label')}</h2>
                         </div>
 
                         {/* Address */}
@@ -295,7 +297,7 @@ export default function IdentityCard() {
                 {/* Info Text Below Card */}
                 <div className="mt-6 text-center max-w-md">
                 <p className={`text-[11px] leading-relaxed ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/50'}`}>
-                    This card is property of Tamil Nadu Government. If found, please return to the nearest government office.
+                    {t('pages:common.id_card.card_disclaimer')}
                 </p>
                 </div>
             </div>
@@ -310,23 +312,23 @@ export default function IdentityCard() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                     </svg>
                     </div>
-                    <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Card Details</h2>
+                    <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{t('pages:common.id_card.card_details')}</h2>
                 </div>
                 <div className="space-y-3">
                     <div>
-                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Full Name</p>
+                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>{t('pages:common.id_card.full_name')}</p>
                     <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{`${cardData.firstName} ${cardData.lastName}`}</p>
                     </div>
                     <div>
-                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Position</p>
+                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>{t('pages:common.id_card.position')}</p>
                     <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.position}</p>
                     </div>
                     <div>
-                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Employee ID</p>
+                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>{t('pages:common.id_card.employee_id')}</p>
                     <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.idNo}</p>
                     </div>
                     <div>
-                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>Contact Number</p>
+                    <p className={`text-xs ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/60'}`}>{t('pages:common.id_card.contact_number')}</p>
                     <p className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.phone}</p>
                     </div>
                 </div>
@@ -340,15 +342,15 @@ export default function IdentityCard() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={cardData.cardStatus === 'Active' ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"} />
                     </svg>
                     </div>
-                    <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>Card Status</h2>
+                    <h2 className={`text-lg font-semibold ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{t('pages:common.id_card.card_status')}</h2>
                 </div>
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Status</span>
+                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{t('common:status')}</span>
                     <span className={`px-3 py-1 ${cardData.cardStatus === 'Active' ? 'bg-success/10 text-success' : 'bg-error/10 text-error'} text-xs font-medium rounded-full`}>{cardData.cardStatus}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>Issued Date</span>
+                    <span className={`text-sm ${isDarkTheme ? 'text-darkTextSecondary' : 'text-secondaryDark/70'}`}>{t('pages:common.id_card.issued_date')}</span>
                     <span className={`text-sm font-medium ${isDarkTheme ? 'text-darkTextPrimary' : 'text-secondaryDark'}`}>{cardData.joinDate}</span>
                     </div>
                     <div className="flex items-center justify-between">

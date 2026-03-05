@@ -8,6 +8,7 @@ import {
   ZoomOut,
   Search,
 } from "../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 const zoneData = {
   name: "North Zone",
@@ -129,6 +130,7 @@ const allDivisions = [
 ];
 
 function ViewZone() {
+    const { t } = useTranslation(["pages", "common"]);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -163,25 +165,25 @@ function ViewZone() {
                 {division.name}
                 </h3>
                 <p className="text-xs text-secondaryDark/60">
-                ID: {division.divisionId} • {division.wards} Wards
+                ID: {division.divisionId} • {division.wards} {t('common:wards')}
                 </p>
             </div>
             <div className={`${getHealthBgColor(division.health)} px-3 py-1 rounded-medium`}>
                 <span className={`text-xs font-bold ${getHealthColor(division.health)}`}>
-                {division.health}% Health
+                {division.health}% {t('pages:mho.view_zone.health_score')}
                 </span>
             </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-3">
             <div className="bg-background rounded-medium p-2">
-                <p className="text-xs text-secondaryDark/60 mb-1">Supervisors</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('common:supervisors')}</p>
                 <p className="text-xs font-semibold text-secondaryDark">
                 {division.team.supervisors}
                 </p>
             </div>
             <div className="bg-background rounded-medium p-2">
-                <p className="text-xs text-secondaryDark/60 mb-1">Sanitary Inspectors</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('common:sanitary_inspectors')}</p>
                 <p className="text-xs font-semibold text-secondaryDark">
                 {division.team.sanitaryInspectors}
                 </p>
@@ -192,7 +194,7 @@ function ViewZone() {
             onClick={()=>navigate("/view-division")}
             className="w-full bg-primary text-white py-2 rounded-medium text-xs font-bold hover:bg-primaryLight hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
             >
-            View Details
+            {t('pages:mho.view_zone.view_division')}
             </button>
         </div>
         );
@@ -216,23 +218,23 @@ function ViewZone() {
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div className="text-center">
-                <p className="text-xs text-secondaryDark/60 mb-1">HEALTH SCORE</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('pages:mho.view_zone.health_score')}</p>
                 <p className="text-2xl font-bold text-success">{zoneData.healthScore}%</p>
                 </div>
                 <div className="text-center">
-                <p className="text-xs text-secondaryDark/60 mb-1">SUPERVISORS</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('common:supervisors')}</p>
                 <p className="text-2xl font-bold text-secondaryDark">{zoneData.supervisors}</p>
                 </div>
                 <div className="text-center">
-                <p className="text-xs text-secondaryDark/60 mb-1">SANITARY INSP.</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('common:sanitary_inspectors')}</p>
                 <p className="text-2xl font-bold text-secondaryDark">{zoneData.sanitaryInspectors}</p>
                 </div>
                 <div className="text-center">
-                <p className="text-xs text-secondaryDark/60 mb-1">URGENT TASKS</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('pages:mho.view_zone.active_tasks')}</p>
                 <p className="text-2xl font-bold text-warning">{zoneData.urgentTasks}</p>
                 </div>
                 <div className="text-center">
-                <p className="text-xs text-secondaryDark/60 mb-1">ESCALATIONS</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('pages:mho.view_zone.escalations')}</p>
                 <p className="text-2xl font-bold text-secondaryDark">{zoneData.escalations}</p>
                 </div>
             </div>
@@ -249,7 +251,7 @@ function ViewZone() {
 
                 <div className="absolute top-4 left-4 bg-white rounded-medium shadow-md px-4 py-2 flex items-center gap-2">
                 <div className="w-2 h-2 bg-primary rounded-full"></div>
-                <span className="text-xs font-bold text-secondaryDark">North Zone View</span>
+                <span className="text-xs font-bold text-secondaryDark">{t('pages:mho.view_zone_page.title')}</span>
                 </div>
 
                 <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 lg:bottom-6 lg:right-6 flex flex-col gap-1.5 sm:gap-2">
@@ -276,10 +278,10 @@ function ViewZone() {
                 <div className="p-4 sm:p-5 lg:p-6">
                 <div className="mb-4">
                     <h2 className="text-base sm:text-lg font-bold text-secondaryDark">
-                    Divisions Overview ({allDivisions.length})
+                    {t('pages:mho.view_zone.zone_overview')} ({allDivisions.length})
                     </h2>
                     <p className="text-xs sm:text-sm text-secondaryDark/60 mt-1">
-                    View all divisions in this zone
+                    {t('pages:mho.view_zone.view_all_divisions')}
                     </p>
                 </div>
 
@@ -290,7 +292,7 @@ function ViewZone() {
                     </div>
                     <input
                     type="text"
-                    placeholder="Search divisions..."
+                    placeholder={t('pages:mho.view_zone.search_placeholder')}
                     value={searchQuery}
                     onChange={function (e) {
                         setSearchQuery(e.target.value);
@@ -311,7 +313,7 @@ function ViewZone() {
                     />
                 ) : (
                     <div className="text-center py-8">
-                    <p className="text-sm text-secondaryDark">No divisions found</p>
+                    <p className="text-sm text-secondaryDark">{t('pages:mho.view_zone.no_divisions_found')}</p>
                     </div>
                 )}
                 </div>

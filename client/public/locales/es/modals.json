@@ -1,0 +1,325 @@
+{
+  "calendar": {
+    "select_date": "Seleccionar fecha",
+    "clear": "Limpiar",
+    "apply": "Aplicar"
+  },
+  "date_range": {
+    "select_date": "Seleccionar fecha",
+    "from": "Desde:",
+    "to": "Hasta:",
+    "cancel": "Cancelar",
+    "apply": "Aplicar"
+  },
+  "assign_task": {
+    "title": "Asignar tarea",
+    "confirm_message": "¿Está seguro de que desea asignar",
+    "close": "Cerrar",
+    "yes_confirm": "Sí, confirmar",
+    "toast_assigned_success": "Recolector asignado exitosamente"
+  },
+  "attendance_confirmation": {
+    "verify_title": "Verificar asistencia",
+    "reject_title": "Rechazar asistencia",
+    "verify_message": "¿Desea verificar la asistencia de",
+    "reject_message": "¿Desea rechazar la asistencia de",
+    "reject_suffix": "Esto los marcará como ausentes.",
+    "name": "Nombre:",
+    "employee_id": "ID de empleado:",
+    "check_in_time": "Hora de entrada:",
+    "location": "Ubicación:",
+    "cancel": "Cancelar",
+    "verify": "Verificar",
+    "reject": "Rechazar"
+  },
+  "priority": {
+    "label": "Prioridad:",
+    "community_vote": "Voto comunitario",
+    "reported_by": "Reportado por",
+    "trash_type": "Tipo de basura",
+    "escalation_history": "Historial de escalamiento",
+    "l2_badge": "L2",
+    "escalated_by_supervisor": "Escalado por supervisor",
+    "supervisor": "Supervisor",
+    "l3_badge": "L3",
+    "escalated_by_inspector": "Escalado además por inspector sanitario",
+    "inspector": "Inspector sanitario",
+    "description": "Descripción",
+    "reported_on": "Reportado el",
+    "close": "Cerrar"
+  },
+  "image_viewer": {
+    "alt_full_size": "Tamaño completo",
+    "click_outside_to_close": "Haga clic afuera para cerrar"
+  },
+  "attendance_submitted": {
+    "title": "Asistencia enviada",
+    "message": "Su asistencia ha sido enviada. Consulte el historial para seguimiento.",
+    "view_history": "Ver historial",
+    "done": "Listo"
+  },
+  "resolve_confirmation": {
+    "title": "Confirmar resolución",
+    "message": "¿Desea marcar esta tarea como resuelta? Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  },
+  "task_detail": {
+    "task_id": "ID de tarea:",
+    "location": "Ubicación",
+    "reported_at": "Reportado el",
+    "resolved_at": "Resuelto el",
+    "resolved_by": "Resuelto por",
+    "close": "Cerrar"
+  },
+  "deleted_config": {
+    "title": "Configuraciones eliminadas",
+    "subtitle": "Restaurar para recuperar una configuración",
+    "empty": "No hay configuraciones eliminadas",
+    "config_prefix": "Config",
+    "restoring": "Restaurando…",
+    "restore": "Restaurar",
+    "time": "Tiempo",
+    "questions": "Preguntas",
+    "total_score": "Puntuación total",
+    "pass_mark": "Nota de aprobación",
+    "correct_mark": "+Marca",
+    "wrong_mark": "-Marca",
+    "close": "Cerrar",
+    "toast_load_failed": "Error al cargar configuraciones eliminadas",
+    "toast_restored": "Configuración {{id}} restaurada",
+    "toast_restore_failed": "Error al restaurar la configuración"
+  },
+  "delete_question": {
+    "title": "Eliminar pregunta",
+    "message": "¿Desea eliminar esta pregunta? Esta acción no se puede deshacer.",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "log_details": {
+    "title": "Detalles del registro",
+    "api_request_log": "Registro de solicitud API",
+    "audit_trail_log": "Registro de auditoría",
+    "event_log": "Registro de eventos",
+    "log_id": "ID de registro",
+    "user_id": "ID de usuario",
+    "role_id": "ID de rol",
+    "endpoint": "Endpoint",
+    "http_method": "Método HTTP",
+    "status_code": "Código de estado",
+    "response_time": "Tiempo de respuesta",
+    "ip_address": "Dirección IP",
+    "user_agent": "Agente de usuario",
+    "request_body": "Cuerpo de solicitud",
+    "response_body": "Cuerpo de respuesta",
+    "created_at": "Creado el",
+    "audit_id": "ID de auditoría",
+    "entity_type": "Tipo de entidad",
+    "entity_id": "ID de entidad",
+    "action_type": "Tipo de acción",
+    "old_value": "Valor anterior",
+    "new_value": "Valor nuevo",
+    "performed_by": "Realizado por",
+    "performed_role": "Rol ejecutor",
+    "remarks": "Observaciones",
+    "event_id": "ID de evento",
+    "event_type": "Tipo de evento",
+    "severity": "Severidad",
+    "metadata": "Metadatos"
+  },
+  "update_question": {
+    "edit_title": "Editar pregunta",
+    "add_title": "Agregar nueva pregunta",
+    "edit_subtitle": "Actualice los detalles de la pregunta",
+    "add_subtitle": "Complete los detalles para agregar una nueva pregunta",
+    "question_text": "Texto de la pregunta",
+    "question_placeholder": "Ingrese el texto de la pregunta...",
+    "answer_options": "Opciones de respuesta",
+    "option_placeholder": "Opción {{number}}",
+    "correct_answer_hint": "Haga clic en el círculo para marcar la respuesta correcta",
+    "cancel": "Cancelar",
+    "save_changes": "Guardar cambios",
+    "add_question": "Agregar pregunta"
+  },
+  "transfer_employee": {
+    "title": "Transferir empleado",
+    "current_zone": "Zona actual:",
+    "current_division": "División actual:",
+    "transfer_to_zone": "Transferir a zona",
+    "select_zone": "Seleccionar zona",
+    "transfer_to_division": "Transferir a división",
+    "select_division": "Seleccionar división",
+    "cancel": "Cancelar",
+    "transfer": "Transferir",
+    "toast_select_zone": "Por favor seleccione una zona",
+    "toast_select_division": "Por favor seleccione una división",
+    "toast_transfer_success": "{{name}} transferido exitosamente"
+  },
+  "confirm": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  },
+  "quiz_result": {
+    "title": "¡Cuestionario completado!",
+    "quiz_id_prefix": "Cuestionario #",
+    "score_label": "Puntuación",
+    "passed": "¡Aprobado!",
+    "failed": "Reprobado",
+    "your_score": "Su puntuación",
+    "total_score": "Puntuación total",
+    "great_job": "¡Excelente trabajo!",
+    "keep_practicing": "¡Siga practicando!",
+    "passed_message": "Obtuvo {{percentage}}% y aprobó. (Aprobación: {{passMarkPercentage}}%)",
+    "failed_message": "Obtuvo {{percentage}}%. Se necesita {{passMarkPercentage}}% para aprobar.",
+    "back_to_quiz": "Volver al cuestionario",
+    "retake_quiz": "Repetir cuestionario"
+  },
+  "review_quiz": {
+    "title_prefix": "Revisión del cuestionario - #",
+    "score_label": "Puntuación:",
+    "questions": "Preguntas",
+    "question_of": "Pregunta {{current}} de {{total}}",
+    "correct": "Correcto",
+    "incorrect": "Incorrecto",
+    "correct_answer": "Respuesta correcta: Opción {{letter}}",
+    "previous": "Anterior",
+    "prev": "Anterior",
+    "next": "Siguiente"
+  },
+  "show_certificate": {
+    "title": "Certificado de logro",
+    "quiz_id_prefix": "Cuestionario #",
+    "download_certificate": "Descargar certificado",
+    "toast_download_failed": "Error al descargar certificado. Intente nuevamente.",
+    "toast_download_success": "¡Certificado descargado exitosamente!"
+  },
+  "feedback": {
+    "id_prefix": "ID:",
+    "rate_experience": "Califique su experiencia",
+    "share_feedback": "Comparta sus comentarios",
+    "placeholder": "Cuéntenos sobre su experiencia con el servicio de recolección de residuos...",
+    "cancel": "Cancelar",
+    "submitting": "Enviando...",
+    "submit_feedback": "Enviar comentarios",
+    "toast_select_rating": "Por favor seleccione una calificación",
+    "toast_submit_success": "¡Comentarios enviados exitosamente!"
+  },
+  "report_submitted": {
+    "title": "Reporte enviado",
+    "message": "Su reporte será visible en el mapa comunitario. Nuestro equipo lo revisará pronto.",
+    "view_on_map": "Ver en mapa",
+    "submit_another": "Enviar otro"
+  },
+  "all_complaints": {
+    "title": "Todas las quejas"
+  },
+  "selected_complaint": {
+    "reported_by": "Reportado por {{name}} hace {{time}}",
+    "is_info_correct": "¿Es correcta esta información?",
+    "confirm_message": "Confirme que la basura aún está presente y la ubicación es exacta.",
+    "yes_correct": "Sí, es correcto",
+    "no_gone": "No, fue retirado",
+    "community": "Comunidad",
+    "yes": "Sí",
+    "no": "No",
+    "toast_confirmed": "Gracias por confirmar el reporte",
+    "toast_feedback": "Gracias por sus comentarios"
+  },
+  "update_address": {
+    "title": "Aviso de cambio de dirección",
+    "subtitle": "Información importante sobre actualización de dirección",
+    "monthly_limit": "Límite de actualización mensual",
+    "limit_message": "Los cambios de dirección están limitados a una vez al mes. Verifique su información antes de guardar.",
+    "cancel": "Cancelar",
+    "agree": "Acepto"
+  },
+  "update_contact": {
+    "title": "Verifique su contacto",
+    "subtitle": "Código de verificación enviado",
+    "code_sent_phone": "Código enviado a su número de teléfono",
+    "code_sent_email": "Código enviado a su correo electrónico",
+    "enter_code": "Ingrese el código de verificación",
+    "didnt_receive": "¿No recibió el código?",
+    "resend_otp": "Reenviar OTP",
+    "cancel": "Cancelar",
+    "verifying": "Verificando...",
+    "verify_continue": "Verificar y continuar"
+  },
+  "view_profile": {
+    "title": "Foto de perfil",
+    "alt_profile": "Perfil"
+  },
+  "si_street_filter": {
+    "title": "Filtrar por ruta"
+  },
+  "si_move_street": {
+    "title": "Mover calle",
+    "street_name_label": "Nombre de calle",
+    "households_count": "{{count}} hogares",
+    "current_route": "Ruta actual:",
+    "select_new_route": "Seleccionar nueva ruta",
+    "street_count_one": "{{count}} calle",
+    "street_count_other": "{{count}} calles",
+    "move_street": "Mover calle"
+  },
+  "si_trashman_filter": {
+    "title": "Filtrar por ruta"
+  },
+  "si_move_trashman": {
+    "title": "Reasignar recolector",
+    "current_route": "Ruta actual:",
+    "select_new_route": "Seleccionar nueva ruta",
+    "trashman_count_one": "{{count}} recolector",
+    "trashman_count_other": "{{count}} recolectores",
+    "reassign": "Reasignar"
+  },
+  "config_route": {
+    "delete_title": "Eliminar ruta",
+    "delete_confirm_prefix": "¿Desea eliminar",
+    "delete_confirm_suffix": "? Esta acción no se puede deshacer."
+  },
+  "config_zone": {
+    "delete_title": "Eliminar zona",
+    "delete_confirm_prefix": "¿Desea eliminar",
+    "delete_confirm_suffix": "? Esta acción no se puede deshacer."
+  },
+  "mho_division_filter": {
+    "title": "Filtrar por zona"
+  },
+  "mho_move_division": {
+    "title": "Mover división",
+    "division_name_label": "Nombre de división",
+    "wards_streets_count": "{{wards}} barrios • {{streets}} calles",
+    "current_zone": "Zona actual:",
+    "select_new_zone": "Seleccionar nueva zona",
+    "division_count_one": "{{count}} división",
+    "division_count_other": "{{count}} divisiones",
+    "move_division": "Mover división"
+  },
+  "mho_ward_filter": {
+    "title": "Filtrar por división"
+  },
+  "mho_move_ward": {
+    "title": "Mover barrio",
+    "ward_label": "Barrio",
+    "streets_count": "{{count}} calles",
+    "current_division": "División actual:",
+    "select_new_division": "Seleccionar nueva división",
+    "ward_count_one": "{{count}} barrio",
+    "ward_count_other": "{{count}} barrios",
+    "move_ward": "Mover barrio"
+  },
+  "mho_street_filter": {
+    "title": "Filtrar por barrio"
+  },
+  "mho_move_street": {
+    "title": "Mover calle",
+    "street_name_label": "Nombre de calle",
+    "households_count": "{{count}} hogares",
+    "current_ward": "Barrio actual:",
+    "select_new_ward": "Seleccionar nuevo barrio",
+    "street_count_one": "{{count}} calle",
+    "street_count_other": "{{count}} calles",
+    "move_street": "Mover calle"
+  }
+}

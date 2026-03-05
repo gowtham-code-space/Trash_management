@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { X, Trash } from "../../../assets/icons/icons";
 import ThemeStore from "../../../store/ThemeStore";
 
 function DeleteQuestionModal({ question, onConfirm, onClose }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
 
     if (!question) return null;
 
@@ -19,7 +21,7 @@ function DeleteQuestionModal({ question, onConfirm, onClose }) {
                 <Trash size={16} defaultColor="#E75A4C" />
                 </div>
                 <h2 className={`text-base font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                Delete Question
+                {t('modals:delete_question.title')}
                 </h2>
             </div>
             <button
@@ -32,7 +34,7 @@ function DeleteQuestionModal({ question, onConfirm, onClose }) {
             </div>
 
             <p className={`text-sm ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-            Are you sure you want to delete this question? This action cannot be undone.
+            {t('modals:delete_question.message')}
             </p>
 
             <div className={`p-3 rounded-large border text-sm font-medium line-clamp-2
@@ -46,13 +48,13 @@ function DeleteQuestionModal({ question, onConfirm, onClose }) {
                 className={`flex-1 py-3 rounded-medium text-sm font-semibold hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out
                 ${isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-secondary text-secondaryDark"}`}
             >
-                Cancel
+                {t('modals:delete_question.cancel')}
             </button>
             <button
                 onClick={onConfirm}
                 className="flex-1 py-3 rounded-medium text-sm font-semibold bg-error text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-error/20 transition-all duration-200 ease-in-out"
             >
-                Delete
+                {t('modals:delete_question.delete')}
             </button>
             </div>
         </div>

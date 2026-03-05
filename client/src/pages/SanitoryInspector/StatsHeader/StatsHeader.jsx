@@ -3,38 +3,44 @@ import React, { useState } from "react";
 //tabs
 import Overview from "./Tabs/Overview";
 import Environment from "./Tabs/Environment";
+import { useTranslation } from "react-i18next";
 
 function StatsHeader({ ShowInspectorDetails = true }) {
+    const { t } = useTranslation(["pages", "common"]);
     const [activeTab, setActiveTab] = useState("Overview");
 
     const stats = [
         {
-        label: "Total Active Workers",
+        label: t('pages:inspector.stats.total_active_workers'),
         value: "32",
-        subtext: "98% Compliance",
+        subtext: t('pages:inspector.stats.compliance'),
         subtextColor: "text-success"
         },
         {
-        label: "Tasks Assigned",
+        label: t('pages:inspector.stats.tasks_assigned_stat'),
         value: "145",
-        subtext: "Avg 4.5/worker",
+        subtext: t('pages:inspector.stats.avg_per_worker'),
         subtextColor: "text-secondaryDark"
         },
         {
-        label: "Active Complaints",
+        label: t('pages:inspector.stats.active_complaints'),
         value: "12",
-        subtext: "Needs Review",
+        subtext: t('pages:inspector.stats.needs_review'),
         subtextColor: "text-error"
         },
         {
-        label: "Escalations",
+        label: t('pages:inspector.stats.escalations'),
         value: "3",
-        subtext: "Needs Attention",
+        subtext: t('pages:inspector.stats.needs_attention'),
         subtextColor: "text-error"
         }
     ];
 
     const tabs = ["Overview", "Environment"];
+    const tabLabels = {
+        "Overview": t('pages:inspector.stats.overview'),
+        "Environment": t('pages:inspector.stats.environment')
+    };
 
     function handleTabClick(tab) {
         setActiveTab(tab);
@@ -54,26 +60,26 @@ function StatsHeader({ ShowInspectorDetails = true }) {
                             <h3 className="text-lg font-bold text-primary">Gowtham CD</h3>
                             <p className="text-sm text-secondaryDark">TM-2024-001</p>
                             <div className="flex items-center gap-2 mt-1">
-                                <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded">SANITARY INSPECTOR</span>
+                                <span className="text-xs font-medium text-success bg-success/10 px-2 py-1 rounded">{t('pages:inspector.stats.sanitary_inspector')}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Assigned Zone */}
                     <div>
-                        <p className="text-xs text-secondaryDark mb-1">ASSIGNED ZONE</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('pages:shared.assigned_zone')}</p>
                         <p className="text-base font-medium text-success">Zone A - Block 5</p>
                     </div>
 
                     {/* Joined Date */}
                     <div>
-                        <p className="text-xs text-secondaryDark mb-1">JOINED</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('pages:shared.joined')}</p>
                         <p className="text-base font-medium text-primary">Jan 2024</p>
                     </div>
 
                     {/* Attendance */}
                     <div>
-                        <p className="text-xs text-secondaryDark mb-1">ATTENDANCE</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('common:attendance')}</p>
                         <div className="flex items-center gap-2">
                             <span className="text-base font-bold text-success">92%</span>
                             <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
@@ -86,19 +92,19 @@ function StatsHeader({ ShowInspectorDetails = true }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 pt-4 border-t border-secondary">
                     {/* Tasks Completed */}
                     <div>
-                        <p className="text-xs text-secondaryDark mb-1">TASKS COMPLETED</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('pages:shared.tasks_completed')}</p>
                         <p className="text-base font-medium text-success">142</p>
                     </div>
 
                     {/* Phone */}
                     <div>
-                        <p className="text-xs text-secondaryDark mb-1">PHONE</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('common:phone')}</p>
                         <p className="text-base font-medium text-primary">+91 98765 43210</p>
                     </div>
 
                     {/* Email */}
                     <div className="md:col-span-2">
-                        <p className="text-xs text-secondaryDark mb-1">EMAIL</p>
+                        <p className="text-xs text-secondaryDark mb-1">{t('common:email')}</p>
                         <p className="text-base font-medium text-primary">gowtham.cd@trashmanagement.com</p>
                     </div>
                 </div>
@@ -144,7 +150,7 @@ function StatsHeader({ ShowInspectorDetails = true }) {
                         : "text-secondaryDark"
                     }`}
                 >
-                    {tab}
+                    {tabLabels[tab]}
                 </button>
                 );
             })}

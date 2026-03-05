@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { LeftArrow, RightArrow, Calendar, UpArrow, DownArrow } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function DateRangePicker({ onApply, onClose, isDarkTheme }) {
+    const { t } = useTranslation(["modals", "common"]);
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -13,8 +15,10 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
     const yearDropdownRef = useRef(null);
 
     const monthNames = [
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        t('common:months_short.jan'), t('common:months_short.feb'), t('common:months_short.mar'),
+        t('common:months_short.apr'), t('common:months_short.may'), t('common:months_short.jun'),
+        t('common:months_short.jul'), t('common:months_short.aug'), t('common:months_short.sep'),
+        t('common:months_short.oct'), t('common:months_short.nov'), t('common:months_short.dec')
     ];
 
     const currentYear = new Date().getFullYear();
@@ -86,7 +90,7 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
     }
 
     function formatDate(date) {
-        if (!date) return 'Select Date';
+        if (!date) return t('modals:date_range.select_date');
         return `${date.getDate()} ${monthNames[date.getMonth()]}, ${date.getFullYear()}`;
     }
 
@@ -192,7 +196,7 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
                 </div>
 
                 <div className="grid grid-cols-7 gap-1 mb-4">
-                    {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
+                    {t('common:weekdays_initial', { returnObjects: true }).map((day, idx) => (
                         <div key={idx} className={`text-center text-[10px] font-semibold py-1 ${
                             isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"
                         }`}>
@@ -236,7 +240,7 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
 
                 <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2">
-                        <span className={`text-xs font-medium w-12 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>From:</span>
+                        <span className={`text-xs font-medium w-12 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('modals:date_range.from')}</span>
                         <button
                             onClick={() => setSelectingFor('from')}
                             className={`flex-1 px-3 py-1.5 rounded-medium text-xs font-medium text-left cursor-pointer hover:scale-[0.99] active:scale-[0.99] transition-all ${
@@ -249,7 +253,7 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
                         </button>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className={`text-xs font-medium w-12 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>To:</span>
+                        <span className={`text-xs font-medium w-12 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('modals:date_range.to')}</span>
                         <button
                             onClick={() => setSelectingFor('to')}
                             className={`flex-1 px-3 py-1.5 rounded-medium text-xs font-medium text-left cursor-pointer hover:scale-[0.99] active:scale-[0.99] transition-all ${
@@ -270,14 +274,14 @@ function DateRangePicker({ onApply, onClose, isDarkTheme }) {
                             isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-secondary text-primary"
                         }`}
                     >
-                        Cancel
+                        {t('modals:date_range.cancel')}
                     </button>
                     <button
                         onClick={handleApplyClick}
                         disabled={!fromDate || !toDate}
                         className="flex-1 bg-primary text-white px-4 py-2 rounded-medium text-xs font-medium hover:scale-[0.99] active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Apply
+                        {t('modals:date_range.apply')}
                     </button>
                 </div>
             </div>

@@ -14,6 +14,7 @@ Edit,
 DownArrow,
 } from "../../assets/icons/icons";
 import { getMetrics, getDashboardKpis } from "../../services/features/adminService";
+import { useTranslation } from "react-i18next";
 
 function fmt(n) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
@@ -27,21 +28,21 @@ function pct(curr, prev) {
   return (Number(v) >= 0 ? '+' : '') + v + '%';
 }
 
-function buildKpiCards(d) {
+function buildKpiCards(d, t) {
   if (!d) return [];
   const reqPerMin = d.minutesElapsedToday ? Math.round(d.apiRequestsToday / d.minutesElapsedToday) : 0;
   const apiChange = pct(d.apiRequestsToday, d.apiRequestsYesterday);
   const userChange = pct(d.newUsersThisMonth, d.newUsersLastMonth);
-  const errRate = d.apiRequestsToday ? ((d.errors4xx / d.apiRequestsToday) * 100).toFixed(2) + '% Rate' : '0.00% Rate';
+  const errRate = d.apiRequestsToday ? ((d.errors4xx / d.apiRequestsToday) * 100).toFixed(2) : '0.00';
   return [
-    { title: 'API Requests Today', value: fmt(d.apiRequestsToday), subtitle: apiChange ? `${apiChange} vs yesterday` : 'No prior data', subtitleColor: apiChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <Mobile size={16} /> },
-    { title: 'Requests / Min', value: fmt(reqPerMin), subtitle: "Today's avg rate", icon: <Stats size={16} /> },
-    { title: '4XX Errors', value: fmt(d.errors4xx), subtitle: errRate, subtitleColor: '#F2C94C', icon: <Notification size={16} /> },
-    { title: '5XX Errors', value: fmt(d.errors5xx), subtitle: d.errors5xx > 0 ? 'Critical Check' : 'All Clear', subtitleColor: d.errors5xx > 0 ? '#E75A4C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.errors5xx > 0 },
-    { title: 'Avg Response Time', value: d.avgResponseMs + 'ms', subtitle: d.avgResponseMs < 200 ? 'Optimal (<200ms)' : d.avgResponseMs < 500 ? 'Moderate' : 'High latency', subtitleColor: d.avgResponseMs < 200 ? '#1E8E54' : d.avgResponseMs < 500 ? '#F2C94C' : '#E75A4C', icon: <Stats size={16} /> },
-    { title: 'New Users', value: fmt(d.newUsersThisMonth), subtitle: userChange ? `${userChange} vs last month` : 'This month', subtitleColor: userChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <People size={16} /> },
-    { title: 'Failed Login Attempts', value: fmt(d.failedLoginsToday), subtitle: d.failedLoginsToday > 50 ? 'Security Check' : 'Normal range', subtitleColor: d.failedLoginsToday > 50 ? '#F2C94C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.failedLoginsToday > 100 },
-    { title: 'Active Users Today', value: fmt(d.activeUsersToday), subtitle: 'All roles combined', subtitleColor: '#1E8E54', icon: <People size={16} /> },
+    { title: t('admin.kpi.api_requests_today'), value: fmt(d.apiRequestsToday), subtitle: apiChange ? t('admin.kpi.subtitle_vs_yesterday', { change: apiChange }) : t('admin.kpi.subtitle_no_prior'), subtitleColor: apiChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <Mobile size={16} /> },
+    { title: t('admin.kpi.requests_per_min'), value: fmt(reqPerMin), subtitle: t('admin.kpi.subtitle_avg_rate'), icon: <Stats size={16} /> },
+    { title: t('admin.kpi.errors_4xx'), value: fmt(d.errors4xx), subtitle: t('admin.kpi.subtitle_err_rate', { rate: errRate }), subtitleColor: '#F2C94C', icon: <Notification size={16} /> },
+    { title: t('admin.kpi.errors_5xx'), value: fmt(d.errors5xx), subtitle: d.errors5xx > 0 ? t('admin.kpi.subtitle_critical') : t('admin.kpi.subtitle_all_clear'), subtitleColor: d.errors5xx > 0 ? '#E75A4C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.errors5xx > 0 },
+    { title: t('admin.kpi.avg_response_time'), value: d.avgResponseMs + 'ms', subtitle: d.avgResponseMs < 200 ? t('admin.kpi.subtitle_optimal') : d.avgResponseMs < 500 ? t('admin.kpi.subtitle_moderate') : t('admin.kpi.subtitle_high_latency'), subtitleColor: d.avgResponseMs < 200 ? '#1E8E54' : d.avgResponseMs < 500 ? '#F2C94C' : '#E75A4C', icon: <Stats size={16} /> },
+    { title: t('admin.kpi.new_users'), value: fmt(d.newUsersThisMonth), subtitle: userChange ? t('admin.kpi.subtitle_vs_last_month', { change: userChange }) : t('admin.kpi.subtitle_this_month'), subtitleColor: userChange?.startsWith('+') ? '#1E8E54' : '#E75A4C', icon: <People size={16} /> },
+    { title: t('admin.kpi.failed_logins'), value: fmt(d.failedLoginsToday), subtitle: d.failedLoginsToday > 50 ? t('admin.kpi.subtitle_security') : t('admin.kpi.subtitle_normal'), subtitleColor: d.failedLoginsToday > 50 ? '#F2C94C' : '#1E8E54', icon: <Notification size={16} />, highlighted: d.failedLoginsToday > 100 },
+    { title: t('admin.kpi.active_users_today'), value: fmt(d.activeUsersToday), subtitle: t('admin.kpi.subtitle_all_roles'), subtitleColor: '#1E8E54', icon: <People size={16} /> },
   ];
 }
 
@@ -60,6 +61,7 @@ function toChartData(rows, range) {
 
 function AdminDashboard() {
 const { isDarkTheme } = ThemeStore();
+const { t } = useTranslation('dashboard');
 const [isEditingEscalation, setIsEditingEscalation] = useState(false);
 const [activeFilter, setActiveFilter] = useState("today");
 const [showDatePicker, setShowDatePicker] = useState(false);
@@ -69,11 +71,11 @@ const [kpis, setKpis] = useState(null);
 const [kpisLoading, setKpisLoading] = useState(true);
 const [chartData, setChartData] = useState({ traffic: [], errors4xx: [], errors5xx: [] });
 const [escalationConfig, setEscalationConfig] = useState([
-    { role: "Resident", timing: "Trigger", isTrigger: true, editable: false },
-    { role: "Supervisor", timing: "24h", editable: true },
-    { role: "Sanitary Inspector", timing: "48h", editable: true },
-    { role: "MHO", timing: "72h", editable: true },
-    { role: "Commissioner", timing: "Final", isFinal: true, editable: false },
+    { roleKey: "roles.resident", timing: "Trigger", isTrigger: true, editable: false },
+    { roleKey: "roles.supervisor", timing: "24h", editable: true },
+    { roleKey: "roles.sanitary_inspector", timing: "48h", editable: true },
+    { roleKey: "roles.mho", timing: "72h", editable: true },
+    { roleKey: "roles.commissioner", timing: "Final", isFinal: true, editable: false },
 ]);
 
 useEffect(() => {
@@ -122,7 +124,7 @@ function handleTimingChange(index, value) {
 
 function handleSaveConfiguration() {
     setIsEditingEscalation(false);
-    ToastNotification("Escalation configuration updated successfully", "success");
+    ToastNotification(t('admin.escalation.updated'), "success");
 }
 
 function handleFilterClick(value) {
@@ -154,7 +156,7 @@ return (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {kpisLoading
             ? Array.from({ length: 8 }).map((_, i) => <AdminKpiCard key={i} loading />)
-            : buildKpiCards(kpis).map((card, idx) => (
+            : buildKpiCards(kpis, t).map((card, idx) => (
                 <AdminKpiCard key={idx} title={card.title} value={card.value} subtitle={card.subtitle} subtitleColor={card.subtitleColor} icon={card.icon} highlighted={card.highlighted} />
             ))
         }
@@ -164,8 +166,8 @@ return (
             <div  className="lg:col-span-2">
                 <div>
                     <AreaChart
-                    title="API Traffic Volume"
-                    subtitle="Requests per minute trend"
+                    title={t('admin.charts.traffic_title')}
+                    subtitle={t('admin.charts.traffic_subtitle')}
                     data={chartData.traffic}
                     showFilters={true}
                     activeFilter={activeFilter}
@@ -179,15 +181,15 @@ return (
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
                     <AreaChart 
-                    title="4xx Errors Trend"
-                    subtitle="Client errors over time"
+                    title={t('admin.charts.errors_4xx_title')}
+                    subtitle={t('admin.charts.errors_4xx_subtitle')}
                     data={chartData.errors4xx}
                     showFilters={false}
                     syncId="apiCharts"
                     />
                     <AreaChart 
-                    title="5xx Errors Trend"
-                    subtitle="Server errors over time"
+                    title={t('admin.charts.errors_5xx_title')}
+                    subtitle={t('admin.charts.errors_5xx_subtitle')}
                     data={chartData.errors5xx}
                     showFilters={false}
                     syncId="apiCharts"
@@ -201,14 +203,14 @@ return (
             <div className="flex items-center justify-between mb-6">
             <div>
                 <h3 className={`text-sm font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>
-                    Escalation Timing Flow
+                    {t('admin.escalation.title')}
                 </h3>
                 <p className={`text-xs mt-0.5 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                Automated escalation hierarchy
+                {t('admin.escalation.subtitle')}
                 </p>
             </div>
             <span className="text-xs font-semibold text-primaryLight bg-primaryLight/10 px-2.5 py-1 rounded-medium">
-                v2.4 Active
+                {t('admin.escalation.version_badge', { version: '2.4' })}
             </span>
             </div>
 
@@ -244,10 +246,10 @@ return (
                             : "text-secondaryDark"
                             }`}
                         >
-                            {tier.role}
+                            {t(`common:${tier.roleKey}`)}
                         </span>
                         <span className={`text-[10px] font-medium mt-0.5 block ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark/60"}`}>
-                            {tier.isTrigger ? "Initial Request" : tier.isFinal ? "Final Authority" : `Auto-escalate after ${tier.timing}`}
+                            {tier.isTrigger ? t('admin.escalation.initial_request') : tier.isFinal ? t('admin.escalation.final_authority') : t('admin.escalation.auto_escalate', { timing: tier.timing })}
                         </span>
                         </div>
                         
@@ -260,7 +262,7 @@ return (
                             ${isDarkTheme
                                 ? "bg-darkSurface border-darkBorder text-darkTextPrimary"
                                 : "bg-white border-gray-300 text-primary"}`}
-                            placeholder="24h"
+                            placeholder={t('admin.escalation.timing_placeholder')}
                         />
                         ) : (
                         <span
@@ -295,7 +297,7 @@ return (
                     handleSaveConfiguration();
                 } else {
                     setIsEditingEscalation(true);
-                    ToastNotification("Edit mode enabled - adjust timing values", "info");
+                    ToastNotification(t('dashboard:admin.escalation.edit_mode_enabled'), "info");
                 }
                 }}
                 className="w-full mt-4 bg-primary text-white py-3 rounded-large text-sm font-bold flex items-center justify-center gap-2
@@ -305,12 +307,12 @@ return (
                 {isEditingEscalation ? (
                 <>
                     <Check size={16} defaultColor="#fff" isDarkTheme={true} />
-                    Save Configuration
+                    {t('admin.escalation.save')}
                 </>
                 ) : (
                 <>
                     <Edit size={16} defaultColor="#fff" isDarkTheme={true} />
-                    Update Configuration
+                    {t('admin.escalation.edit')}
                 </>
                 )}
             </button>

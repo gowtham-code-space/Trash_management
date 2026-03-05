@@ -19,37 +19,39 @@ import ToastNotification from "../../components/Notification/ToastNotification";
 import ThemeStore from "../../store/ThemeStore";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function InspectorDashboard() {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
     const [isMapExpanded, setIsMapExpanded] = useState(false);
-    const [selectedView, setSelectedView] = useState("trashmen"); // "trashmen" or "supervisors"
+    const [selectedView, setSelectedView] = useState("trashmen");
+    const { t } = useTranslation('pages');
 
     function handleNotificationClick() {
-        ToastNotification("You have 5 new notifications", "info");
+        ToastNotification(t('inspector.dashboard.toast_notifications', { count: 5 }), "info");
     }
 
     function handleZoomIn() {
-        ToastNotification("Zooming in", "info");
+        ToastNotification(t('shared.zoom_in_toast'), "info");
     }
 
     function handleZoomOut() {
-        ToastNotification("Zooming out", "info");
+        ToastNotification(t('shared.zoom_out_toast'), "info");
     }
 
     function handleLocate() {
-        ToastNotification("Locating inspector position", "info");
+        ToastNotification(t('inspector.dashboard.toast_locate'), "info");
     }
 
     function handleExpandMap() {
         setIsMapExpanded(!isMapExpanded);
-        ToastNotification(isMapExpanded ? "Map view minimized" : "Map view expanded", "info");
+        ToastNotification(isMapExpanded ? t('shared.map_minimized') : t('shared.map_expanded'), "info");
     }
 
     function handleViewSwitch(view) {
         setSelectedView(view);
-        ToastNotification(`Switched to ${view} view`, "info");
+        ToastNotification(t('inspector.dashboard.toast_view_switch', { view }), "info");
     }
 
     return (
@@ -69,7 +71,7 @@ function InspectorDashboard() {
                                 : "bg-transparent text-secondaryDark hover:bg-secondary"
                         }`}
                     >
-                        Trashmen
+                        {t('inspector.dashboard.view_trashmen')}
                     </button>
                     <button
                         onClick={() => handleViewSwitch("supervisors")}
@@ -79,7 +81,7 @@ function InspectorDashboard() {
                                 : "bg-transparent text-secondaryDark hover:bg-secondary"
                         }`}
                     >
-                        Supervisors
+                        {t('inspector.dashboard.view_supervisors')}
                     </button>
                 </div>
 
@@ -89,20 +91,20 @@ function InspectorDashboard() {
                         {/* Total Trashmen */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Trashmen</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('inspector.dashboard.total_trashmen')}</p>
                                 <People size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">128</h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                                <p className="text-xs font-medium text-primary">Across All Zones</p>
+                                <p className="text-xs font-medium text-primary">{t('inspector.dashboard.across_all_zones')}</p>
                             </div>
                         </div>
 
                         {/* Attendance Today */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Attendance Today</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('shared.attendance_today')}</p>
                                 <Certificate size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">
@@ -110,20 +112,20 @@ function InspectorDashboard() {
                             </h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                                <p className="text-xs font-medium text-yellow-600">13 Absent</p>
+                                <p className="text-xs font-medium text-yellow-600">{t('shared.absent_count', { count: 13 })}</p>
                             </div>
                         </div>
 
                         {/* Pending Tasks */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Pending Tasks</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('inspector.dashboard.pending_tasks')}</p>
                                 <Task size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">18</h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
-                                <p className="text-xs font-medium text-red-500">5 Overdue &gt; 24h</p>
+                                <p className="text-xs font-medium text-red-500">{t('shared.overdue_count', { count: 5 })}</p>
                             </div>
                         </div>
                     </div>
@@ -132,20 +134,20 @@ function InspectorDashboard() {
                         {/* Total Supervisors */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Total Supervisors</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('inspector.dashboard.total_supervisors')}</p>
                                 <People size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">12</h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-primary rounded-full"></div>
-                                <p className="text-xs font-medium text-primary">Managing All Zones</p>
+                                <p className="text-xs font-medium text-primary">{t('inspector.dashboard.managing_all_zones')}</p>
                             </div>
                         </div>
 
                         {/* Attendance Today */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Attendance Today</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('shared.attendance_today')}</p>
                                 <Certificate size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">
@@ -153,20 +155,20 @@ function InspectorDashboard() {
                             </h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full"></div>
-                                <p className="text-xs font-medium text-yellow-600">1 Absent</p>
+                                <p className="text-xs font-medium text-yellow-600">{t('shared.absent_count', { count: 1 })}</p>
                             </div>
                         </div>
 
                         {/* Active Reports */}
                         <div className="bg-secondary border border-secondary rounded-large p-5 shadow-sm hover:scale-[0.99] transition-all duration-200">
                             <div className="flex items-center justify-between mb-3">
-                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Reports</p>
+                                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{t('inspector.dashboard.active_reports')}</p>
                                 <Task size={18} defaultColor="#145B47" />
                             </div>
                             <h3 className="text-xl font-bold text-black mb-2">8</h3>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                                <p className="text-xs font-medium text-green-600">All On Track</p>
+                                <p className="text-xs font-medium text-green-600">{t('shared.all_on_track')}</p>
                             </div>
                         </div>
                     </div>
@@ -183,7 +185,7 @@ function InspectorDashboard() {
                 {/* Live Satellite View Badge */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2">
                     <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Live Satellite View</p>
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">{t('shared.live_satellite_view')}</p>
                 </div>
 
                 {/* Expand Button */}
@@ -192,7 +194,7 @@ function InspectorDashboard() {
                     className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-medium border border-secondary flex items-center gap-2 hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
                 >
                     <Expand size={14} defaultColor="#145B47" />
-                    <p className="text-xs font-bold text-primary uppercase tracking-tight">Expand</p>
+                    <p className="text-xs font-bold text-primary uppercase tracking-tight">{t('shared.expand')}</p>
                 </button>
                 
                 {/* Map Controls */}
@@ -220,7 +222,7 @@ function InspectorDashboard() {
 
                 {/* MOBILE/MID QUICK ACTIONS */}
                 <div className="lg:hidden space-y-3">
-                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">Quick actions</h2>
+                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">{t('shared.quick_actions')}</h2>
                     <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                         
                         {/* Search Workers */}
@@ -232,8 +234,8 @@ function InspectorDashboard() {
                                 <Search size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Search</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Find workers</p>
+                                <p className="text-sm font-bold leading-tight">{t('inspector.dashboard.search_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.find_workers')}</p>
                             </div>
                         </div>
 
@@ -246,8 +248,8 @@ function InspectorDashboard() {
                                 <People size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Attendance</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Track attendance</p>
+                                <p className="text-sm font-bold leading-tight">{t('inspector.dashboard.attendance_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.track_attendance')}</p>
                             </div>
                         </div>
 
@@ -260,8 +262,8 @@ function InspectorDashboard() {
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Tasks</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View all tasks</p>
+                                <p className="text-sm font-bold leading-tight">{t('shared.tasks_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.view_all_tasks')}</p>
                             </div>
                         </div>
 
@@ -274,8 +276,8 @@ function InspectorDashboard() {
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Create Feedback</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">New feedback</p>
+                                <p className="text-sm font-bold leading-tight">{t('shared.create_feedback')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.new_feedback')}</p>
                             </div>
                         </div>
 
@@ -288,8 +290,8 @@ function InspectorDashboard() {
                                 <Configure size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Configure Route</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Manage routes</p>
+                                <p className="text-sm font-bold leading-tight">{t('inspector.dashboard.configure_route_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.manage_routes')}</p>
                             </div>
                         </div>
 
@@ -302,8 +304,8 @@ function InspectorDashboard() {
                                 <Stats size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Overall Stats</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View statistics</p>
+                                <p className="text-sm font-bold leading-tight">{t('inspector.dashboard.overall_stats_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.view_statistics')}</p>
                             </div>
                         </div>
 
@@ -316,8 +318,8 @@ function InspectorDashboard() {
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">ID Card</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View your ID</p>
+                                <p className="text-sm font-bold leading-tight">{t('shared.id_card_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('shared.view_id')}</p>
                             </div>
                         </div>
 
@@ -330,10 +332,10 @@ function InspectorDashboard() {
                         <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                         </div>
-                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">Inspector tip</h3>
+                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.inspector_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                        "Regular monitoring and feedback improves team efficiency by up to 35%."
+                        "{t('inspector.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
@@ -347,7 +349,7 @@ function InspectorDashboard() {
                 <div className="bg-white border border-secondary rounded-large p-5 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
                     <div className="w-1.5 h-4 bg-primary rounded-full" />
-                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">Quick actions</h2>
+                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">{t('shared.quick_actions')}</h2>
                     </div>
                     
                     <div className="space-y-3">
@@ -361,8 +363,8 @@ function InspectorDashboard() {
                                     <Search size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Search</p>
-                                    <p className="text-xs text-gray-500 font-medium">Find workers</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('inspector.dashboard.search_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.find_workers')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -378,8 +380,8 @@ function InspectorDashboard() {
                                     <People size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Attendance</p>
-                                    <p className="text-xs text-gray-500 font-medium">Track attendance</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('inspector.dashboard.attendance_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.track_attendance')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -395,8 +397,8 @@ function InspectorDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Tasks</p>
-                                    <p className="text-xs text-gray-500 font-medium">View all tasks</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('shared.tasks_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.view_all_tasks')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -412,8 +414,8 @@ function InspectorDashboard() {
                                     <FeedBack size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Create Feedback</p>
-                                    <p className="text-xs text-gray-500 font-medium">New feedback session</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('shared.create_feedback')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.new_feedback_session')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -429,8 +431,8 @@ function InspectorDashboard() {
                                     <Configure size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Configure Route</p>
-                                    <p className="text-xs text-gray-500 font-medium">Manage routes</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('inspector.dashboard.configure_route_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.manage_routes')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -446,8 +448,8 @@ function InspectorDashboard() {
                                     <Stats size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Overall Stats</p>
-                                    <p className="text-xs text-gray-500 font-medium">View statistics</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('inspector.dashboard.overall_stats_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.view_statistics')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -463,8 +465,8 @@ function InspectorDashboard() {
                                     <Certificate size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">ID Card</p>
-                                    <p className="text-xs text-gray-500 font-medium">View your ID card</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('shared.id_card_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.view_id_card')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -478,21 +480,21 @@ function InspectorDashboard() {
                     <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                     </div>
-                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">Inspector tip</h3>
+                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.inspector_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                    "Regular monitoring and feedback improves team efficiency by up to 35%."
+                    "{t('inspector.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
                 {/* Support Action */}
                 <button 
                     onClick={function () {
-                    ToastNotification("Opening Support Contact", "info");
+                    ToastNotification(t('shared.contact_support_toast'), "info");
                     }}
                     className="w-full py-3.5 bg-secondary border border-primary/10 rounded-large text-xs font-bold text-primary uppercase tracking-widest hover:bg-primary hover:text-white hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
                 >
-                    Need Help? Contact Support
+                    {t('shared.contact_support')}
                 </button>
                 </div>
             </div>

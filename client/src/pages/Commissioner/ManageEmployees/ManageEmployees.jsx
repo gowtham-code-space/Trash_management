@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Search, Add, DownArrow, Filter } from "../../../assets/icons/icons";
 import EmployeeCard from "../../../components/Cards/Commissioner/EmployeeCard";
@@ -9,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ManageEmployees() {
+  const { t } = useTranslation(["pages", "common"]);
   const { isDarkTheme } = ThemeStore();
   const [activeTab, setActiveTab] = useState("All Officials");
   const [searchQuery, setSearchQuery] = useState("");
@@ -199,13 +201,13 @@ function ManageEmployees() {
         <div className="p-6">
           <div className="bg-white rounded-veryLarge p-6">
             <div className="flex items-center justify-between mb-6">
-              <h1 className="text-xl font-bold text-secondaryDark">Employee Management</h1>
+              <h1 className="text-xl font-bold text-secondaryDark">{t('pages:commissioner.manage_employees.employee_management')}</h1>
               <button
                 onClick={handleHireEmployee}
                 className="flex items-center gap-2 bg-primary text-white px-4 py-3 rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
               >
                 <Add size={20} isDarkTheme={true} />
-                <span>Hire New Employee</span>
+                <span>{t('pages:commissioner.manage_employees.hire_new_employee')}</span>
               </button>
             </div>
 
@@ -215,7 +217,7 @@ function ManageEmployees() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by name or ID..."
+                  placeholder={t('pages:commissioner.manage_employees.search_placeholder')}
                   className="w-full pl-10 pr-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                 />
                 <div className="absolute left-3 top-3">
@@ -303,7 +305,7 @@ function ManageEmployees() {
 
             {filteredEmployees.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-secondaryDark">No employees found</p>
+                <p className="text-secondaryDark">{t('pages:commissioner.manage_employees.no_employees_found')}</p>
               </div>
             )}
 

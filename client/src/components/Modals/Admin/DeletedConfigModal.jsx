@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { X, Trash } from "../../../assets/icons/icons";
 import ThemeStore from "../../../store/ThemeStore";
 import { SkeletonLine } from "../../skeleton";
@@ -7,6 +8,7 @@ import ToastNotification from "../../Notification/ToastNotification";
 
 function DeletedConfigModal({ onClose, onRestored }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
     const [deleted, setDeleted] = useState([]);
     const [loading, setLoading] = useState(true);
     const [restoringId, setRestoringId] = useState(null);
@@ -17,7 +19,7 @@ function DeletedConfigModal({ onClose, onRestored }) {
             const res = await getDeletedQuizConfigs();
             setDeleted(Array.isArray(res.data) ? res.data : []);
         } catch {
-            ToastNotification("Failed to load deleted configurations", "error");
+            ToastNotification(t('modals:deleted_config.toast_load_failed'), "error");
         } finally {
             setLoading(false);
         }
@@ -31,11 +33,11 @@ function DeletedConfigModal({ onClose, onRestored }) {
         setRestoringId(config.score_time_id);
         try {
             await restoreQuizConfig(config.score_time_id);
-            ToastNotification(`Config ${config.score_time_id} restored`, "success");
+            ToastNotification(t('modals:deleted_config.toast_restored', { id: config.score_time_id }), "success");
             onRestored?.();
         } catch {
             setDeleted(prev);
-            ToastNotification("Failed to restore configuration", "error");
+            ToastNotification(t('modals:deleted_config.toast_restore_failed'), "error");
         } finally {
             setRestoringId(null);
         }
@@ -59,10 +61,10 @@ function DeletedConfigModal({ onClose, onRestored }) {
                         </div>
                         <div>
                             <h2 className={`text-base font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                                Deleted Configurations
+                                {t('modals:deleted_config.title')}
                             </h2>
                             <p className={`text-xs mt-0.5 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                                Restore a config to bring it back
+                                {t('modals:deleted_config.subtitle')}
                             </p>
                         </div>
                     </div>
@@ -91,7 +93,7 @@ function DeletedConfigModal({ onClose, onRestored }) {
                     ) : deleted.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-12 gap-2">
                             <p className={`text-sm font-medium ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                                No deleted configurations
+                                {t('modals:deleted_config.empty')}
                             </p>
                         </div>
                     ) : (
@@ -99,24 +101,24 @@ function DeletedConfigModal({ onClose, onRestored }) {
                             <div key={config.score_time_id} className={`rounded-large border p-4 ${rowClass}`}>
                                 <div className="flex items-center justify-between mb-3">
                                     <span className={`text-sm font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-                                        Config {config.score_time_id}
+                                        {t('modals:deleted_config.config_prefix')} {config.score_time_id}
                                     </span>
                                     <button
                                         disabled={restoringId === config.score_time_id}
                                         onClick={() => handleRestore(config)}
                                         className="flex items-center gap-1.5 px-3 py-1.5 rounded-medium text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 hover:scale-[0.99] active:scale-[0.99] focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        {restoringId === config.score_time_id ? "Restoring…" : "Restore"}
+                                        {restoringId === config.score_time_id ? t('modals:deleted_config.restoring') : t('modals:deleted_config.restore')}
                                     </button>
                                 </div>
                                 <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
                                     {[
-                                        ["Time", config.total_time || "—"],
-                                        ["Questions", config.total_questions],
-                                        ["Total Score", config.total_score],
-                                        ["Pass Mark", config.pass_mark],
-                                        ["+Mark", config.correct_mark],
-                                        ["-Mark", config.wrong_mark],
+                                        [t('modals:deleted_config.time'), config.total_time || "—"],
+                                        [t('modals:deleted_config.questions'), config.total_questions],
+                                        [t('modals:deleted_config.total_score'), config.total_score],
+                                        [t('modals:deleted_config.pass_mark'), config.pass_mark],
+                                        [t('modals:deleted_config.correct_mark'), config.correct_mark],
+                                        [t('modals:deleted_config.wrong_mark'), config.wrong_mark],
                                     ].map(([label, val]) => (
                                         <div key={label} className="flex justify-between items-center">
                                             <span className={labelClass}>{label}</span>
@@ -136,7 +138,7 @@ function DeletedConfigModal({ onClose, onRestored }) {
                         className={`w-full py-3 rounded-medium text-sm font-semibold hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200
                             ${isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-secondary text-secondaryDark"}`}
                     >
-                        Close
+                        {t('modals:deleted_config.close')}
                     </button>
                 </div>
             </div>

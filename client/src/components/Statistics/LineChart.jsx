@@ -10,7 +10,9 @@ import {
     PieChart as RechartsPie,
 } from "recharts";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 function LineChart({ data, monthDropDown, yearDropDown, title = "Monthly Trend" }) {
+    const { t } = useTranslation(["common"]);
     const [selectedMonth, setSelectedMonth] = useState(monthDropDown[0] || null);
     const [selectedYear, setSelectedYear] = useState(yearDropDown[0] || null);
 
@@ -23,13 +25,13 @@ function LineChart({ data, monthDropDown, yearDropDown, title = "Monthly Trend" 
     function handleMonthChange(event) {
         const newMonth = event.target.value;
         setSelectedMonth(newMonth);
-        ToastNotification(`Loading Monthly Trend data for ${newMonth} ${selectedYear}`, "info");
+        ToastNotification(t('common:loading_chart_data', { title: title, period: `${newMonth} ${selectedYear}` }), "info");
     }
     
     function handleYearChange(event) {
         const newYear = event.target.value;
         setSelectedYear(newYear);
-        ToastNotification(`Loading Monthly Trend data for ${selectedMonth} ${newYear}`, "info");
+        ToastNotification(t('common:loading_chart_data', { title: title, period: `${selectedMonth} ${newYear}` }), "info");
     }
 
     return (

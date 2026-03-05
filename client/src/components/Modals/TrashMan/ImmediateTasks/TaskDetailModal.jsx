@@ -1,7 +1,9 @@
 import React from "react";
 import { Location } from "../../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function TaskDetailModal({ isOpen, onClose, task }) {
+  const { t } = useTranslation(["modals", "common"]);
   if (!isOpen || !task) return null;
 
   return (
@@ -28,30 +30,30 @@ function TaskDetailModal({ isOpen, onClose, task }) {
         <div className="p-6 space-y-4">
           <div>
             <h2 className="text-xl font-bold text-primary mb-1">{task.type}</h2>
-            <p className="text-sm text-gray-500">Task ID: {task.id}</p>
+            <p className="text-sm text-gray-500">{t('modals:task_detail.task_id')} {task.id}</p>
           </div>
 
           <div className="flex items-start gap-2 p-3 bg-background rounded-lg">
             <Location size={20} defaultColor="#145B47" />
             <div className="flex-1">
-              <p className="text-xs font-semibold text-gray-500 mb-1">Location</p>
+              <p className="text-xs font-semibold text-gray-500 mb-1">{t('modals:task_detail.location')}</p>
               <p className="text-sm text-secondaryDark font-medium">{task.location}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 bg-background rounded-lg">
-              <p className="text-xs font-semibold text-gray-500 mb-1">Reported At</p>
+              <p className="text-xs font-semibold text-gray-500 mb-1">{t('modals:task_detail.reported_at')}</p>
               <p className="text-sm text-secondaryDark font-medium">{task.createdAt}</p>
             </div>
             <div className="p-3 bg-success/10 rounded-lg border border-success/20">
-              <p className="text-xs font-semibold text-gray-500 mb-1">Resolved At</p>
+              <p className="text-xs font-semibold text-gray-500 mb-1">{t('modals:task_detail.resolved_at')}</p>
               <p className="text-sm text-success font-bold">{task.resolvedAt}</p>
             </div>
           </div>
 
           <div className="p-3 bg-success/5 rounded-lg border border-success/20">
-            <p className="text-xs font-semibold text-gray-500 mb-1">Resolved By</p>
+            <p className="text-xs font-semibold text-gray-500 mb-1">{t('modals:task_detail.resolved_by')}</p>
             <p className="text-base font-bold text-success">{task.resolvedBy}</p>
           </div>
 
@@ -59,7 +61,7 @@ function TaskDetailModal({ isOpen, onClose, task }) {
             onClick={onClose}
             className="w-full bg-primary text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
           >
-            Close
+            {t('modals:task_detail.close')}
           </button>
         </div>
       </div>

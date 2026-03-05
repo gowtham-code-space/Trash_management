@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../store/ThemeStore";
 import Pagination from "../../utils/Pagination";
 import AdminKpiCard from "../../components/Cards/Admin/AdminKpiCard";
@@ -21,6 +22,7 @@ const OPTION_LETTERS = ["a", "b", "c", "d"];
 
 // ─── Config Card ──────────────────────────────────────────────────────────────
 function ConfigCard({ config, isSelected, onSelect, onEdit, onDelete, isDarkTheme }) {
+  const { t } = useTranslation(["pages", "common"]);
   return (
     <div
       onClick={onSelect}
@@ -32,10 +34,10 @@ function ConfigCard({ config, isSelected, onSelect, onEdit, onDelete, isDarkThem
           <div className={`w-5 h-5 rounded-full border-2 shrink-0 transition-all duration-200
             ${isSelected ? "border-primary bg-primary" : isDarkTheme ? "border-darkBorder" : "border-gray-300"}`} />
           <span className={`text-sm font-bold ${isSelected ? "text-primary" : isDarkTheme ? "text-darkTextPrimary" : "text-secondaryDark"}`}>
-            Config {config.score_time_id}
+            {t('pages:admin.quiz_management.config_prefix')} {config.score_time_id}
           </span>
           {config.is_active ? (
-            <span className="text-xs px-2 py-0.5 rounded-medium bg-primary/10 text-primary font-semibold">Active</span>
+            <span className="text-xs px-2 py-0.5 rounded-medium bg-primary/10 text-primary font-semibold">{t('common:active')}</span>
           ) : null}
         </div>
         <div className="flex items-center gap-1">
@@ -56,12 +58,12 @@ function ConfigCard({ config, isSelected, onSelect, onEdit, onDelete, isDarkThem
       </div>
       <div className="grid grid-cols-2 gap-x-3 gap-y-2">
         {[
-          ["Time", config.total_time || "—"],
-          ["Questions", config.total_questions],
-          ["Total Score", config.total_score],
-          ["Pass Mark", config.pass_mark],
-          ["+Mark", config.correct_mark],
-          ["-Mark", config.wrong_mark],
+          [t('pages:admin.quiz_management.time'), config.total_time || "—"],
+          [t('pages:admin.quiz_management.questions'), config.total_questions],
+          [t('pages:admin.quiz_management.total_score'), config.total_score],
+          [t('pages:admin.quiz_management.pass_mark'), config.pass_mark],
+          [t('pages:admin.quiz_management.correct_mark'), config.correct_mark],
+          [t('pages:admin.quiz_management.wrong_mark'), config.wrong_mark],
         ].map(([label, val]) => (
           <div key={label} className="flex justify-between items-center">
             <span className={`text-xs ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{label}</span>
@@ -75,6 +77,7 @@ function ConfigCard({ config, isSelected, onSelect, onEdit, onDelete, isDarkThem
 
 // ─── Config Modal ─────────────────────────────────────────────────────────────
 function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
+  const { t } = useTranslation(["pages", "common"]);
   const isEdit = Boolean(existingConfig);
   const [form, setForm] = useState({
     total_time: existingConfig?.total_time ?? "",
@@ -106,7 +109,7 @@ function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
         ${isDarkTheme ? "bg-darkSurface border-darkBorder" : "bg-white border-gray-200"}`}>
         <div className="flex items-center justify-between">
           <h2 className={`text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>
-            {isEdit ? "Edit Configuration" : "Add Configuration"}
+            {isEdit ? t('pages:admin.quiz_management.edit_configuration') : t('pages:admin.quiz_management.add_configuration')}
           </h2>
           <button onClick={onClose} className={`p-2 rounded-medium hover:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200
             ${isDarkTheme ? "bg-darkBackground" : "bg-secondary"}`}>
@@ -115,7 +118,7 @@ function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelClass}>Time (HH:MM:SS)</label>
+            <label className={labelClass}>{t('pages:admin.quiz_management.time_format')}</label>
             <input
               type="text"
               className={inputClass}
@@ -126,11 +129,11 @@ function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
             />
           </div>
           {[
-            ["Total Questions", "total_questions"],
-            ["Total Score", "total_score"],
-            ["Pass Mark", "pass_mark"],
-            ["Correct Mark", "correct_mark"],
-            ["Wrong Mark", "wrong_mark"],
+            [t('pages:admin.quiz_management.total_questions'), "total_questions"],
+            [t('pages:admin.quiz_management.total_score_input'), "total_score"],
+            [t('pages:admin.quiz_management.pass_mark_input'), "pass_mark"],
+            [t('pages:admin.quiz_management.correct_mark_input'), "correct_mark"],
+            [t('pages:admin.quiz_management.wrong_mark_input'), "wrong_mark"],
           ].map(([label, field]) => (
             <div key={field}>
               <label className={labelClass}>{label}</label>
@@ -146,9 +149,9 @@ function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
         </div>
         <div className="flex gap-3 pt-2">
           <button onClick={onClose} className={`flex-1 py-3 rounded-medium text-sm font-semibold hover:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200
-            ${isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-secondary text-secondaryDark"}`}>Cancel</button>
+            ${isDarkTheme ? "bg-darkBackground text-darkTextPrimary border border-darkBorder" : "bg-secondary text-secondaryDark"}`}>{t('common:cancel')}</button>
           <button onClick={handleSubmit} className="flex-1 py-3 rounded-medium text-sm font-semibold bg-primary text-white hover:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200">
-            {isEdit ? "Save" : "Add"}
+            {isEdit ? t('common:save') : t('common:add')}
           </button>
         </div>
       </div>
@@ -158,6 +161,7 @@ function ConfigModal({ onClose, onSave, existingConfig = null, isDarkTheme }) {
 
 // ─── Question Row ─────────────────────────────────────────────────────────────
 function QuestionRow({ question, index, onEdit, onDelete, isDarkTheme }) {
+  const { t } = useTranslation(["pages", "common"]);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -197,7 +201,7 @@ function QuestionRow({ question, index, onEdit, onDelete, isDarkTheme }) {
                 ${isDarkTheme ? "text-darkTextPrimary hover:bg-darkBackground" : "text-secondaryDark hover:bg-background"}`}
             >
               <Edit size={14} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
-              Edit
+              {t('common:edit')}
             </button>
             <div className={`h-px ${isDarkTheme ? "bg-darkBorder" : "bg-gray-100"}`} />
             <button
@@ -205,7 +209,7 @@ function QuestionRow({ question, index, onEdit, onDelete, isDarkTheme }) {
               className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-error hover:bg-error/5 transition-all duration-200"
             >
               <Trash size={14} defaultColor="#E75A4C" />
-              Delete
+              {t('common:delete')}
             </button>
           </div>
         )}
@@ -216,6 +220,7 @@ function QuestionRow({ question, index, onEdit, onDelete, isDarkTheme }) {
 
 function QuizManagement() {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
 
   const [questions, setQuestions] = useState([]);
   const [questionsTotal, setQuestionsTotal] = useState(0);
@@ -246,7 +251,7 @@ function QuizManagement() {
       setQuestions(res.data?.rows || []);
       setQuestionsTotal(res.data?.total || 0);
     } catch {
-      ToastNotification("Failed to load questions", "error");
+      ToastNotification(t('pages:admin.quiz_management.toast_failed_load_questions'), "error");
     } finally {
       setQuestionsLoading(false);
     }
@@ -258,7 +263,7 @@ function QuizManagement() {
       const res = await getQuizConfigs();
       setConfigs(Array.isArray(res.data) ? res.data : []);
     } catch {
-      ToastNotification("Failed to load configs", "error");
+      ToastNotification(t('pages:admin.quiz_management.toast_failed_load_configs'), "error");
     } finally {
       setConfigsLoading(false);
     }
@@ -307,22 +312,22 @@ function QuizManagement() {
     try {
       if (editingQuestion) {
         await updateQuizQuestion(editingQuestion.question_id, payload);
-        ToastNotification("Question updated", "success");
+        ToastNotification(t('pages:admin.quiz_management.toast_question_updated'), "success");
       } else {
         await createQuizQuestion(payload);
-        ToastNotification("Question added", "success");
+        ToastNotification(t('pages:admin.quiz_management.toast_question_added'), "success");
       }
       fetchQuestions(questionsPage, searchQuery);
-    } catch { ToastNotification("Failed to save question", "error"); }
+    } catch { ToastNotification(t('pages:admin.quiz_management.toast_failed_save_question'), "error"); }
   }
 
   async function handleConfirmDelete() {
     try {
       await deleteQuizQuestion(deleteQuestion.question_id);
-      ToastNotification("Question deleted", "success");
+      ToastNotification(t('pages:admin.quiz_management.toast_question_deleted'), "success");
       setDeleteQuestion(null);
       fetchQuestions(questionsPage, searchQuery);
-    } catch { ToastNotification("Failed to delete question", "error"); }
+    } catch { ToastNotification(t('pages:admin.quiz_management.toast_failed_delete_question'), "error"); }
   }
 
   async function handleBulkUpload(e) {
@@ -336,7 +341,7 @@ function QuizManagement() {
       const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
       const REQUIRED = ["question", "option_a", "option_b", "option_c", "option_d", "correct_option"];
       if (!rows.length || !REQUIRED.every((k) => k in rows[0])) {
-        ToastNotification(`Required columns: ${REQUIRED.join(", ")}`, "error");
+        ToastNotification(t('pages:admin.quiz_management.toast_required_columns', { columns: REQUIRED.join(", ") }), "error");
         return;
       }
       const cleaned = rows.map((r) => ({
@@ -344,23 +349,23 @@ function QuizManagement() {
         option_c: r.option_c, option_d: r.option_d, correct_option: String(r.correct_option).toLowerCase(),
       }));
       await bulkUploadQuestions(cleaned);
-      ToastNotification(`${cleaned.length} questions uploaded`, "success");
+      ToastNotification(t('pages:admin.quiz_management.toast_questions_uploaded', { count: cleaned.length }), "success");
       fetchQuestions(1, searchQuery);
       setQuestionsPage(1);
-    } catch { ToastNotification("Bulk upload failed", "error"); }
+    } catch { ToastNotification(t('pages:admin.quiz_management.toast_bulk_upload_failed'), "error"); }
   }
 
   async function handleSaveConfig(form) {
     try {
       if (editingConfig) {
         await updateQuizConfig(editingConfig.score_time_id, form);
-        ToastNotification("Configuration updated", "success");
+        ToastNotification(t('pages:admin.quiz_management.toast_configuration_updated'), "success");
       } else {
         await createQuizConfig(form);
-        ToastNotification("Configuration added", "success");
+        ToastNotification(t('pages:admin.quiz_management.toast_configuration_added'), "success");
       }
       fetchConfigs();
-    } catch { ToastNotification("Failed to save configuration", "error"); }
+    } catch { ToastNotification(t('pages:admin.quiz_management.toast_failed_save_configuration'), "error"); }
   }
 
   async function handleActivateConfig(config) {
@@ -370,27 +375,27 @@ function QuizManagement() {
     setActivatingId(config.score_time_id);
     try {
       await activateQuizConfig(config.score_time_id);
-      ToastNotification(`Config ${config.score_time_id} activated`, "success");
+      ToastNotification(t('pages:admin.quiz_management.toast_config_activated', { id: config.score_time_id }), "success");
       fetchConfigs();
     } catch {
       setConfigs(prevConfigs);
-      ToastNotification("Failed to activate configuration", "error");
+      ToastNotification(t('pages:admin.quiz_management.toast_failed_activate'), "error");
     } finally { setActivatingId(null); }
   }
 
   async function handleDeleteConfig(config) {
     if (config.is_active) {
-      ToastNotification("Cannot delete the active configuration", "error");
+      ToastNotification(t('pages:admin.quiz_management.toast_cannot_delete_active'), "error");
       return;
     }
     const prevConfigs = configs;
     setConfigs((prev) => prev.filter((c) => c.score_time_id !== config.score_time_id));
     try {
       await deleteQuizConfig(config.score_time_id);
-      ToastNotification("Configuration deleted", "success");
+      ToastNotification(t('pages:admin.quiz_management.toast_configuration_deleted'), "success");
     } catch {
       setConfigs(prevConfigs);
-      ToastNotification("Failed to delete configuration", "error");
+      ToastNotification(t('pages:admin.quiz_management.toast_failed_delete_configuration'), "error");
     }
   }
 
@@ -404,10 +409,10 @@ function QuizManagement() {
 
           {/* ── KPI Cards ────────────────────────────────────────────────── */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-            <AdminKpiCard title="Total Attempts" value={kpisLoading ? "…" : (kpis?.totalAttempts ?? "—")} icon={<People size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
-            <AdminKpiCard title="Pass Rate" value={kpisLoading ? "…" : (kpis?.passRate ?? "—")} icon={<Check size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
-            <AdminKpiCard title="Avg Completion" value={kpisLoading ? "…" : (kpis?.avgCompletion ?? "—")} icon={<Stats size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
-            <AdminKpiCard title="Active Sessions" value={kpisLoading ? "…" : (kpis?.activeSessions ?? "—")} icon={<Mobile size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
+            <AdminKpiCard title={t('pages:admin.quiz_management.total_attempts')} value={kpisLoading ? "…" : (kpis?.totalAttempts ?? "—")} icon={<People size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
+            <AdminKpiCard title={t('pages:admin.quiz_management.pass_rate')} value={kpisLoading ? "…" : (kpis?.passRate ?? "—")} icon={<Check size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
+            <AdminKpiCard title={t('pages:admin.quiz_management.avg_completion')} value={kpisLoading ? "…" : (kpis?.avgCompletion ?? "—")} icon={<Stats size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
+            <AdminKpiCard title={t('pages:admin.quiz_management.active_sessions')} value={kpisLoading ? "…" : (kpis?.activeSessions ?? "—")} icon={<Mobile size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#145B47"} />} />
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
@@ -417,10 +422,10 @@ function QuizManagement() {
               <div className="px-4 sm:px-6 pt-4 sm:pt-5 pb-4 border-b border-gray-100 dark:border-darkBorder space-y-3">
                 {/* Row 1: title + total */}
                 <div className="flex items-center gap-2">
-                  <h2 className={`text-base sm:text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>Question Repository</h2>
+                  <h2 className={`text-base sm:text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>{t('pages:admin.quiz_management.question_repository')}</h2>
                   <span className={`text-xs font-semibold px-2 py-1 rounded-medium
                     ${isDarkTheme ? "bg-darkBackground text-darkTextSecondary" : "bg-secondary text-secondaryDark"}`}>
-                    {questionsTotal} Total
+                    {t('pages:admin.quiz_management.total_badge', { count: questionsTotal })}
                   </span>
                 </div>
                 {/* Row 2: search + actions */}
@@ -433,7 +438,7 @@ function QuizManagement() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search questions..."
+                      placeholder={t('pages:admin.quiz_management.search_placeholder')}
                       className={`w-full pl-10 pr-4 py-2.5 rounded-large text-sm border outline-none focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200
                         ${isDarkTheme ? "bg-darkBackground border-darkBorder text-darkTextPrimary placeholder:text-darkTextSecondary" : "bg-white border-gray-200 text-secondaryDark placeholder:text-gray-400"}`}
                     />
@@ -445,21 +450,21 @@ function QuizManagement() {
                       ${isDarkTheme ? "bg-darkBackground border-darkBorder text-darkTextPrimary" : "bg-secondary border-gray-200 text-secondaryDark"}`}
                   >
                     <Upload size={16} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
-                    <span className="hidden sm:inline">Bulk Upload</span>
+                    <span className="hidden sm:inline">{t('pages:admin.quiz_management.bulk_upload')}</span>
                   </button>
                   <button
                     onClick={() => setShowQuestionModal(true)}
                     className="flex items-center gap-2 px-3 py-2.5 rounded-large text-sm font-semibold bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 shrink-0"
                   >
                     <Add size={16} defaultColor="#fff" isDarkTheme />
-                    <span className="hidden sm:inline">Add New</span>
+                    <span className="hidden sm:inline">{t('pages:admin.quiz_management.add_new')}</span>
                   </button>
                 </div>
               </div>
 
               <div className={`flex items-center px-6 py-3 border-b ${isDarkTheme ? "border-darkBorder" : "border-gray-100"}`}>
-                <span className={`text-sm font-semibold flex-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>Question Text</span>
-                <span className={`text-sm font-semibold w-16 text-right ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>Actions</span>
+                <span className={`text-sm font-semibold flex-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('pages:admin.quiz_management.column_question_text')}</span>
+                <span className={`text-sm font-semibold w-16 text-right ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('common:actions')}</span>
               </div>
 
               <div className="flex-1 pb-3">
@@ -477,7 +482,7 @@ function QuizManagement() {
                   <div className="flex flex-col items-center justify-center py-16 gap-3">
                     <Search size={32} defaultColor={isDarkTheme ? "#B7D6C9" : "#316F5D"} />
                     <p className={`text-sm font-medium ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                      {searchQuery ? "No questions match your search" : "No questions found"}
+                      {searchQuery ? t('pages:admin.quiz_management.no_questions_match') : t('pages:admin.quiz_management.no_questions_found')}
                     </p>
                   </div>
                 ) : (
@@ -507,8 +512,8 @@ function QuizManagement() {
             <div className={`rounded-veryLarge border flex flex-col ${surfaceClass}`}>
               <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-darkBorder">
                 <div>
-                  <h2 className={`text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>Quiz Configurations</h2>
-                  <p className={`text-sm mt-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>Click a config to set it active</p>
+                  <h2 className={`text-lg font-bold ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>{t('pages:admin.quiz_management.quiz_configurations')}</h2>
+                  <p className={`text-sm mt-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('pages:admin.quiz_management.click_config_active')}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -516,14 +521,14 @@ function QuizManagement() {
                     className={`flex items-center gap-2 px-3 py-3 rounded-large text-sm font-semibold border hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200
                       ${isDarkTheme ? "bg-darkBackground border-darkBorder text-darkTextPrimary" : "bg-secondary border-gray-200 text-secondaryDark"}`}
                   >
-                    View History
+                    {t('pages:admin.quiz_management.view_history')}
                   </button>
                   <button
                     onClick={() => setShowConfigModal(true)}
                     className="flex items-center gap-2 px-4 py-3 rounded-large text-sm font-semibold bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                   >
                     <Add size={16} defaultColor="#fff" isDarkTheme />
-                    Add Config
+                    {t('pages:admin.quiz_management.add_config')}
                   </button>
                 </div>
               </div>
@@ -542,7 +547,7 @@ function QuizManagement() {
                   ))
                 ) : configs.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 gap-3">
-                    <p className={`text-sm ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>No configurations found</p>
+                    <p className={`text-sm ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>{t('pages:admin.quiz_management.no_configurations_found')}</p>
                   </div>
                 ) : (
                   configs.map((config) => (
@@ -562,10 +567,10 @@ function QuizManagement() {
               {activeConfig && (
                 <div className={`mx-6 mb-6 p-4 rounded-large border ${isDarkTheme ? "bg-darkBackground border-darkBorder" : "bg-secondary border-gray-200"}`}>
                   <p className={`text-sm font-semibold mb-1 ${isDarkTheme ? "text-darkTextSecondary" : "text-secondaryDark"}`}>
-                    Active: Config {activeConfig.score_time_id}
+                    {t('pages:admin.quiz_management.active_config', { id: activeConfig.score_time_id })}
                   </p>
                   <p className={`text-sm ${isDarkTheme ? "text-darkTextPrimary" : "text-primary"}`}>
-                    {activeConfig.total_time} min • {activeConfig.total_questions} Qs • Pass: {activeConfig.pass_mark}/{activeConfig.total_score}
+                    {activeConfig.total_time} {t('pages:admin.quiz_management.min')} • {activeConfig.total_questions} {t('pages:admin.quiz_management.qs')} • {t('pages:admin.quiz_management.pass_label')} {activeConfig.pass_mark}/{activeConfig.total_score}
                   </p>
                 </div>
               )}

@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Camera, DownArrow, Upload, Download, X } from "../../../assets/icons/icons";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 
 function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
+  const { t } = useTranslation(["pages", "common"]);
   const fileInputRef = useRef(null);
   const photoInputRef = useRef(null);
   const [uploadMode, setUploadMode] = useState("individual");
@@ -37,13 +39,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
     const file = event.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
-        ToastNotification("Please upload a valid image file", "error");
+        ToastNotification(t('pages:commissioner.hire_employee.toast_invalid_image'), "error");
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
         handleInputChange("profile_pic", reader.result);
-        ToastNotification("Profile photo uploaded successfully", "success");
+        ToastNotification(t('pages:commissioner.hire_employee.toast_photo_uploaded'), "success");
       };
       reader.readAsDataURL(file);
     }
@@ -51,51 +53,51 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
 
   function handleSubmit() {
     if (!formData.first_name || !formData.last_name || !formData.phone || !formData.email || !formData.role) {
-      ToastNotification("Please fill all required fields", "error");
+      ToastNotification(t('pages:commissioner.hire_employee.toast_fill_required'), "error");
       return;
     }
 
     if (mode === "hire") {
-      ToastNotification("Employee hired successfully", "success");
+      ToastNotification(t('pages:commissioner.hire_employee.toast_employee_hired'), "success");
     } else if (mode === "edit") {
-      ToastNotification("Employee updated successfully", "success");
+      ToastNotification(t('pages:commissioner.hire_employee.toast_employee_updated'), "success");
     }
     onClose();
   }
 
   function handleFire() {
     handleInputChange("status", "Resigned");
-    ToastNotification("Employee status updated to Resigned", "warning");
+    ToastNotification(t('pages:commissioner.hire_employee.toast_employee_resigned'), "warning");
   }
 
   function handleSuspend() {
     handleInputChange("status", "Suspended");
-    ToastNotification("Employee suspended", "warning");
+    ToastNotification(t('pages:commissioner.hire_employee.toast_employee_suspended'), "warning");
   }
 
   function handleFileUpload(event) {
     const file = event.target.files[0];
     if (file) {
       if (!file.name.endsWith('.xlsx') && !file.name.endsWith('.xls') && !file.name.endsWith('.csv')) {
-        ToastNotification("Please upload a valid Excel or CSV file", "error");
+        ToastNotification(t('pages:commissioner.hire_employee.toast_invalid_excel'), "error");
         return;
       }
       setUploadedFile(file);
-      ToastNotification(`File "${file.name}" uploaded successfully`, "success");
+      ToastNotification(t('pages:commissioner.hire_employee.toast_file_uploaded', { name: file.name }), "success");
     }
   }
 
   function handleBulkSubmit() {
     if (!uploadedFile) {
-      ToastNotification("Please upload a file first", "error");
+      ToastNotification(t('pages:commissioner.hire_employee.toast_upload_file_first'), "error");
       return;
     }
-    ToastNotification("Bulk employee data uploaded successfully", "success");
+    ToastNotification(t('pages:commissioner.hire_employee.toast_bulk_success'), "success");
     onClose();
   }
 
   function downloadTemplate() {
-    ToastNotification("Downloading Excel template...", "success");
+    ToastNotification(t('pages:commissioner.hire_employee.toast_downloading_template'), "success");
   }
 
   return (
@@ -104,7 +106,7 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
         <div className="bg-white rounded-veryLarge p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-secondaryDark">
-              {mode === "hire" ? "Hire New Employee" : "Manage Employee"}
+              {mode === "hire" ? t('pages:commissioner.hire_employee.hire_new_heading') : t('pages:commissioner.hire_employee.manage_heading')}
             </h2>
             {mode === "edit" && formData.status && (
               <span className={`px-3 py-1 rounded-large text-sm font-medium ${
@@ -129,7 +131,7 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                       : "bg-secondary text-secondaryDark"
                   }`}
                 >
-                  Individual Hire
+                  {t('pages:commissioner.hire_employee.tab_individual')}
                 </button>
                 <button
                   onClick={() => setUploadMode("bulk")}
@@ -139,7 +141,7 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                       : "bg-secondary text-secondaryDark"
                   }`}
                 >
-                  Bulk Upload
+                  {t('pages:commissioner.hire_employee.tab_bulk')}
                 </button>
               </div>
             </div>
@@ -161,10 +163,10 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-secondaryDark mb-2">
-                      Upload Employee Data
+                      {t('pages:commissioner.hire_employee.upload_heading')}
                     </h3>
                     <p className="text-sm text-secondaryDark mb-4">
-                      Upload an Excel or CSV file with employee information
+                      {t('pages:commissioner.hire_employee.upload_sub')}
                     </p>
                     {uploadedFile && (
                       <div className="flex items-center justify-center gap-2 mb-4 px-4 py-2 bg-success/10 rounded-large">
@@ -183,7 +185,7 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                       onClick={() => fileInputRef.current.click()}
                       className="px-6 py-3 bg-primary text-white rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                     >
-                      Choose File
+                      {t('pages:commissioner.hire_employee.choose_file')}
                     </button>
                   </div>
                 </div>
@@ -191,17 +193,17 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
 
               <div className="bg-secondary p-4 rounded-large">
                 <h4 className="text-sm font-bold text-secondaryDark mb-3">
-                  Download Template
+                  {t('pages:commissioner.hire_employee.download_template')}
                 </h4>
                 <p className="text-xs text-secondaryDark mb-3">
-                  Use our Excel template to ensure your data is formatted correctly
+                  {t('pages:commissioner.hire_employee.template_desc')}
                 </p>
                 <button
                   onClick={downloadTemplate}
                   className="flex items-center gap-2 px-4 py-2 bg-white border border-secondary text-secondaryDark rounded-large text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
                   <Download size={16} isDarkTheme={isDarkTheme} />
-                  <span>Download Template</span>
+                  <span>{t('pages:commissioner.hire_employee.download_template')}</span>
                 </button>
               </div>
 
@@ -210,13 +212,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                   onClick={onClose}
                   className="flex-1 px-4 py-3 bg-secondary text-secondaryDark rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                  Cancel
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={handleBulkSubmit}
                   className="flex-1 px-4 py-3 bg-primary text-white rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                  Upload Employees
+                  {t('pages:commissioner.hire_employee.upload_employees_btn')}
                 </button>
               </div>
             </div>
@@ -250,57 +252,57 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">First Name</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.first_name')}</label>
                   <input
                     type="text"
                     value={formData.first_name}
                     onChange={(e) => handleInputChange("first_name", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    placeholder="Enter first name"
+                    placeholder={t('pages:commissioner.hire_employee.placeholder_first_name')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Last Name</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.last_name')}</label>
                   <input
                     type="text"
                     value={formData.last_name}
                     onChange={(e) => handleInputChange("last_name", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    placeholder="Enter last name"
+                    placeholder={t('pages:commissioner.hire_employee.placeholder_last_name')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Phone Number</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.phone_number')}</label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    placeholder="Enter phone number"
+                    placeholder={t('pages:commissioner.hire_employee.placeholder_phone')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Email</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.email')}</label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    placeholder="Enter email"
+                    placeholder={t('pages:commissioner.hire_employee.placeholder_email')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">District</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.district')}</label>
                   <select
                     value={formData.district}
                     onChange={(e) => handleInputChange("district", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                   >
-                    <option value="">Select District</option>
+                    <option value="">{t('pages:commissioner.hire_employee.placeholder_district')}</option>
                     {districts.map(function(district) {
                       return (
                         <option key={district} value={district}>
@@ -312,13 +314,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Ward</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.ward')}</label>
                   <select
                     value={formData.ward}
                     onChange={(e) => handleInputChange("ward", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                   >
-                    <option value="">Select Ward</option>
+                    <option value="">{t('pages:commissioner.hire_employee.placeholder_ward')}</option>
                     {wards.map(function(ward) {
                       return (
                         <option key={ward} value={ward}>
@@ -330,13 +332,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Street Name</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.street_name')}</label>
                   <select
                     value={formData.street}
                     onChange={(e) => handleInputChange("street", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                   >
-                    <option value="">Select Street</option>
+                    <option value="">{t('pages:commissioner.hire_employee.placeholder_street')}</option>
                     {streets.map(function(street) {
                       return (
                         <option key={street} value={street}>
@@ -348,24 +350,24 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">House / Flat Number</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.house_flat')}</label>
                   <input
                     type="text"
                     value={formData.house_number}
                     onChange={(e) => handleInputChange("house_number", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    placeholder="Enter house/flat number"
+                    placeholder={t('pages:commissioner.hire_employee.placeholder_house_flat')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Role</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.role')}</label>
                   <select
                     value={formData.role}
                     onChange={(e) => handleInputChange("role", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                   >
-                    <option value="">Select Role</option>
+                    <option value="">{t('pages:commissioner.hire_employee.placeholder_role')}</option>
                     {roles.map(function(role) {
                       return (
                         <option key={role} value={role}>
@@ -377,13 +379,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-secondaryDark mb-2">Status</label>
+                  <label className="block text-sm font-medium text-secondaryDark mb-2">{t('pages:commissioner.hire_employee.status')}</label>
                   <select
                     value={formData.status}
                     onChange={(e) => handleInputChange("status", e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                   >
-                    <option value="">Select Status</option>
+                    <option value="">{t('pages:commissioner.hire_employee.placeholder_status')}</option>
                     {statuses.map(function(status) {
                       return (
                         <option key={status} value={status}>
@@ -400,13 +402,13 @@ function HireEmployees({ employee, onClose, isDarkTheme, mode }) {
                   onClick={onClose}
                   className="flex-1 px-4 py-3 bg-secondary text-secondaryDark rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                  Cancel
+                  {t('common:cancel')}
                 </button>
                 <button
                   onClick={handleSubmit}
                   className="flex-1 px-4 py-3 bg-primary text-white rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                  {mode === "hire" ? "Hire Employee" : "Update"}
+                  {mode === "hire" ? t('pages:commissioner.hire_employee.hire_btn') : t('pages:commissioner.hire_employee.update_btn')}
                 </button>
               </div>
             </div>

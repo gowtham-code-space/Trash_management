@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import Pagination from "../../../../utils/Pagination";
 import ToastNotification from "../../../../components/Notification/ToastNotification";
@@ -8,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 // Main ConfigZone Component
 function ConfigZone() {
+  const { t } = useTranslation(["pages", "common"]);
   const { isDarkTheme } = ThemeStore();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +48,7 @@ function ConfigZone() {
   function handleAddZone() {
     const isMobile = window.innerWidth < 1024;
     if (!isMobile && !selectedDistrict) {
-      ToastNotification("Please select a district first", "error");
+      ToastNotification(t('pages:commissioner.config_zone.toast_select_district_first'), "error");
       return;
     }
     
@@ -60,7 +62,7 @@ function ConfigZone() {
     
     setZones([...zones, newZone]);
     setStructureZones([...structureZones, { id: newZone.id, name: newZone.name }]);
-    ToastNotification("Draft zone added. Edit the name to save.", "info");
+    ToastNotification(t('pages:commissioner.config_zone.toast_draft_zone_added'), "info");
   }
 
   function handleEditClick(zone) {
@@ -71,7 +73,7 @@ function ConfigZone() {
 
   function handleSaveEdit() {
     if (!editValue.trim()) {
-      ToastNotification("Zone name cannot be empty", "error");
+      ToastNotification(t('pages:commissioner.config_zone.toast_zone_name_empty'), "error");
       return;
     }
 
@@ -87,7 +89,7 @@ function ConfigZone() {
         : z
     ));
     
-    ToastNotification("Zone updated successfully", "success");
+    ToastNotification(t('pages:commissioner.config_zone.toast_zone_updated'), "success");
     setEditingZone(null);
     setEditValue("");
   }
@@ -97,9 +99,9 @@ function ConfigZone() {
     if (zone?.isDraft) {
       setZones(zones.filter(z => z.id !== editingZone));
       setStructureZones(structureZones.filter(z => z.id !== editingZone));
-      ToastNotification("Draft zone discarded", "info");
+      ToastNotification(t('pages:commissioner.config_zone.toast_draft_zone_discarded'), "info");
     } else {
-      ToastNotification("Edit cancelled", "info");
+      ToastNotification(t('common:edit_cancelled'), "info");
     }
     setEditingZone(null);
     setEditValue("");
@@ -114,7 +116,7 @@ function ConfigZone() {
   function handleConfirmDelete() {
     setZones(zones.filter(z => z.id !== zoneToDelete.id));
     setStructureZones(structureZones.filter(z => z.id !== zoneToDelete.id));
-    ToastNotification("Zone deleted successfully", "success");
+    ToastNotification(t('pages:commissioner.config_zone.toast_zone_deleted'), "success");
     setShowDeleteModal(false);
     setZoneToDelete(null);
   }
@@ -154,7 +156,7 @@ function ConfigZone() {
                     {zone.name}
                   </h3>
                   <p className="text-xs text-secondaryDark mt-1">
-                    {zone.divisions} Divisions • {zone.wards} Wards
+                    {zone.divisions} {t('common:divisions')} • {zone.wards} {t('common:wards')}
                   </p>
                 </>
               )}
@@ -195,14 +197,14 @@ function ConfigZone() {
                     className="w-full px-4 py-2 text-left text-sm text-secondaryDark hover:bg-background transition-all duration-200 ease-in-out flex items-center gap-2 rounded-t-medium"
                   >
                     <Edit size={14} isDarkTheme={isDarkTheme} />
-                    Edit
+                    {t('common:edit')}
                   </button>
                   <button
                     onClick={() => handleDeleteClick(zone)}
                     className="w-full px-4 py-2 text-left text-sm text-error hover:bg-background transition-all duration-200 ease-in-out flex items-center gap-2 rounded-b-medium"
                   >
                     <Trash size={14} defaultColor="#E75A4C" />
-                    Delete
+                    {t('common:delete')}
                   </button>
                 </div>
               )}
@@ -223,7 +225,7 @@ function ConfigZone() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-sm font-bold text-secondaryDark">
-                  AVAILABLE ZONES ({filteredZones.length})
+                  {t('pages:commissioner.config_zone.available_zones')} ({filteredZones.length})
                 </h2>
               </div>
               <div className="flex items-center gap-2">
@@ -233,7 +235,7 @@ function ConfigZone() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search zones..."
+                      placeholder={t('pages:commissioner.config_zone.search_placeholder')}
                       className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-background text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                       autoFocus
                     />
@@ -267,10 +269,10 @@ function ConfigZone() {
           <div className="bg-white rounded-large p-6 border border-secondary">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-secondaryDark">
-                DISTRICT ORGANIZATION (TARGET)
+                {t('pages:commissioner.config_zone.district_organization')}
               </h2>
               <span className="text-xs text-secondaryDark">
-                Salem District
+                {t('pages:commissioner.config_zone.salem_district')}
               </span>
             </div>
 
@@ -286,10 +288,10 @@ function ConfigZone() {
               <div className="bg-secondary rounded-medium p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-base font-bold text-secondaryDark">
-                    Salem District Structure
+                    {t('pages:commissioner.config_zone.salem_district_structure')}
                   </h3>
                   <span className="text-xs font-bold text-primary">
-                    {structureZones.length} Active Zones
+                    {structureZones.length} {t('pages:commissioner.config_zone.active_zones')}
                   </span>
                 </div>
 
@@ -321,7 +323,7 @@ function ConfigZone() {
               onClick={handleAddZone}
               className="mt-3  w-full bg-primary text-white px-4 py-3 rounded-medium font-medium transition-all duration-200 ease-in-out hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] mb-4"
             >
-              Add Zone
+              {t('pages:commissioner.config_zone.add_zone_btn')}
             </button>
           </div>
         </div>

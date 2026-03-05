@@ -1,8 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 
 function AssignTrashMenModal({ title, message, onConfirm, onCancel }) {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["modals", "common"]);
 
   return (
     <div className={isDarkTheme ? "dark" : ""}>
@@ -24,7 +26,7 @@ function AssignTrashMenModal({ title, message, onConfirm, onCancel }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                         transition-all duration-200 ease-in-out"
               >
-              Cancel
+              {t('common:cancel')}
             </button>
             
             <button
@@ -34,7 +36,7 @@ function AssignTrashMenModal({ title, message, onConfirm, onCancel }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                         transition-all duration-200 ease-in-out"
             >
-              Delete
+              {t('common:delete')}
             </button>
           </div>
         </div>

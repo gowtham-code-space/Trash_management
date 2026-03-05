@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { X, Check } from "../../../../assets/icons/icons";
 
 function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
     const [selectedZone, setSelectedZone] = useState(division?.zone || "");
 
     function handleConfirm() {
@@ -20,7 +22,7 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
             <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-large p-6 max-w-lg w-full mx-4 border border-secondary">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-secondaryDark">
-                Move Division
+                {t('modals:mho_move_division.title')}
                 </h3>
                 <button
                 onClick={onCancel}
@@ -35,22 +37,22 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
             
             <div className="mb-6">
                 <div className="bg-background rounded-medium p-4 mb-4">
-                <p className="text-xs text-secondaryDark/60 mb-1">Division Name</p>
+                <p className="text-xs text-secondaryDark/60 mb-1">{t('modals:mho_move_division.division_name_label')}</p>
                 <p className="text-sm font-bold text-secondaryDark">
                     {division?.name}
                 </p>
                 <p className="text-xs text-secondaryDark mt-2">
-                    {division?.wards} Wards • {division?.streets} Streets
+                    {t('modals:mho_move_division.wards_streets_count', { wards: division?.wards, streets: division?.streets })}
                 </p>
                 </div>
 
                 <div>
                 <label className="block text-sm font-bold text-secondaryDark mb-3">
-                    Current Zone: <span className="text-primary">{division?.zone}</span>
+                    {t('modals:mho_move_division.current_zone')} <span className="text-primary">{division?.zone}</span>
                 </label>
                 
                 <p className="text-sm font-bold text-secondaryDark mb-2">
-                    Select New Zone
+                    {t('modals:mho_move_division.select_new_zone')}
                 </p>
                 
                 <div className="space-y-2">
@@ -78,7 +80,7 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
                                 {zone.name}
                             </p>
                             <p className="text-xs text-secondaryDark/60 mt-1">
-                                {zone.divisions.length} Division{zone.divisions.length !== 1 ? 's' : ''}
+                                {t('modals:mho_move_division.division_count', { count: zone.divisions.length })}
                             </p>
                             </div>
                             {isSelected && !isCurrentZone && (
@@ -88,7 +90,7 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
                             )}
                             {isCurrentZone && (
                             <span className="text-xs text-secondaryDark/60 font-bold">
-                                Current
+                                {t('common:current')}
                             </span>
                             )}
                         </div>
@@ -107,7 +109,7 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
                             focus:outline-none focus:ring-2 focus:ring-primary/20
                             transition-all duration-200 ease-in-out"
                 >
-                Cancel
+                {t('common:cancel')}
                 </button>
                 
                 <button
@@ -119,7 +121,7 @@ function MoveDivisionModal({ division, zones, onConfirm, onCancel }) {
                             ? "bg-secondary text-secondaryDark/40 cursor-not-allowed"
                             : "bg-primary text-white hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20"}`}
                 >
-                Move Division
+                {t('modals:mho_move_division.move_division')}
                 </button>
             </div>
             </div>

@@ -1,10 +1,12 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ProgressBar from "../../components/Statistics/ProgressBar";
 import Pagination from "../../utils/Pagination";
 import { useNavigate } from "react-router-dom";
 
 function MHODashboard() {
   const navigate = useNavigate();
+  const { t } = useTranslation('pages');
 
   const zoneData = [
     {
@@ -59,27 +61,27 @@ function MHODashboard() {
 
   const districtPerformance = [
     {
-      label: "Total Active Complaints",
+      label: t('mho.dashboard.total_active_complaints_label'),
       value: "1,248",
-      change: "+12% this week",
+      change: t('mho.dashboard.change_week'),
       changeColor: "text-error"
     },
     {
-      label: "Total Resolved",
+      label: t('mho.dashboard.total_resolved_label'),
       value: "12.5k",
-      change: "92% Rate",
+      change: t('mho.dashboard.resolution_rate'),
       changeColor: "text-success"
     },
     {
-      label: "Avg Resolution Time",
+      label: t('mho.dashboard.avg_resolution_time_label'),
       value: "26 Hrs",
-      change: "Target: 24 Hrs",
+      change: t('mho.dashboard.resolution_target'),
       changeColor: "text-secondaryDark"
     },
     {
-      label: "Workforce Attendance",
+      label: t('mho.dashboard.workforce_attendance_label'),
       value: "94%",
-      change: "High Turnout",
+      change: t('mho.dashboard.high_turnout'),
       changeColor: "text-success"
     }
   ];
@@ -113,15 +115,15 @@ function MHODashboard() {
 
         <div className="grid grid-cols-3 gap-3 mb-4">
           <div className="text-center">
-            <p className="text-xs text-secondaryDark mb-1">Active</p>
+            <p className="text-xs text-secondaryDark mb-1">{t('shared.active')}</p>
             <p className="text-lg font-bold text-primary">{zone.active}</p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-secondaryDark mb-1">Resolved</p>
+            <p className="text-xs text-secondaryDark mb-1">{t('shared.resolved')}</p>
             <p className="text-lg font-bold text-primary">{zone.resolved}</p>
           </div>
           <div className="text-center">
-            <p className="text-xs text-secondaryDark mb-1">Pending</p>
+            <p className="text-xs text-secondaryDark mb-1">{t('shared.pending')}</p>
             <p className="text-lg font-bold text-primary">{zone.pending}</p>
           </div>
         </div>
@@ -129,7 +131,7 @@ function MHODashboard() {
         <div className="space-y-2 pt-3 border-t border-secondary">
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondaryDark">
-              Complaints Raised
+              {t('shared.complaints_raised')}
             </span>
             <span className="text-sm font-bold text-warning">
               {zone.complaintsRaised}
@@ -137,7 +139,7 @@ function MHODashboard() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondaryDark">
-              Complaints Resolved
+              {t('shared.complaints_resolved')}
             </span>
             <span className="text-sm font-bold text-success">
               {zone.complaintsResolved}
@@ -155,7 +157,7 @@ function MHODashboard() {
     <div className="space-y-6 p-6">
       <div>
         <h2 className="text-lg font-bold text-secondaryDark mb-4">
-          District Performance
+          {t('shared.district_performance')}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {districtPerformance.map(function (item, index) {
@@ -179,7 +181,7 @@ function MHODashboard() {
 
       <div>
         <h2 className="text-lg font-bold text-secondaryDark mb-4">
-          Zone Overview
+          {t('shared.zone_overview')}
         </h2>
         <Pagination
           data={zoneData}

@@ -7,9 +7,11 @@ import UpdateContactInfo from "../../../../../components/Modals/Settings/UpdateC
 import ViewProfileModal from "../../../../../components/Modals/Settings/ViewProfileModal";
 import { getProfile, updateProfile, requestPhoneOtp, requestEmailOtp, verifyEmailOtp, deleteProfilePic } from "../../../../../services/features/settingsService";
 import { SkeletonAvatar, SkeletonLine, SkeletonBlock } from "../../../../../components/skeleton";
+import { useTranslation } from "react-i18next";
 
 function AboutMe() {
     const navigate = useNavigate();
+    const { t } = useTranslation('settings');
     const [showModal, setShowModal] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [modalType, setModalType] = useState("");
@@ -66,7 +68,7 @@ function AboutMe() {
                 setTempEmail(profile.email || "");
             } catch (error) {
                 console.error('Error fetching profile:', error);
-                ToastNotification("Failed to load profile", "error");
+                ToastNotification(t('about.failed_load'), "error");
             } finally {
                 setLoading(false);
             }
@@ -79,7 +81,7 @@ function AboutMe() {
         const file = e.target.files[0];
         if (file) {
             if (!file.type.startsWith('image/')) {
-                ToastNotification("Please select a valid image file", "error");
+                ToastNotification(t('about.invalid_image'), "error");
                 return;
             }
             setProfilePicFile(file);
@@ -104,11 +106,11 @@ function AboutMe() {
                     return { ...prev, profilePic: null };
                 });
                 setProfilePicFile(null);
-                ToastNotification("Profile picture deleted successfully", "success");
+                ToastNotification(t('about.pic_deleted'), "success");
             }
         } catch (error) {
             console.error('Error deleting profile picture:', error);
-            ToastNotification(error.response?.data?.message || "Failed to delete profile picture", "error");
+                ToastNotification(error.response?.data?.message || t('about.failed_pic_delete'), "error");
         }
     }
 
@@ -146,7 +148,7 @@ function AboutMe() {
                 }
             } catch (error) {
                 console.error('Error requesting phone OTP:', error);
-                ToastNotification(error.response?.data?.message || "Failed to process phone change", "error");
+                ToastNotification(error.response?.data?.message || t('about.failed_phone'), "error");
             }
         } else if (field === "email") {
             try {
@@ -161,7 +163,7 @@ function AboutMe() {
                 }
             } catch (error) {
                 console.error('Error requesting email OTP:', error);
-                ToastNotification(error.response?.data?.message || "Failed to send email OTP", "error");
+                ToastNotification(error.response?.data?.message || t('about.failed_email'), "error");
             }
         }
     }
@@ -182,12 +184,12 @@ function AboutMe() {
                 setUserData(function (prev) {
                     return { ...prev, email: tempEmail };
                 });
-                ToastNotification(response.message || "Email updated successfully", "success");
+                ToastNotification(response.message || t('about.email_updated'), "success");
                 setShowModal(false);
                 setEditingField(null);
             } catch (error) {
                 console.error('Error verifying email OTP:', error);
-                ToastNotification(error.response?.data?.message || "Invalid OTP", "error");
+                ToastNotification(error.response?.data?.message || t('about.invalid_otp'), "error");
                 throw error; 
             }
         }
@@ -221,7 +223,7 @@ function AboutMe() {
                 
                 const response = await updateProfile(formData);
                 
-                ToastNotification(response.message || "Profile updated successfully", "success");
+                ToastNotification(response.message || t('about.profile_updated'), "success");
                 setProfilePicFile(null);
                 
                 setOriginalData({
@@ -240,7 +242,7 @@ function AboutMe() {
                 setEditingField(null);
             } catch (error) {
                 console.error('Error updating profile:', error);
-                ToastNotification(error.response?.data?.message || "Failed to update profile", "error");
+                ToastNotification(error.response?.data?.message || t('about.failed_update'), "error");
             } finally {
                 setIsTogglingEdit(false);
             }
@@ -330,7 +332,7 @@ function AboutMe() {
                                 type="button"
                                 onClick={handleDeleteProfilePic}
                                 className="absolute top-0 right-0 w-7 h-7 bg-red-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-600 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-all duration-200 ease-in-out shadow-md"
-                                title="Delete profile picture"
+                                title={t('about.delete_profile_picture')}
                             >
                                 <Trash size={14} isDarkTheme={true} />
                             </button>
@@ -347,7 +349,7 @@ function AboutMe() {
                     />
                 </div>
                 <div>
-                    <p className="text-sm font-bold text-primary">Change Picture</p>
+                    <p className="text-sm font-bold text-primary">{t('about.change_photo')}</p>
                 </div>
                 </div>
 
@@ -361,14 +363,14 @@ function AboutMe() {
                 }`}
                 >
                 <Edit size={16} isDarkTheme={!isEditMode} />
-                {isTogglingEdit ? 'Saving...' : (isEditMode ? 'Done' : 'Edit')}
+                {isTogglingEdit ? t('about.saving') : (isEditMode ? t('about.save_profile') : t('about.edit_profile'))}
                 </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    First Name
+                    {t('about.first_name')}
                 </label>
                 {editingField === "firstName" ? (
                     <div className="flex items-center gap-2">
@@ -413,7 +415,7 @@ function AboutMe() {
 
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    Last Name
+                    {t('about.last_name')}
                 </label>
                 {editingField === "lastName" ? (
                     <div className="flex items-center gap-2">
@@ -460,7 +462,7 @@ function AboutMe() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    Phone Number
+                    {t('about.phone')}
                 </label>
                 {editingField === "phone" ? (
                     <div className="flex items-center gap-2">
@@ -505,7 +507,7 @@ function AboutMe() {
 
                 <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                    Email Address
+                    {t('about.email')}
                 </label>
                 {editingField === "email" ? (
                     <div className="flex items-center gap-2">
@@ -551,7 +553,7 @@ function AboutMe() {
 
             <div>
                 <label className="text-xs font-semibold text-secondaryDark/60 mb-2 block">
-                Certificates
+                {t('about.certificates')}
                 </label>
                 <div
                 onClick={function () {
@@ -564,12 +566,12 @@ function AboutMe() {
                     <Certificate size={20} defaultColor="#1E8E54" />
                     </div>
                     <div>
-                    <p className="text-sm font-bold text-secondaryDark">{userData.certificate}</p>
-                    <p className="text-xs text-secondaryDark/60">Verified credential</p>
+                    <p className="text-sm font-bold text-secondaryDark">{t('about.certificate')}</p>
+                    <p className="text-xs text-secondaryDark/60">{t('about.verified_credential')}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-primary">View certification</span>
+                    <span className="text-xs font-bold text-primary">{t('about.view_certification')}</span>
                     <RightArrow size={14} defaultColor="#145B47" />
                 </div>
                 </div>

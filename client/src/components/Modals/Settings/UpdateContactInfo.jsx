@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { X, Check ,Mobile ,Email } from "../../../assets/icons/icons";
 import ToastNotification from "../../Notification/ToastNotification";
+import { useTranslation } from "react-i18next";
 
 function UpdateContactInfo({ type, value, onClose, onConfirm }) {
+    const { t } = useTranslation(["modals", "common"]);
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const inputRefs = [
@@ -89,9 +91,9 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
         <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-veryLarge shadow-2xl max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-300">
             <div className="flex items-center justify-between p-6 border-b border-secondary">
             <div>
-                <h3 className="text-lg font-bold text-primary">Verify Your Contact</h3>
+                <h3 className="text-lg font-bold text-primary">{t('modals:update_contact.title')}</h3>
                 <p className="text-xs text-secondaryDark/60 mt-1">
-                We sent a verification code
+                {t('modals:update_contact.subtitle')}
                 </p>
             </div>
             <button
@@ -112,7 +114,7 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
                 </div>
                 <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-secondaryDark/80 mb-1">
-                    Code sent to {type === "phone" ? "phone number" : "email address"}
+                    {type === "phone" ? t('modals:update_contact.code_sent_phone') : t('modals:update_contact.code_sent_email')}
                     </p>
                     <p className="text-sm font-bold text-primary break-all">{value}</p>
                 </div>
@@ -121,7 +123,7 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
 
             <div>
                 <label className="text-xs font-bold text-secondaryDark mb-3 block">
-                Enter Verification Code
+                {t('modals:update_contact.enter_code')}
                 </label>
                 <div className="flex gap-2 justify-between">
                 {otp.map(function (digit, index) {
@@ -146,9 +148,9 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
                 })}
                 </div>
                 <div className="flex items-center justify-between mt-3">
-                <p className="text-xs text-secondaryDark/60">Didn't receive code?</p>
+                <p className="text-xs text-secondaryDark/60">{t('modals:update_contact.didnt_receive')}</p>
                 <button className="text-xs font-bold text-primary hover:underline focus:outline-none focus:underline transition-all">
-                    Resend OTP
+                    {t('modals:update_contact.resend_otp')}
                 </button>
                 </div>
             </div>
@@ -158,7 +160,7 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
                 onClick={onClose}
                 className="flex-1 bg-secondary text-primary py-3.5 rounded-large text-sm font-bold hover:bg-secondary/80 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                 >
-                Cancel
+                {t('modals:update_contact.cancel')}
                 </button>
                 <button
                 onClick={handleConfirm}
@@ -170,7 +172,7 @@ function UpdateContactInfo({ type, value, onClose, onConfirm }) {
                 }`}
                 >
                 <Check size={16} isDarkTheme={isComplete && !isSubmitting} defaultColor={isComplete && !isSubmitting ? "#fff" : "#316F5D"} />
-                {isSubmitting ? "Verifying..." : "Verify & Continue"}
+                {isSubmitting ? t('modals:update_contact.verifying') : t('modals:update_contact.verify_continue')}
                 </button>
             </div>
             </div>

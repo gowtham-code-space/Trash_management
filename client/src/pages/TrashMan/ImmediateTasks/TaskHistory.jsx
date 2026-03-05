@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../../../utils/Pagination";
 import TaskDetailModal from "../../../components/Modals/TrashMan/ImmediateTasks/TaskDetailModal";
 
@@ -76,6 +77,7 @@ const taskHistory = [
 ];
 
 function TaskHistory() {
+    const { t } = useTranslation(["pages", "common"]);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [taskDetail, setTaskDetail] = useState(null);
 
@@ -84,14 +86,14 @@ function TaskHistory() {
         return (
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 border border-success/20">
             <div className="w-1.5 h-1.5 rounded-full bg-success" />
-            <span className="text-xs font-bold text-success uppercase tracking-tight">Resolved</span>
+            <span className="text-xs font-bold text-success uppercase tracking-tight">{t('common:resolved')}</span>
             </div>
         );
         }
         return (
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warning/10 border border-warning/20">
             <div className="w-1.5 h-1.5 rounded-full bg-warning" />
-            <span className="text-xs font-bold text-warning uppercase tracking-tight">Pending</span>
+            <span className="text-xs font-bold text-warning uppercase tracking-tight">{t('common:pending')}</span>
         </div>
         );
     }
@@ -133,7 +135,7 @@ function TaskHistory() {
                 </div>
 
                 <div className="flex items-center gap-1.5 text-xs text-gray-600">
-                <span className="font-medium">by <span className="text-success font-semibold">{task.resolvedBy}</span></span>
+                <span className="font-medium">{t('pages:trashman.task_history.by')} <span className="text-success font-semibold">{task.resolvedBy}</span></span>
                 </div>
             </div>
             </div>
@@ -145,14 +147,14 @@ function TaskHistory() {
         <div className="bg-white border border-secondary/50 rounded-veryLarge p-5 shadow-sm">
         {taskHistory.length === 0 ? (
             <div className="text-center py-12">
-            <p className="text-sm font-bold text-gray-600">No task history</p>
-            <p className="text-xs text-gray-400 mt-1">Resolved tasks will appear here</p>
+            <p className="text-sm font-bold text-gray-600">{t('pages:trashman.task_history.no_history')}</p>
+            <p className="text-xs text-gray-400 mt-1">{t('pages:trashman.task_history.resolved_tasks_appear')}</p>
             </div>
         ) : (
             <div className="space-y-1">
             <div className="flex items-center justify-between mb-3 pb-3 border-b border-secondary/30">
                 <p className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-                Showing {taskHistory.length} {taskHistory.length === 1 ? 'record' : 'records'}
+                {t('pages:trashman.task_history.showing_records', { count: taskHistory.length })}
                 </p>
             </div>
             <Pagination 

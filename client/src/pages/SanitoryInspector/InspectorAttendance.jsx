@@ -3,8 +3,10 @@ import { Search, Check, MapPin, LeftArrow, RightArrow, Calendar } from "../../as
 import AttendanceConfirmationModal from "../../components/Modals/SuperVisor/AttendanceConfirmationModal";
 import CalendarModal from "../../components/Modals/Calendar/CalendarModal";
 import Pagination from "../../utils/Pagination";
+import { useTranslation } from "react-i18next";
 
 function InspectorAttendance() {
+  const { t } = useTranslation(["pages", "common"]);
   const [activeTab, setActiveTab] = useState("pending");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -217,7 +219,7 @@ function InspectorAttendance() {
             </div>
             <div>
               <div className="text-sm font-medium text-secondaryDark">{supervisor.name}</div>
-              <div className="text-xs text-secondaryDark">ID: {supervisor.empId}</div>
+              <div className="text-xs text-secondaryDark">{t('common:id_prefix')}{supervisor.empId}</div>
             </div>
           </div>
         </td>
@@ -231,17 +233,17 @@ function InspectorAttendance() {
         <td className="py-4">
           {supervisor.status === "pending" && (
             <span className="inline-block px-3 py-1 bg-warning/10 text-warning text-xs font-medium rounded-medium">
-              Pending Review
+              {t('pages:shared.pending_review')}
             </span>
           )}
           {supervisor.status === "verified" && (
             <span className="inline-block px-3 py-1 bg-success/10 text-success text-xs font-medium rounded-medium">
-              Verified
+              {t('common:verified')}
             </span>
           )}
           {supervisor.status === "absent" && (
             <span className="inline-block px-3 py-1 bg-error/10 text-error text-xs font-medium rounded-medium">
-              Absent
+              {t('common:absent')}
             </span>
           )}
         </td>
@@ -255,7 +257,7 @@ function InspectorAttendance() {
                            hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200 ease-in-out"
                 >
-                  Verify
+                  {t('pages:shared.verify')}
                 </button>
                 <button
                   onClick={() => handleRejectClick(supervisor)}
@@ -263,17 +265,17 @@ function InspectorAttendance() {
                            hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                            transition-all duration-200 ease-in-out"
                 >
-                  Reject
+                  {t('pages:shared.reject')}
                 </button>
               </>
             )}
             {supervisor.status === "verified" && (
               <span className="text-xs text-secondaryDark">
-                Verified at {supervisor.verifiedAt}
+                {t('pages:shared.verified_at', { time: supervisor.verifiedAt })}
               </span>
             )}
             {supervisor.status === "absent" && (
-              <span className="text-xs text-error font-medium">Override</span>
+              <span className="text-xs text-error font-medium">{t('pages:shared.override')}</span>
             )}
           </div>
         </td>
@@ -299,8 +301,8 @@ function InspectorAttendance() {
             supervisor.status === "verified" ? "bg-success/10 text-success" : 
             "bg-error/10 text-error"
           }`}>
-            {supervisor.status === "pending" ? "Pending" : 
-             supervisor.status === "verified" ? "Verified" : "Absent"}
+            {supervisor.status === "pending" ? t('common:pending') : 
+             supervisor.status === "verified" ? t('common:verified') : t('common:absent')}
           </span>
         </div>
 
@@ -312,7 +314,7 @@ function InspectorAttendance() {
                       hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                       transition-all duration-200 ease-in-out"
             >
-              Verify
+              {t('pages:shared.verify')}
             </button>
             <button
               onClick={() => handleRejectClick(supervisor)}
@@ -320,7 +322,7 @@ function InspectorAttendance() {
                       hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20
                       transition-all duration-200 ease-in-out"
             >
-              Reject
+              {t('pages:shared.reject')}
             </button>
           </div>
         )}
@@ -333,40 +335,40 @@ function InspectorAttendance() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="hidden md:grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-large border border-secondary">
-            <div className="text-xs text-secondaryDark mb-1">Total Supervisors</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('pages:shared.total_supervisors')}</div>
             <div className="text-2xl font-bold text-secondaryDark">{stats.total}</div>
-            <div className="text-xs text-secondaryDark mt-1">Registered Supervisors</div>
+            <div className="text-xs text-secondaryDark mt-1">{t('pages:shared.registered_supervisors')}</div>
           </div>
 
           <div className="bg-white p-4 rounded-large border border-secondary">
-            <div className="text-xs text-secondaryDark mb-1">Verified Present</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('pages:shared.verified_present')}</div>
             <div className="text-2xl font-bold text-success">{stats.verified}</div>
             <div className="text-xs text-success mt-1 flex items-center gap-1">
               <Check size={12} />
-              {Math.round((stats.verified / stats.total) * 100)}% Verified
+              {t('pages:shared.percent_verified', { percent: Math.round((stats.verified / stats.total) * 100) })}
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-large border border-secondary">
-            <div className="text-xs text-secondaryDark mb-1">Pending Review</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('pages:shared.pending_review')}</div>
             <div className="text-2xl font-bold text-warning">{stats.pending}</div>
-            <div className="text-xs text-warning mt-1">Needs Action</div>
+            <div className="text-xs text-warning mt-1">{t('pages:shared.needs_action')}</div>
           </div>
 
           <div className="bg-white p-4 rounded-large border border-secondary">
-            <div className="text-xs text-secondaryDark mb-1">Absent</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('common:absent')}</div>
             <div className="text-2xl font-bold text-error">{stats.absent}</div>
-            <div className="text-xs text-error mt-1">Not marked present</div>
+            <div className="text-xs text-error mt-1">{t('pages:shared.not_marked_present')}</div>
           </div>
         </div>
 
         <div className="md:hidden flex gap-3 mb-4">
           <div className="flex-1 bg-white p-3 rounded-large border border-secondary text-center">
-            <div className="text-xs text-secondaryDark mb-1">Verified</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('common:verified')}</div>
             <div className="text-xl font-bold text-success">{stats.verified}</div>
           </div>
           <div className="flex-1 bg-white p-3 rounded-large border border-secondary text-center">
-            <div className="text-xs text-secondaryDark mb-1">Pending</div>
+            <div className="text-xs text-secondaryDark mb-1">{t('common:pending')}</div>
             <div className="text-xl font-bold text-warning">{stats.pending}</div>
           </div>
         </div>
@@ -382,7 +384,7 @@ function InspectorAttendance() {
                     : "border-transparent text-secondaryDark hover:text-primary"
                 }`}
               >
-                Pending ({stats.pending})
+                {t('common:pending')} ({stats.pending})
               </button>
               <button
                 onClick={() => setActiveTab("verified")}
@@ -392,7 +394,7 @@ function InspectorAttendance() {
                     : "border-transparent text-secondaryDark hover:text-primary"
                 }`}
               >
-                Verified ({stats.verified})
+                {t('common:verified')} ({stats.verified})
               </button>
               <button
                 onClick={() => setActiveTab("absent")}
@@ -402,7 +404,7 @@ function InspectorAttendance() {
                     : "border-transparent text-secondaryDark hover:text-primary"
                 }`}
               >
-                Absent ({stats.absent})
+                {t('common:absent')} ({stats.absent})
               </button>
               <button
                 onClick={() => setActiveTab("all")}
@@ -412,7 +414,7 @@ function InspectorAttendance() {
                     : "border-transparent text-secondaryDark hover:text-primary"
                 }`}
               >
-                All Supervisors
+                {t('pages:shared.all_supervisors')}
               </button>
             </div>
 
@@ -426,7 +428,7 @@ function InspectorAttendance() {
                     : "bg-secondary text-secondaryDark"
                 }`}
               >
-                Pending ({stats.pending})
+                {t('common:pending')} ({stats.pending})
               </button>
               <button
                 onClick={() => setActiveTab("verified")}
@@ -437,7 +439,7 @@ function InspectorAttendance() {
                     : "bg-secondary text-secondaryDark"
                 }`}
               >
-                Verified ({stats.verified})
+                {t('common:verified')} ({stats.verified})
               </button>
               <button
                 onClick={() => setActiveTab("absent")}
@@ -448,7 +450,7 @@ function InspectorAttendance() {
                     : "bg-secondary text-secondaryDark"
                 }`}
               >
-                Absent ({stats.absent})
+                {t('common:absent')} ({stats.absent})
               </button>
               <button
                 onClick={() => setActiveTab("all")}
@@ -459,7 +461,7 @@ function InspectorAttendance() {
                     : "bg-secondary text-secondaryDark"
                 }`}
               >
-                All Supervisors
+                {t('pages:shared.all_supervisors')}
               </button>
             </div>
           </div>
@@ -472,7 +474,7 @@ function InspectorAttendance() {
                 </div>
                 <input
                   type="text"
-                  placeholder="Search supervisor..."
+                placeholder={t('pages:inspector.assign_supervisor.search_placeholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-secondary rounded-medium bg-background text-secondaryDark text-sm
@@ -486,7 +488,7 @@ function InspectorAttendance() {
                           transition-all duration-200 ease-in-out whitespace-nowrap"
               >
                 <Calendar size={18} defaultColor="white" />
-                <span className="hidden sm:inline">Pick Date</span>
+                <span className="hidden sm:inline">{t('common:pick_date')}</span>
               </button>
             </div>
 
@@ -495,11 +497,11 @@ function InspectorAttendance() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-secondary text-left">
-                      <th className="pb-3 text-xs font-medium text-secondaryDark">Supervisor Name</th>
-                      <th className="pb-3 text-xs font-medium text-secondaryDark">Check-in Time</th>
-                      <th className="pb-3 text-xs font-medium text-secondaryDark">Geo-Location</th>
-                      <th className="pb-3 text-xs font-medium text-secondaryDark">Status</th>
-                      <th className="pb-3 text-xs font-medium text-secondaryDark">Actions</th>
+                      <th className="pb-3 text-xs font-medium text-secondaryDark">{t('pages:shared.supervisor_name')}</th>
+                      <th className="pb-3 text-xs font-medium text-secondaryDark">{t('pages:shared.check_in_time')}</th>
+                      <th className="pb-3 text-xs font-medium text-secondaryDark">{t('pages:shared.geo_location')}</th>
+                      <th className="pb-3 text-xs font-medium text-secondaryDark">{t('common:status')}</th>
+                      <th className="pb-3 text-xs font-medium text-secondaryDark">{t('common:actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -512,7 +514,7 @@ function InspectorAttendance() {
               {filteredSupervisors.length > 0 && (
                 <div className="flex items-center justify-end mt-6 gap-4 border-t border-secondary pt-4">
                   <span className="text-[11px] font-bold text-gray-400">
-                    Showing {startIdx + 1}-{endIdx} of {filteredSupervisors.length}
+                    {t('pages:shared.showing_range', { start: startIdx + 1, end: endIdx, total: filteredSupervisors.length })}
                   </span>
                   
                   <div className="flex items-center gap-1.5">

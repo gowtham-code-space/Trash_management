@@ -25,6 +25,7 @@ import { clearSession } from "../../services/core/session";
 import { logout } from "../../services/features/authService";
 import { api } from "../../services/core/apiMethods";
 import { SkeletonLine } from "../../components/skeleton";
+import { useTranslation } from "react-i18next";
 
 import place_holder_img from '../../assets/avator_placeholder.png'
 // Role ID to Role Name mapping
@@ -105,6 +106,7 @@ function SideTab({ user }) {
 const navigate = useNavigate();
 const location = useLocation();
 const { isDarkTheme } = ThemeStore();
+const { t } = useTranslation('navigation');
 const [userDetails, setUserDetails] = useState(null);
 const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -131,64 +133,64 @@ useEffect(function() {
 
 const menuConfig = {
 Resident: [
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "map", label: "Map", mobileLabel: "Map", icon: Map, showMobile: true, isHighlighted: false },
-    { id: "submit-feedback", label: "Feedback", mobileLabel: "Feedback", icon: QR, showMobile: true, isHighlighted: true },
-    { id: "route-timings", label: "Routes & Timings", mobileLabel: "Routes", icon: TrashRoute, showMobile: false, isHighlighted: false },
-    { id: "report-trash", label: "Report", mobileLabel: "Report", icon: Camera, showMobile: false, isHighlighted: false },
-    { id: "my-stats", label: "Statistics", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: false, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "map", label: t('menu.map'), mobileLabel: t('mobile_menu.map'), icon: Map, showMobile: true, isHighlighted: false },
+    { id: "submit-feedback", label: t('menu.feedback'), mobileLabel: t('mobile_menu.feedback'), icon: QR, showMobile: true, isHighlighted: true },
+    { id: "route-timings", label: t('menu.routes_timings'), mobileLabel: t('mobile_menu.routes'), icon: TrashRoute, showMobile: false, isHighlighted: false },
+    { id: "report-trash", label: t('menu.report'), mobileLabel: t('mobile_menu.report'), icon: Camera, showMobile: false, isHighlighted: false },
+    { id: "my-stats", label: t('menu.statistics'), mobileLabel: t('mobile_menu.stats'), icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: t('menu.quiz'), mobileLabel: t('mobile_menu.quiz'), icon: Certificate, showMobile: false, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 TrashMan: [
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "upload-attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: true, isHighlighted: false },
-    { id: "create-feedback-session", label: "Scan & share", mobileLabel: "Create", icon: ZoomIn, showMobile: true, isHighlighted: true },
-    { id: "immediate-tasks", label: "Immediate Tasks", mobileLabel: "Tasks", icon: Task, showMobile: false, isHighlighted: false },
-    { id: "route-timings", label: "Routes & Timings", mobileLabel: "Routes", icon: Map, showMobile: false, isHighlighted: false },
-    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "upload-attendance", label: t('menu.attendance'), mobileLabel: t('mobile_menu.attendance'), icon: People, showMobile: true, isHighlighted: false },
+    { id: "create-feedback-session", label: t('menu.scan_share'), mobileLabel: t('mobile_menu.create'), icon: ZoomIn, showMobile: true, isHighlighted: true },
+    { id: "immediate-tasks", label: t('menu.immediate_tasks'), mobileLabel: t('mobile_menu.tasks'), icon: Task, showMobile: false, isHighlighted: false },
+    { id: "route-timings", label: t('menu.routes_timings'), mobileLabel: t('mobile_menu.routes'), icon: Map, showMobile: false, isHighlighted: false },
+    { id: "my-stats", label: t('menu.stats'), mobileLabel: t('mobile_menu.stats'), icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 SuperVisor: [
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "search-workers", label: "Search", mobileLabel: "Search", icon: Search, showMobile: true, isHighlighted: false },
-    { id: "attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: false, isHighlighted: false },
-    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: false, isHighlighted: false },
-    { id: "create-feedback-session", label: "Create Feedback", mobileLabel: "Create", icon:ZoomIn, showMobile: true, isHighlighted: true },
-    { id: "submit-feedback", label: "Submit Feedback", mobileLabel: "Feedback", icon: FeedBack, showMobile: false, isHighlighted: false },
-    { id: "my-stats", label: "Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "search-workers", label: t('menu.search'), mobileLabel: t('menu.search'), icon: Search, showMobile: true, isHighlighted: false },
+    { id: "attendance", label: t('menu.attendance'), mobileLabel: t('mobile_menu.attendance'), icon: People, showMobile: false, isHighlighted: false },
+    { id: "all-tasks", label: t('menu.tasks'), mobileLabel: t('mobile_menu.tasks'), icon: Task, showMobile: false, isHighlighted: false },
+    { id: "create-feedback-session", label: t('menu.create_feedback'), mobileLabel: t('mobile_menu.create'), icon:ZoomIn, showMobile: true, isHighlighted: true },
+    { id: "submit-feedback", label: t('menu.submit_feedback'), mobileLabel: t('mobile_menu.feedback'), icon: FeedBack, showMobile: false, isHighlighted: false },
+    { id: "my-stats", label: t('menu.stats'), mobileLabel: t('mobile_menu.stats'), icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 SanitaryInspector: [
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "search-workers", label: "Search", mobileLabel: "Search", icon: Search, showMobile: false, isHighlighted: false },
-    { id: "attendance", label: "Attendance", mobileLabel: "Attendance", icon: People, showMobile: false, isHighlighted: false },
-    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: false },
-    { id: "create-feedback-session", label: "Create Feedback", mobileLabel: "Create", icon:ZoomIn, showMobile: true, isHighlighted: true },
-    { id: "config-route", label: "configure route", mobileLabel: "configure", icon:Configure, showMobile: false, isHighlighted: false },
-    { id: "overall-stats", label: "Overall Stats", mobileLabel: "Stats", icon: Stats, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "search-workers", label: t('menu.search'), mobileLabel: t('menu.search'), icon: Search, showMobile: false, isHighlighted: false },
+    { id: "attendance", label: t('menu.attendance'), mobileLabel: t('mobile_menu.attendance'), icon: People, showMobile: false, isHighlighted: false },
+    { id: "all-tasks", label: t('menu.tasks'), mobileLabel: t('mobile_menu.tasks'), icon: Task, showMobile: true, isHighlighted: false },
+    { id: "create-feedback-session", label: t('menu.create_feedback'), mobileLabel: t('mobile_menu.create'), icon:ZoomIn, showMobile: true, isHighlighted: true },
+    { id: "config-route", label: t('menu.configure_route'), mobileLabel: t('mobile_menu.configure'), icon:Configure, showMobile: false, isHighlighted: false },
+    { id: "overall-stats", label: t('menu.overall_stats'), mobileLabel: t('mobile_menu.stats'), icon: Stats, showMobile: true, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 MHO: [
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "all-tasks", label: "Tasks", mobileLabel: "Tasks", icon: Task, showMobile: true, isHighlighted: false },
-    { id: "id-card", label: "Id Card", mobileLabel: "Id card", icon: IdCard, showMobile: true, isHighlighted: false },
-    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "all-tasks", label: t('menu.tasks'), mobileLabel: t('mobile_menu.tasks'), icon: Task, showMobile: true, isHighlighted: false },
+    { id: "id-card", label: t('menu.id_card'), mobileLabel: t('mobile_menu.id_card'), icon: IdCard, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: t('menu.quiz'), mobileLabel: t('mobile_menu.quiz'), icon: Certificate, showMobile: true, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 Commissioner:[
-    { id: "", label: "Home", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "config-district", label: "Configure district", mobileLabel: "config", icon: Configure, showMobile: true, isHighlighted: false },
-    { id: "appoint-employees", label: "Appoint employees", mobileLabel: "Appoint", icon: People, showMobile: true, isHighlighted: false },
-    { id: "id-card", label: "Id Card", mobileLabel: "Id card", icon: IdCard, showMobile: true, isHighlighted: false },
-    { id: "quiz", label: "Quiz", mobileLabel: "Quiz", icon: Certificate, showMobile: true, isHighlighted: false },
-    { id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false },
+    { id: "", label: t('menu.home'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "config-district", label: t('menu.configure_district'), mobileLabel: t('mobile_menu.config'), icon: Configure, showMobile: true, isHighlighted: false },
+    { id: "appoint-employees", label: t('menu.appoint_employees'), mobileLabel: t('mobile_menu.appoint'), icon: People, showMobile: true, isHighlighted: false },
+    { id: "id-card", label: t('menu.id_card'), mobileLabel: t('mobile_menu.id_card'), icon: IdCard, showMobile: true, isHighlighted: false },
+    { id: "quiz", label: t('menu.quiz'), mobileLabel: t('mobile_menu.quiz'), icon: Certificate, showMobile: true, isHighlighted: false },
+    { id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false },
 ],
 Admin:[
-    { id: "", label: "Dashboard", mobileLabel: "Home", icon: Home, showMobile: true, isHighlighted: false },
-    { id: "Quiz-management", label: "Quiz Management", mobileLabel: "Quiz", icon: Configure, showMobile: true, isHighlighted: false },
-    { id: "logs", label: "View Logs", mobileLabel: "Logs", icon: People, showMobile: true, isHighlighted: false },
-{ id: "settings", label: "Settings", mobileLabel: "Settings", icon: Settings, showMobile: true, isHighlighted: false }
+    { id: "", label: t('dashboard'), mobileLabel: t('mobile_menu.home'), icon: Home, showMobile: true, isHighlighted: false },
+    { id: "Quiz-management", label: t('menu.quiz_management'), mobileLabel: t('mobile_menu.quiz'), icon: Configure, showMobile: true, isHighlighted: false },
+    { id: "logs", label: t('menu.view_logs'), mobileLabel: t('mobile_menu.logs'), icon: People, showMobile: true, isHighlighted: false },
+{ id: "settings", label: t('menu.settings'), mobileLabel: t('mobile_menu.settings'), icon: Settings, showMobile: true, isHighlighted: false }
 ],
 };
 
@@ -218,7 +220,7 @@ return (
         <div className="transition-transform hover:rotate-12 duration-300">
         <Add defaultColor={"white"} />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">CleanCity</h1>
+        <h1 className="text-xl font-bold text-white tracking-tight">{t('app_name')}</h1>
     </div>
 
     <nav className="flex-1 space-y-2 overflow-y-auto p-4 custom-scrollbar">
@@ -270,7 +272,7 @@ return (
             isDarkTheme={false}
             defaultColor="currentColor"
         />
-        <span className="text-sm font-bold">Logout</span>
+        <span className="text-sm font-bold">{t('logout')}</span>
         </button>
     </div>
     </aside>
@@ -307,7 +309,7 @@ return (
                     {userDetails?.first_name ? `${userDetails.first_name} ${userDetails.last_name || ''}`.trim() : userDetails?.email || 'User'}
                 </p>
             )}
-            <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">View Profile</p>
+            <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">{t('view_profile')}</p>
             </div>
             <div className="relative group cursor-pointer transition-transform active:scale-95">
             <img 

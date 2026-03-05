@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "../../../assets/icons/icons";
 import ThemeStore from "../../../store/ThemeStore";
 import WorkerInfoCard from "../../../components/Cards/Workers/WorkersInfoCard";
@@ -6,6 +7,7 @@ import Pagination from "../../../utils/Pagination";
 
 function SearchWorkers() {
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
   
   const [userRole] = useState("MHO");
   const [searchQuery, setSearchQuery] = useState("");
@@ -226,7 +228,7 @@ function SearchWorkers() {
               </div>
               <input
                 type="text"
-                placeholder="Search workers..."
+                placeholder={t('pages:common.search_workers.search_placeholder')}
                 value={searchQuery}
                 onChange={function (e) {
                   setSearchQuery(e.target.value);
@@ -256,7 +258,12 @@ function SearchWorkers() {
                                     : "bg-secondary text-secondaryDark"
                                 }`}
                   >
-                    {filter}
+                    {{
+                      "All": t('pages:common.search_workers.filter_all'),
+                      "TrashMan": t('pages:common.search_workers.filter_trashman'),
+                      "Supervisor": t('pages:common.search_workers.filter_supervisor'),
+                      "SI": t('pages:common.search_workers.filter_si'),
+                    }[filter] || filter}
                   </button>
                 );
               })}
@@ -308,9 +315,9 @@ function SearchWorkers() {
               <div className="w-16 h-16 mx-auto mb-4 bg-secondary rounded-full flex items-center justify-center">
                 <Search size={24} defaultColor="#316F5D" isDarkTheme={isDarkTheme} />
               </div>
-              <h3 className="text-sm font-bold text-secondaryDark mb-1">No workers found</h3>
+              <h3 className="text-sm font-bold text-secondaryDark mb-1">{t('pages:common.search_workers.no_results')}</h3>
               <p className="text-xs text-secondaryDark/60 mb-4">
-                Try adjusting your search or filters
+                {t('pages:common.search_workers.try_adjusting')}
               </p>
               <button
                 onClick={function() { 
@@ -321,7 +328,7 @@ function SearchWorkers() {
                           hover:scale-[0.99] active:scale-[0.99] transition-all duration-200
                           focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
-                Clear All
+                {t('common:clear_all')}
               </button>
             </div>
           )}

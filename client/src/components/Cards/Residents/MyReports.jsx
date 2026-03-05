@@ -1,8 +1,16 @@
 import React from "react";
 import { RightArrow } from "../../../assets/icons/icons";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 function MyReports({ report }) {
     const navigate = useNavigate();
+    const { t } = useTranslation(["common"]);
+
+    const statusLabels = {
+        "Pending": t('common:pending'),
+        "Critical": t('common:critical'),
+        "Resolved": t('common:resolved')
+    };
 
     function getStatusStyle(status) {
         if (status === "Pending") return "bg-warning text-black";
@@ -36,7 +44,7 @@ function MyReports({ report }) {
         {/* Status & Action */}
         <div className="flex items-center gap-3">
         <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${getStatusStyle(report.status)}`}>
-            {report.status}
+            {statusLabels[report.status] || report.status}
         </span>
         <div className="transition-transform group-hover:translate-x-1">
             <RightArrow size={14} isPressed={false} isDarkTheme={false} />

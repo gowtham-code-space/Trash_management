@@ -5,9 +5,11 @@ import ToastNotification from "../../../../components/Notification/ToastNotifica
 import ThemeStore from "../../../../store/ThemeStore";
 import ConfigRouteModal from "../../../../components/Modals/SanitaryInspector/ConfigRoute/ConfigRouteModal";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 // Main ConfigRoute Component
 function ConfigRoute() {
+  const { t } = useTranslation(["pages", "common"]);
   const { isDarkTheme } = ThemeStore();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,7 +48,7 @@ function ConfigRoute() {
   function handleAddRoute() {
     const isMobile = window.innerWidth < 1024;
     if (!isMobile && !selectedDivision) {
-      ToastNotification("Please select a division first", "error");
+      ToastNotification(t('pages:inspector.config_route_tab.toast_select_division_first'), "error");
       return;
     }
     
@@ -60,7 +62,7 @@ function ConfigRoute() {
     
     setRoutes([...routes, newRoute]);
     setStructureRoutes([...structureRoutes, { id: newRoute.id, name: newRoute.name }]);
-    ToastNotification("Draft route added. Edit the name to save.", "info");
+    ToastNotification(t('pages:inspector.config_route_tab.toast_draft_route_added'), "info");
   }
 
   function handleEditClick(route) {
@@ -71,7 +73,7 @@ function ConfigRoute() {
 
   function handleSaveEdit() {
     if (!editValue.trim()) {
-      ToastNotification("Route name cannot be empty", "error");
+      ToastNotification(t('pages:inspector.config_route_tab.toast_route_name_empty'), "error");
       return;
     }
 
@@ -87,7 +89,7 @@ function ConfigRoute() {
         : r
     ));
     
-    ToastNotification("Route updated successfully", "success");
+    ToastNotification(t('pages:inspector.config_route_tab.toast_route_updated'), "success");
     setEditingRoute(null);
     setEditValue("");
   }
@@ -97,9 +99,9 @@ function ConfigRoute() {
     if (route?.isDraft) {
       setRoutes(routes.filter(r => r.id !== editingRoute));
       setStructureRoutes(structureRoutes.filter(r => r.id !== editingRoute));
-      ToastNotification("Draft route discarded", "info");
+      ToastNotification(t('pages:inspector.config_route_tab.toast_draft_route_discarded'), "info");
     } else {
-      ToastNotification("Edit cancelled", "info");
+      ToastNotification(t('pages:inspector.config_route_tab.toast_edit_cancelled'), "info");
     }
     setEditingRoute(null);
     setEditValue("");
@@ -114,7 +116,7 @@ function ConfigRoute() {
   function handleConfirmDelete() {
     setRoutes(routes.filter(r => r.id !== routeToDelete.id));
     setStructureRoutes(structureRoutes.filter(r => r.id !== routeToDelete.id));
-    ToastNotification("Route deleted successfully", "success");
+    ToastNotification(t('pages:inspector.config_route_tab.toast_route_deleted'), "success");
     setShowDeleteModal(false);
     setRouteToDelete(null);
   }
@@ -154,7 +156,7 @@ function ConfigRoute() {
                     {route.name}
                   </h3>
                   <p className="text-xs text-secondaryDark mt-1">
-                    {route.streets} Streets • {route.households} Households
+                    {route.streets} {t('common:streets')} • {route.households} {t('common:households')}
                   </p>
                 </>
               )}
@@ -191,14 +193,14 @@ function ConfigRoute() {
                     className="w-full px-4 py-2 text-left text-sm text-secondaryDark hover:bg-background transition-all duration-200 ease-in-out flex items-center gap-2 rounded-t-medium"
                   >
                     <Edit size={14} isDarkTheme={isDarkTheme} />
-                    Edit
+                    {t('common:edit')}
                   </button>
                   <button
                     onClick={() => handleDeleteClick(route)}
                     className="w-full px-4 py-2 text-left text-sm text-error hover:bg-background transition-all duration-200 ease-in-out flex items-center gap-2 rounded-b-medium"
                   >
                     <Trash size={14} defaultColor="#E75A4C" />
-                    Delete
+                    {t('common:delete')}
                   </button>
                 </div>
               )}
@@ -219,7 +221,7 @@ function ConfigRoute() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-sm font-bold text-secondaryDark">
-                  AVAILABLE ROUTES ({filteredRoutes.length})
+                  {t('pages:inspector.config_route_tab.available_routes')} ({filteredRoutes.length})
                 </h2>
               </div>
               <div className="flex items-center gap-2">
@@ -229,7 +231,7 @@ function ConfigRoute() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search routes..."
+                      placeholder={t('pages:inspector.config_route_tab.search_placeholder')}
                       className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-background text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                       autoFocus
                     />
@@ -263,10 +265,10 @@ function ConfigRoute() {
           <div className="bg-white rounded-large p-6 border border-secondary">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-bold text-secondaryDark">
-                DIVISION ORGANIZATION (TARGET)
+                {t('pages:inspector.config_route_tab.division_organization')}
               </h2>
               <span className="text-xs text-secondaryDark">
-                Fairlands Division
+                {t('pages:inspector.config_route_tab.fairlands_division')}
               </span>
             </div>
 
@@ -282,10 +284,10 @@ function ConfigRoute() {
               <div className="bg-secondary rounded-medium p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-base font-bold text-secondaryDark">
-                    Fairlands Division Structure
+                    {t('pages:inspector.config_route_tab.fairlands_division_structure')}
                   </h3>
                   <span className="text-xs font-bold text-primary">
-                    {structureRoutes.length} Active Routes
+                    {structureRoutes.length} {t('pages:inspector.config_route_tab.active_routes')}
                   </span>
                 </div>
 
@@ -317,7 +319,7 @@ function ConfigRoute() {
               onClick={handleAddRoute}
               className="mt-3  w-full bg-primary text-white px-4 py-3 rounded-medium font-medium transition-all duration-200 ease-in-out hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] mb-4"
             >
-              Add Route
+              {t('pages:inspector.config_route_tab.add_route_btn')}
             </button>
           </div>
         </div>

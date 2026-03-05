@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function HeatMap({ year = new Date().getFullYear(), data = {} }) {
   // Default sample data if no data is provided
-
+  const { t } = useTranslation(["common"]);
 
   const complaintData = data;
   
@@ -15,18 +16,18 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
   });
 
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    t('common:months_short.jan'),
+    t('common:months_short.feb'),
+    t('common:months_short.mar'),
+    t('common:months_short.apr'),
+    t('common:months_short.may'),
+    t('common:months_short.jun'),
+    t('common:months_short.jul'),
+    t('common:months_short.aug'),
+    t('common:months_short.sep'),
+    t('common:months_short.oct'),
+    t('common:months_short.nov'),
+    t('common:months_short.dec'),
   ];
 
   function getHeatColor(complaints) {
@@ -75,7 +76,7 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
       <div className="bg-white p-6 rounded-large border border-secondary shadow-sm">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <h3 className="text-base font-semibold text-secondaryDark">
-            Complaint Activity Heatmap
+            {t('common:complaint_activity_heatmap')}
           </h3>
           <select
             value={year}
@@ -113,7 +114,7 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
                         onMouseLeave={handleLeave}
                         style={{ backgroundColor: getHeatColor(complaints) }}
                         className="w-4 h-4 rounded-sm cursor-pointer border border-gray-200"
-                        title={`${complaints} complaint${complaints !== 1 ? "s" : ""}`}
+                        title={t('common:complaint_count', { count: complaints })}
                       />
                     );
                   })}
@@ -128,7 +129,7 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
 
         <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-secondary">
           <span className="text-xs font-medium text-gray-600">
-            Less
+            {t('common:less')}
           </span>
           <div className="flex gap-1.5">
             <div 
@@ -153,7 +154,7 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
             />
           </div>
           <span className="text-xs font-medium text-gray-600">
-            More
+            {t('common:more')}
           </span>
         </div>
       </div>
@@ -171,7 +172,7 @@ function HeatMap({ year = new Date().getFullYear(), data = {} }) {
         >
           <div className="font-semibold">{tooltip.date}</div>
           <div className="mt-1">
-            {tooltip.complaints} complaint{tooltip.complaints !== 1 ? "s" : ""}
+            {t('common:complaint_count', { count: tooltip.complaints })}
           </div>
         </div>
       )}

@@ -3,11 +3,18 @@ import { Download } from "../../../assets/icons/icons";
 import ConfigRoute from "./Tabs/ConfigRoute";
 import AddStreet from "./Tabs/AddStreet";
 import AssignTrashMen from "./Tabs/AssignTrashMen";
+import { useTranslation } from "react-i18next";
 
 function RouteConfigHeader() {
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedTab, setSelectedTab] = useState("Routes");
 
   const tabs = ["Routes", "Streets", "Assign Trashman"];
+  const tabLabels = {
+    "Routes": t('pages:inspector.route_config.tab_routes'),
+    "Streets": t('pages:inspector.route_config.tab_streets'),
+    "Assign Trashman": t('pages:inspector.route_config.tab_assign_trashman')
+  };
 
   function handleTabClick(tab) {
     setSelectedTab(tab);
@@ -32,7 +39,7 @@ function RouteConfigHeader() {
                     hover:scale-[0.99] active:scale-[0.99]
                   `}
                 >
-                  {tab}
+                  {tabLabels[tab]}
                 </button>
               );
             })}
@@ -44,7 +51,7 @@ function RouteConfigHeader() {
             <div className="mr-1">
                 <Download size={20} defaultColor="white"/>
             </div>
-              Download
+              {t('common:download')}
           </button>
       </div>
 

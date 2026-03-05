@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Download } from "../../../assets/icons/icons";
 import ConfigZone from "./Tabs/ConfigZone";
 import ConfigDivision from "./Tabs/ConfigDivision";
@@ -6,9 +7,16 @@ import ConfigWard from "./Tabs/ConfigWard";
 import ConfigStreet from "./Tabs/ConfigStreet";
 
 function ConfigHeader() {
+  const { t } = useTranslation(["pages", "common"]);
   const [selectedTab, setSelectedTab] = useState("Zones");
 
   const tabs = ["Zones", "Divisions", "Wards", "Streets"];
+  const tabLabels = {
+    Zones: t('pages:commissioner.config_header.tab_zones'),
+    Divisions: t('pages:commissioner.config_header.tab_divisions'),
+    Wards: t('pages:commissioner.config_header.tab_wards'),
+    Streets: t('pages:commissioner.config_header.tab_streets'),
+  };
 
   function handleTabClick(tab) {
     setSelectedTab(tab);
@@ -33,7 +41,7 @@ function ConfigHeader() {
                     hover:scale-[0.99] active:scale-[0.99]
                   `}
                 >
-                  {tab}
+                  {tabLabels[tab] || tab}
                 </button>
               );
             })}
@@ -45,7 +53,7 @@ function ConfigHeader() {
             <div className="mr-1">
                 <Download size={20} defaultColor="white"/>
             </div>
-              Download
+              {t('common:download')}
           </button>
       </div>
 

@@ -1,7 +1,9 @@
 import React from 'react'
 import HeatMap from '../../../../components/Statistics/HeatMap'
 import Rating from "../../../../components/Statistics/Rating"
+import { useTranslation } from "react-i18next";
 function Environment() {
+    const { t } = useTranslation(["common"]);
     const residentFeedbackData = {
         averageRating: 4.8,
         totalReviews: 142,
@@ -44,7 +46,12 @@ function Environment() {
             <HeatMap data={HeatMapData}/>
             <div className='mt-5'>
                 <Rating yearDropDown={['2025', '2026']} 
-                    monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+                    monthDropDown={[
+                        t('common:months.january'), t('common:months.february'), t('common:months.march'),
+                        t('common:months.april'), t('common:months.may'), t('common:months.june'),
+                        t('common:months.july'), t('common:months.august'), t('common:months.september'),
+                        t('common:months.october'), t('common:months.november'), t('common:months.december')
+                    ]}
                     averageRating={residentFeedbackData.averageRating}
                     totalReviews={residentFeedbackData.totalReviews}
                     ratingBreakdown={residentFeedbackData.ratingBreakdown}/>

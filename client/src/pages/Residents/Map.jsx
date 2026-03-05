@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import ToastNotification from '../../components/Notification/ToastNotification';
 import AllComplaints from '../../components/Modals/Residents/complaints/AllComplaints';
@@ -81,6 +82,7 @@ function Map() {
   const [showPreviewCard, setShowPreviewCard] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
 
   function handleViewComplaints() {
     setShowAllComplaints(true);
@@ -112,7 +114,7 @@ function Map() {
           <span className="text-[10px] md:text-xs font-bold">i</span>
         </div>
         <p className="text-xs md:text-sm leading-relaxed">
-          Help your city verify if reported issues are still present. Your vote keeps the map accurate.
+          {t('pages:resident.map.banner_info')}
         </p>
       </div>
 
@@ -133,8 +135,8 @@ function Map() {
             className={`${isDarkTheme ? "bg-primary text-white" : "bg-white text-primary"} pointer-events-auto absolute bottom-4 left-4 md:bottom-6 md:left-6 px-4 py-2.5 md:px-4 md:py-3 rounded-large shadow-lg font-semibold text-xs md:text-sm hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20`}
           >
             <span className="flex items-center gap-2">
-              <span className="hidden sm:inline">View Complaints</span>
-              <span className="sm:hidden">Complaints</span>
+              <span className="hidden sm:inline">{t('pages:resident.map.view_complaints')}</span>
+              <span className="sm:hidden">{t('pages:resident.map.complaints')}</span>
               {mockComplaints.length > 0 && (
                 <span className="w-5 h-5 md:w-6 md:h-6 z-10 absolute -top-2 -right-2 bg-error text-white text-[10px] md:text-xs font-bold rounded-full flex items-center justify-center shadow-md">
                   {mockComplaints.length}

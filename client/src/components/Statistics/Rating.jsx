@@ -3,7 +3,9 @@ import { Star } from "../../assets/icons/icons";
 import ToastNotification from "../Notification/ToastNotification";
 import { ToastContainer } from "react-toastify";
 import ProgressBar from "./ProgressBar"
+import { useTranslation } from "react-i18next";
 function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [], yearDropDown = [], monthDropDown = [] }) {
+    const { t } = useTranslation(["common"]);
     const [selectedYear, setSelectedYear] = useState(yearDropDown[0] || "2025");
     const [selectedMonth, setSelectedMonth] = useState(monthDropDown[0] || "January");
 
@@ -20,13 +22,13 @@ function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [],
     function handleYearChange(event) {
         const newYear = event.target.value;
         setSelectedYear(newYear);
-        ToastNotification(`Loading ratings data for ${selectedMonth} ${newYear}`, "info");
+        ToastNotification(t('common:loading_chart_data', { title: t('common:resident_feedback'), period: `${selectedMonth} ${newYear}` }), "info");
     }
 
     function handleMonthChange(event) {
         const newMonth = event.target.value;
         setSelectedMonth(newMonth);
-        ToastNotification(`Loading ratings data for ${newMonth} ${selectedYear}`, "info");
+        ToastNotification(t('common:loading_chart_data', { title: t('common:resident_feedback'), period: `${newMonth} ${selectedYear}` }), "info");
     }
 
     // Function to render stars
@@ -75,7 +77,7 @@ function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [],
         <div className="bg-secondary p-6 rounded-large border border-secondary shadow-sm">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-secondaryDark">
-                    Resident Feedback
+                    {t('common:resident_feedback')}
                 </h2>
                 <div className="w-9 h-9 rounded-full bg-warning/10 flex items-center justify-center">
                     <Star size={18} defaultColor="#F59E0B" />
@@ -130,7 +132,7 @@ function Rating({ averageRating = 4.8, totalReviews = 142, ratingBreakdown = [],
                 </div>
                 
                 <p className="text-xs text-gray-500 font-medium">
-                    Based on {totalReviews} reviews
+                    {t('common:based_on_reviews', { count: totalReviews })}
                 </p>
             </div>
 

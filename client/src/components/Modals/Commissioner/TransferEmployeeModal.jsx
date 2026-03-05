@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X, DownArrow } from "../../../assets/icons/icons";
 import ToastNotification from "../../../components/Notification/ToastNotification";
 
 function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
+    const { t } = useTranslation(["modals", "common"]);
     const [selectedZone, setSelectedZone] = useState("");
     const [selectedDivision, setSelectedDivision] = useState("");
 
@@ -11,16 +13,16 @@ function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
 
     function handleTransfer() {
         if (!selectedZone) {
-        ToastNotification("Please select a zone", "error");
+        ToastNotification(t('modals:transfer_employee.toast_select_zone'), "error");
         return;
         }
         
         if (employee.role !== "MHO" && !selectedDivision) {
-        ToastNotification("Please select a division", "error");
+        ToastNotification(t('modals:transfer_employee.toast_select_division'), "error");
         return;
         }
 
-        ToastNotification(`${employee.first_name} ${employee.last_name} transferred successfully`, "success");
+        ToastNotification(t('modals:transfer_employee.toast_transfer_success', { name: `${employee.first_name} ${employee.last_name}` }), "success");
         onClose();
     }
 
@@ -28,7 +30,7 @@ function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
         <div onClick={onClose} className="fixed inset-0 bg-primary/40 backdrop-blur-sm flex items-center justify-center z-50">
         <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-veryLarge p-6 w-full max-w-md mx-4">
             <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-secondaryDark">Transfer Employee</h2>
+            <h2 className="text-xl font-bold text-secondaryDark">{t('modals:transfer_employee.title')}</h2>
             <button 
                 onClick={onClose}
                 className="p-1 hover:scale-[0.99] transition-all duration-200 ease-in-out"
@@ -53,21 +55,21 @@ function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
             </div>
 
             <div>
-                <p className="text-sm text-secondaryDark mb-2">Current Zone: <span className="font-bold">{employee.zone}</span></p>
+                <p className="text-sm text-secondaryDark mb-2">{t('modals:transfer_employee.current_zone')} <span className="font-bold">{employee.zone}</span></p>
                 {employee.role !== "MHO" && (
-                <p className="text-sm text-secondaryDark">Current Division: <span className="font-bold">{employee.division}</span></p>
+                <p className="text-sm text-secondaryDark">{t('modals:transfer_employee.current_division')} <span className="font-bold">{employee.division}</span></p>
                 )}
             </div>
 
             <div className="space-y-4 mt-6">
                 <div>
-                <label className="block text-sm font-medium text-secondaryDark mb-2">Transfer to Zone</label>
+                <label className="block text-sm font-medium text-secondaryDark mb-2">{t('modals:transfer_employee.transfer_to_zone')}</label>
                 <select
                     value={selectedZone}
                     onChange={(e) => setSelectedZone(e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                 >
-                    <option value="">Select Zone</option>
+                    <option value="">{t('modals:transfer_employee.select_zone')}</option>
                     {zones.map(function(zone) {
                     return (
                         <option key={zone} value={zone}>
@@ -80,13 +82,13 @@ function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
 
                 {employee.role !== "MHO" && (
                 <div>
-                    <label className="block text-sm font-medium text-secondaryDark mb-2">Transfer to Division</label>
+                    <label className="block text-sm font-medium text-secondaryDark mb-2">{t('modals:transfer_employee.transfer_to_division')}</label>
                     <select
                     value={selectedDivision}
                     onChange={(e) => setSelectedDivision(e.target.value)}
                     className="w-full px-4 py-3 bg-background border border-secondary rounded-large text-sm text-secondaryDark focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                     >
-                    <option value="">Select Division</option>
+                    <option value="">{t('modals:transfer_employee.select_division')}</option>
                     {divisions.map(function(division) {
                         return (
                         <option key={division} value={division}>
@@ -104,13 +106,13 @@ function TransferEmployeeModal({ employee, onClose, isDarkTheme }) {
                 onClick={onClose}
                 className="flex-1 px-4 py-3 bg-secondary text-secondaryDark rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                Cancel
+                {t('modals:transfer_employee.cancel')}
                 </button>
                 <button
                 onClick={handleTransfer}
                 className="flex-1 px-4 py-3 bg-primary text-white rounded-large font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99] transition-all duration-200 ease-in-out"
                 >
-                Transfer
+                {t('modals:transfer_employee.transfer')}
                 </button>
             </div>
             </div>

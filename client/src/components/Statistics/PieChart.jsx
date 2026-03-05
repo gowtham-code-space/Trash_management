@@ -15,14 +15,16 @@ import {
     Cell,
 } from "recharts";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 function PieChart({ data , yearDropDown}) {
+    const { t } = useTranslation(["common"]);
     const [selectedYear, setSelectedYear] = useState("2025");
     //role for testing: "Resident", "TrashMan", "SuperVisor", "SanittaryInspector", "MHO"
     const role = "TrashMan"
     function handleYearChange(event) {
         const newYear = event.target.value;
         setSelectedYear(newYear);
-        ToastNotification(`Loading Community Response data for ${newYear}`, "info");
+        ToastNotification(t('common:loading_chart_data', { title: t('common:community_response'), period: newYear }), "info");
     }
     
     return (
@@ -30,12 +32,12 @@ function PieChart({ data , yearDropDown}) {
         <div className="flex items-center justify-between mb-2">
             {role === "Resident" ? 
             <h2 className="text-base font-semibold text-secondaryDark">
-            Community Response
+            {t('common:community_response')}
             </h2>
 
             : role === "TrashMan" ?
             <h2 className="text-base font-semibold text-secondaryDark">
-            Attendance
+            {t('common:attendance')}
             </h2> : ""
             }
             
@@ -55,13 +57,13 @@ function PieChart({ data , yearDropDown}) {
         </div>
         
         {role === "Resident" ?
-            <p className="text-sm text-secondaryDark mb-6">Neighbor votes for {selectedYear}</p>
+            <p className="text-sm text-secondaryDark mb-6">{t('common:neighbor_votes_for', { year: selectedYear })}</p>
 
         : role === "TrashMan" ?
-        <p className="text-sm text-secondaryDark mb-6">Attendance for {selectedYear}</p>
+        <p className="text-sm text-secondaryDark mb-6">{t('common:attendance_for', { year: selectedYear })}</p>
         
         :
-        <p className="text-sm text-secondaryDark mb-6">Attendance for {selectedYear}</p>
+        <p className="text-sm text-secondaryDark mb-6">{t('common:attendance_for', { year: selectedYear })}</p>
         }
 
         <ResponsiveContainer width="100%" height={220}>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Location,
     Expand,
@@ -8,6 +9,7 @@ import ThemeStore from "../../../store/ThemeStore";
 
 function CreateFeedBack() {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["pages", "common"]);
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSessionGenerated, setIsSessionGenerated] = useState(false);
@@ -89,7 +91,7 @@ function CreateFeedBack() {
                     <span>{collectorData.route}</span>
                     </div>
                     <p className="text-xs text-secondaryDark mt-1">
-                    Vehicle ID: {collectorData.vehicle}
+                    {t('pages:common.feedback.vehicle_id')} {collectorData.vehicle}
                     </p>
                 </div>
                 <div className="text-left sm:text-right">
@@ -110,7 +112,7 @@ function CreateFeedBack() {
                     }`}
                     ></div>
                     <span className="text-xs sm:text-sm font-medium text-secondaryDark">
-                    Session {isSessionActive ? "Active" : "Expired"} • Expires in{" "}
+                    {isSessionActive ? t('pages:common.feedback.session_active') : t('pages:common.feedback.session_expired')} • {t('pages:common.feedback.expires_in')}{" "}
                     {getTimeUntilMidnight()}
                     </span>
                 </div>
@@ -122,17 +124,17 @@ function CreateFeedBack() {
                 <div className="text-center space-y-6">
                     <div className="space-y-2">
                     <h3 className="text-xl sm:text-2xl font-bold text-primary">
-                        No Active Session
+                        {t('pages:common.feedback.no_active_session')}
                     </h3>
                     <p className="text-sm sm:text-base text-secondaryDark max-w-md">
-                        Generate a new QR code and OTP to start collecting feedback from residents
+                        {t('pages:common.feedback.generate_session_desc')}
                     </p>
                     </div>
                     <button
                     onClick={generateSession}
                     className="px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white rounded-medium text-base sm:text-lg font-semibold hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
                     >
-                    Generate QR Code & OTP
+                    {t('pages:common.feedback.generate_qr_otp')}
                     </button>
                 </div>
                 </div>
@@ -141,10 +143,10 @@ function CreateFeedBack() {
                 <div className="bg-white rounded-large p-6 sm:p-8 border border-secondary flex flex-col items-center justify-center space-y-4 sm:space-y-6">
                     <div className="text-center">
                     <h3 className="text-base sm:text-lg font-bold text-primary mb-2">
-                        Daily QR Code
+                        {t('pages:common.feedback.daily_qr_code')}
                     </h3>
                     <p className="text-xs sm:text-sm text-secondaryDark">
-                        Scan to submit feedback
+                        {t('pages:common.feedback.scan_to_submit')}
                     </p>
                     </div>
 
@@ -157,7 +159,7 @@ function CreateFeedBack() {
                     <button
                         onClick={openModal}
                         className="absolute top-2 right-2 p-2 bg-white rounded-medium border border-secondary hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                        aria-label="Expand QR Code"
+                        aria-label={t('pages:common.feedback.expand_qr')}
                     >
                         <Expand size={20} defaultColor="#145B47" isDarkTheme={isDarkTheme} />
                     </button>
@@ -165,7 +167,7 @@ function CreateFeedBack() {
 
                     <div className="text-center space-y-2">
                     <p className="text-xs sm:text-sm font-medium text-secondaryDark">
-                        One-Time Password
+                        {t('pages:common.feedback.one_time_password')}
                     </p>
                     <div className="bg-secondary px-6 sm:px-8 py-3 sm:py-4 rounded-medium">
                         <p className="text-2xl sm:text-3xl font-bold text-primary tracking-wider">
@@ -178,35 +180,35 @@ function CreateFeedBack() {
                 <div className="space-y-4 sm:space-y-6">
                     <div className="bg-white rounded-large p-4 sm:p-6 border border-secondary space-y-4">
                     <h3 className="text-base sm:text-lg font-bold text-primary">
-                        Session Information
+                        {t('pages:common.feedback.session_information')}
                     </h3>
                     
                     <div className="space-y-3">
                         <div className="flex items-center justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Session Status</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.session_status')}</span>
                         <span className={`text-sm font-semibold ${isSessionActive ? "text-success" : "text-error"}`}>
-                            {isSessionActive ? "Active" : "Expired"}
+                            {isSessionActive ? t('pages:common.feedback.session_active') : t('pages:common.feedback.session_expired')}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Time Remaining</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.time_remaining')}</span>
                         <span className="text-sm font-semibold text-primary">
                             {getTimeUntilMidnight()}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Generated At</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.generated_at')}</span>
                         <span className="text-sm font-semibold text-primary">
                             {collectorData.sessionGeneratedAt}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2">
-                        <span className="text-sm text-secondaryDark">Valid Until</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.valid_until')}</span>
                         <span className="text-sm font-semibold text-primary">
-                            11:59:59 PM Today
+                            {t('pages:common.feedback.valid_until_value')}
                         </span>
                         </div>
                     </div>
@@ -214,33 +216,33 @@ function CreateFeedBack() {
 
                     <div className="bg-white rounded-large p-4 sm:p-6 border border-secondary space-y-4">
                     <h3 className="text-base sm:text-lg font-bold text-primary">
-                        Collection Route Details
+                        {t('pages:common.feedback.collection_route_details')}
                     </h3>
                     
                     <div className="space-y-3">
                         <div className="flex items-start justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Assigned Route</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.assigned_route')}</span>
                         <span className="text-sm font-semibold text-primary text-right">
                             {collectorData.route}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Vehicle ID</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.vehicle_id_detail')}</span>
                         <span className="text-sm font-semibold text-primary">
                             {collectorData.vehicle}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2 border-b border-secondary">
-                        <span className="text-sm text-secondaryDark">Collector Name</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.collector_name')}</span>
                         <span className="text-sm font-semibold text-primary">
                             {collectorData.name}
                         </span>
                         </div>
                         
                         <div className="flex items-center justify-between py-2">
-                        <span className="text-sm text-secondaryDark">Shift Date</span>
+                        <span className="text-sm text-secondaryDark">{t('pages:common.feedback.shift_date')}</span>
                         <span className="text-sm font-semibold text-primary">
                             {new Date().toLocaleDateString("en-US", {
                             month: "short",
@@ -254,24 +256,24 @@ function CreateFeedBack() {
 
                     <div className="bg-white rounded-large p-4 sm:p-6 border border-secondary space-y-3">
                     <h3 className="text-base sm:text-lg font-bold text-primary">
-                        Usage Guidelines
+                        {t('pages:common.feedback.usage_guidelines')}
                     </h3>
                     <ul className="space-y-2 text-xs sm:text-sm text-secondaryDark">
                         <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">•</span>
-                        <span>Share the QR code or OTP with residents after collection service</span>
+                        <span>{t('pages:common.feedback.guideline_1')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">•</span>
-                        <span>Each resident can submit only one feedback per day</span>
+                        <span>{t('pages:common.feedback.guideline_2')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">•</span>
-                        <span>Session automatically expires at midnight</span>
+                        <span>{t('pages:common.feedback.guideline_3')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                         <span className="text-primary font-bold">•</span>
-                        <span>Generate a new session each day before starting your route</span>
+                        <span>{t('pages:common.feedback.guideline_4')}</span>
                         </li>
                     </ul>
                     </div>
@@ -281,7 +283,7 @@ function CreateFeedBack() {
 
             <div className="bg-primary/5 rounded-large p-4 border border-primary/20">
                 <p className="text-xs sm:text-sm text-center text-secondaryDark">
-                This QR code and OTP are unique to your current collection session. They will automatically reset at midnight for the next day's service.
+                {t('pages:common.feedback.footer_disclaimer')}
                 </p>
             </div>
             </div>
@@ -292,12 +294,12 @@ function CreateFeedBack() {
             <div className="bg-white rounded-large p-6 sm:p-8 max-w-md w-full space-y-4">
                 <div className="flex items-center justify-between">
                 <h3 className="text-lg sm:text-xl font-bold text-primary">
-                    QR Code
+                    {t('pages:common.feedback.qr_code_title')}
                 </h3>
                 <button
                     onClick={closeModal}
                     className="p-2 rounded-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
-                    aria-label="Close modal"
+                    aria-label={t('pages:common.feedback.close_modal')}
                 >
                     <X size={24} defaultColor="#145B47" isDarkTheme={isDarkTheme} />
                 </button>
@@ -313,7 +315,7 @@ function CreateFeedBack() {
 
                 <div className="text-center space-y-2">
                 <p className="text-sm font-medium text-secondaryDark">
-                    One-Time Password
+                    {t('pages:common.feedback.one_time_password')}
                 </p>
                 <div className="bg-secondary px-8 py-4 rounded-medium">
                     <p className="text-3xl font-bold text-primary tracking-wider">

@@ -9,6 +9,7 @@ import {
 } from "../../assets/icons/icons";
 import { ToastContainer } from "react-toastify";
 import AssignTaskModal from "../../components/Modals/SuperVisor/AssignTaskModal";
+import { useTranslation } from "react-i18next";
 
 const selectedTaskDetails = {
     id: 1,
@@ -55,6 +56,7 @@ const allSI = [
 ];
 
 function AssignToSI() {
+    const { t } = useTranslation(["pages", "common"]);
     const [selectedInspectors, setSelectedInspectors] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [showModal, setShowModal] = useState(false);
@@ -83,7 +85,7 @@ function AssignToSI() {
 
     function handleAssignTask() {
         if (selectedInspectors.length === 0) {
-        ToastNotification("Please select at least one sanitary inspector to assign the task", "error");
+        ToastNotification(t('pages:mho.assign_to_si.toast_select_required'), "error");
         return;
         }
         console.log("Assigning task to sanitary inspectors:", selectedInspectors);
@@ -97,9 +99,9 @@ function AssignToSI() {
     }
 
     function getPriorityLabel(level) {
-        if (level === 1) return "Level 1";
-        if (level === 2) return "Level 2";
-        return "Level 3";
+        if (level === 1) return t('common:level_1');
+        if (level === 2) return t('common:level_2');
+        return t('common:level_3');
     }
 
     function getInspectorInitial(name) {
@@ -135,7 +137,7 @@ function AssignToSI() {
                 </h4>
                 <div className="flex items-center gap-2 mt-1">
                 <span className="text-xs text-secondaryDark">
-                    Attendance {inspector.attendance}%
+                    {t('common:attendance')} {inspector.attendance}%
                 </span>
                 <span className="text-secondaryDark">•</span>
                 <span className="text-xs text-secondaryDark">
@@ -152,7 +154,7 @@ function AssignToSI() {
                     : 'bg-secondary text-primary'
                 }`}
             >
-                {isSelected ? 'Selected' : 'Select'}
+                {isSelected ? t('common:selected') : t('common:select')}
             </button>
             </div>
         </div>
@@ -186,15 +188,15 @@ function AssignToSI() {
 
                 <div className="flex flex-wrap gap-4 text-xs">
                     <div>
-                    <span className="text-secondaryDark font-semibold">Location: </span>
+                    <span className="text-secondaryDark font-semibold">{t('common:location_prefix')} </span>
                     <span className="text-secondaryDark font-medium">{selectedTaskDetails.location}</span>
                     </div>
                     <div>
-                    <span className="text-secondaryDark font-semibold">Type: </span>
+                    <span className="text-secondaryDark font-semibold">{t('common:type_prefix')} </span>
                     <span className="text-secondaryDark font-medium">{selectedTaskDetails.trashType}</span>
                     </div>
                     <div>
-                    <span className="text-secondaryDark font-semibold">Reported: </span>
+                    <span className="text-secondaryDark font-semibold">{t('common:reported')} </span>
                     <span className="text-secondaryDark font-medium">{selectedTaskDetails.date}</span>
                     </div>
                 </div>
@@ -232,9 +234,9 @@ function AssignToSI() {
             <div className="w-full lg:w-96 bg-white border border-secondary rounded-medium">
                 <div className="p-4 sm:p-5 lg:p-6">
                 <div className="mb-4">
-                    <h2 className="text-base sm:text-lg font-bold text-secondaryDark">Available Sanitary Inspectors</h2>
+                    <h2 className="text-base sm:text-lg font-bold text-secondaryDark">{t('pages:mho.assign_to_si.available_inspectors')}</h2>
                     <p className="text-xs sm:text-sm text-secondaryDark mt-1">
-                    Select sanitary inspectors for this task
+                    {t('pages:mho.assign_to_si.select_for_task')}
                     </p>
                 </div>
 
@@ -244,7 +246,7 @@ function AssignToSI() {
                     </div>
                     <input
                     type="text"
-                    placeholder="Search sanitary inspectors..."
+                    placeholder={t('pages:mho.assign_to_si.search_placeholder')}
                     value={searchQuery}
                     onChange={(e)=>{ setSearchQuery(e.target.value) }}
                     className="w-full bg-background border border-secondary rounded-medium py-2 pl-10 pr-4
@@ -263,7 +265,7 @@ function AssignToSI() {
                     />
                 ) : (
                     <div className="text-center py-8">
-                    <p className="text-sm text-secondaryDark">No sanitary inspectors found</p>
+                    <p className="text-sm text-secondaryDark">{t('pages:mho.assign_to_si.no_inspectors_found')}</p>
                     </div>
                 )}
 
@@ -271,7 +273,7 @@ function AssignToSI() {
                     onClick={handleAssignTask}
                     className="w-full bg-primary text-white py-3 rounded-large text-sm font-bold hover:bg-primaryLight hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out mt-4"
                 >
-                    Assign Task {selectedInspectors.length > 0 && `(${selectedInspectors.length} selected)`}
+                    {selectedInspectors.length > 0 ? t('pages:mho.assign_to_si.assign_task_selected', { count: selectedInspectors.length }) : t('pages:mho.assign_to_si.assign_task')}
                 </button>
                 </div>
             </div>

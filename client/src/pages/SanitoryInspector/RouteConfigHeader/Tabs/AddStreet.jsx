@@ -7,8 +7,10 @@ import MoveStreetModal from "../../../../components/Modals/SanitaryInspector/Add
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function AddStreet() {
+    const { t } = useTranslation(["pages", "common"]);
     const { isDarkTheme } = ThemeStore();
     
     const [searchVisible, setSearchVisible] = useState(false);
@@ -90,7 +92,7 @@ function AddStreet() {
     function handleFilterApply(selectedRoutes) {
         setSelectedRouteFilters(selectedRoutes);
         setFilterVisible(false);
-        ToastNotification("Filter applied successfully", "success");
+        ToastNotification(t('pages:inspector.add_street.toast_filter_applied'), "success");
     }
 
     function handleRouteSelect(routeName) {
@@ -103,7 +105,7 @@ function AddStreet() {
 
     function handleAddStreet() {
         if (!selectedRoute) {
-        ToastNotification("Please select a route first", "error");
+        ToastNotification(t('pages:inspector.add_street.toast_select_route_first'), "error");
         return;
         }
 
@@ -116,7 +118,7 @@ function AddStreet() {
         };
 
         setStreets([...streets, newStreet]);
-        ToastNotification("Draft street added to " + selectedRoute, "success");
+        ToastNotification(t('pages:inspector.add_street.toast_draft_street_added', { routeName: selectedRoute }), "success");
     }
 
     function handleEditStart(street) {
@@ -130,7 +132,7 @@ function AddStreet() {
         }));
         setEditingStreet(null);
         setEditValue("");
-        ToastNotification("Street updated successfully", "success");
+        ToastNotification(t('pages:inspector.add_street.toast_street_updated'), "success");
     }
 
     function handleEditCancel() {
@@ -141,7 +143,7 @@ function AddStreet() {
     function handleDeleteConfirm(streetId) {
         setStreets(streets.filter(function(s) { return s.id !== streetId; }));
         setDeleteModal({ visible: false, streetId: null });
-        ToastNotification("Street deleted successfully", "success");
+        ToastNotification(t('pages:inspector.add_street.toast_street_deleted'), "success");
     }
 
     function handleMoveStreet(streetId, newRoute) {
@@ -149,7 +151,7 @@ function AddStreet() {
         return s.id === streetId ? { ...s, route: newRoute } : s;
         }));
         setMoveModal({ visible: false, street: null });
-        ToastNotification("Street moved to " + newRoute + " successfully", "success");
+        ToastNotification(t('pages:inspector.add_street.toast_street_moved', { routeName: newRoute }), "success");
     }
 
     const filteredStreets = streets.filter(function(street) {
@@ -182,17 +184,17 @@ function AddStreet() {
                 </h3>
                 <div className="flex items-center gap-2 mt-2">
                 <span className="text-xs px-3 py-1 rounded-small bg-background text-secondaryDark border border-secondary">
-                    {regularStreets} Street{regularStreets !== 1 ? 's' : ''}
+                    {regularStreets} {regularStreets !== 1 ? t('common:streets') : t('common:streets')}
                 </span>
                 {draftStreets > 0 && (
                     <span className="text-xs px-3 py-1 rounded-small bg-warning/20 text-warning font-bold border border-warning">
-                    {draftStreets} Draft{draftStreets !== 1 ? 's' : ''}
+                    {draftStreets} {draftStreets !== 1 ? t('common:drafts') : t('common:draft')}
                     </span>
                 )}
                 </div>
             </div>
             <span className="text-xs text-secondaryDark font-bold">
-                Total: {totalStreets}
+                {t('common:total')}: {totalStreets}
             </span>
             </div>
         </div>
@@ -258,14 +260,14 @@ function AddStreet() {
                         {street.street_name}
                     </h3>
                     <p className="text-xs text-secondaryDark mt-1">
-                        {street.households} Households
+                        {street.households} {t('common:households')}
                     </p>
                     <p className="text-xs text-primary font-bold mt-1">
                         {street.route}
                     </p>
                     {street.isDraft && (
                         <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
-                        Draft
+                        {t('common:draft')}
                         </span>
                     )}
                     </>
@@ -298,7 +300,7 @@ function AddStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Edit size={14} />
-                        <span>Edit</span>
+                        <span>{t('common:edit')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -312,7 +314,7 @@ function AddStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <span>↔</span>
-                        <span>Move</span>
+                        <span>{t('common:move')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -326,7 +328,7 @@ function AddStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Trash size={14} defaultColor="#E75A4C" />
-                        <span>Delete</span>
+                        <span>{t('common:delete')}</span>
                     </button>
                     </div>
                 )}
@@ -346,14 +348,14 @@ function AddStreet() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ALL STREETS ({filteredStreets.length})
+                    {t('pages:inspector.add_street.all_streets')} ({filteredStreets.length})
                     </h2>
                     
                     <div className="flex items-center gap-2">
                     {searchVisible && (
                         <input
                         type="text"
-                        placeholder="Search streets..."
+                        placeholder={t('pages:inspector.add_street.search_placeholder')}
                         value={searchQuery}
                         onChange={function(e) { setSearchQuery(e.target.value); }}
                         className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -398,7 +400,7 @@ function AddStreet() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    TARGET ROUTES ({routes.length})
+                    {t('pages:inspector.add_street.target_routes')} ({routes.length})
                     </h2>
                     
                     <button
@@ -408,7 +410,7 @@ function AddStreet() {
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             transition-all duration-200 ease-in-out"
                     >
-                    Add Street
+                    {t('pages:inspector.add_street.add_street_btn')}
                     </button>
                 </div>
 
@@ -434,8 +436,8 @@ function AddStreet() {
 
             {deleteModal.visible && (
             <AddStreetModal
-                title="Delete Street"
-                message="Are you sure you want to delete this street? This action cannot be undone."
+                title={t('pages:inspector.add_street.delete_street_title')}
+                message={t('pages:inspector.add_street.delete_street_message')}
                 onConfirm={function() { handleDeleteConfirm(deleteModal.streetId); }}
                 onCancel={function() { setDeleteModal({ visible: false, streetId: null }); }}
             />

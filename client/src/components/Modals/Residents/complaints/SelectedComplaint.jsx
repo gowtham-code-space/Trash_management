@@ -1,17 +1,19 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import { X } from '../../../../assets/icons/icons';
 import ToastNotification from '../../../Notification/ToastNotification';
 
 function SelectedComplaint({ isOpen, onClose, complaint }) {
+  const { t } = useTranslation(["modals", "common"]);
   if (!isOpen || !complaint) return null;
 
   function handleYesCorrect() {
-    ToastNotification('Thank you for confirming the complaint', 'success');
+    ToastNotification(t('modals:selected_complaint.toast_confirmed'), 'success');
     onClose();
   }
 
   function handleNoGone() {
-    ToastNotification('Thank you for your feedback', 'success');
+    ToastNotification(t('modals:selected_complaint.toast_feedback'), 'success');
     onClose();
   }
 
@@ -51,7 +53,7 @@ function SelectedComplaint({ isOpen, onClose, complaint }) {
             <h3 className="text-lg md:text-xl font-bold text-primary mb-1.5 md:mb-2">{complaint.type}</h3>
             <p className="text-xs md:text-sm text-primary/60 flex items-center gap-2">
               <span className="w-1.5 h-1.5 bg-primaryLight rounded-full" />
-              Reported {complaint.reportedTime} by {complaint.reportedBy}
+              {t('modals:selected_complaint.reported_by', { time: complaint.reportedTime, name: complaint.reportedBy })}
             </p>
           </div>
 
@@ -59,10 +61,10 @@ function SelectedComplaint({ isOpen, onClose, complaint }) {
           <div className="bg-secondary rounded-medium md:rounded-large p-4 md:p-5 mb-4 md:mb-6">
             <h4 className="text-xs md:text-sm font-bold text-primary mb-1.5 md:mb-2 flex items-center gap-2">
               <span className="w-2 h-2 bg-primaryLight rounded-full animate-pulse" />
-              Is this information correct?
+              {t('modals:selected_complaint.is_info_correct')}
             </h4>
             <p className="text-xs md:text-sm text-primary/70 mb-3 md:mb-4">
-              Confirm that the trash is still present and the location is accurate.
+              {t('modals:selected_complaint.confirm_message')}
             </p>
 
             <div className="grid grid-cols-2 gap-2 md:gap-3">
@@ -70,13 +72,13 @@ function SelectedComplaint({ isOpen, onClose, complaint }) {
                 onClick={handleYesCorrect}
                 className="bg-success text-white py-3 md:py-3.5 px-3 md:px-4 rounded-small md:rounded-medium font-bold text-xs md:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-success/30 shadow-lg hover:shadow-xl"
               >
-                Yes, it's correct
+                {t('modals:selected_complaint.yes_correct')}
               </button>
               <button
                 onClick={handleNoGone}
                 className="bg-error text-white py-3 md:py-3.5 px-3 md:px-4 rounded-small md:rounded-medium font-bold text-xs md:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-error/30 shadow-lg hover:shadow-xl"
               >
-                No, it's gone
+                {t('modals:selected_complaint.no_gone')}
               </button>
             </div>
           </div>
@@ -99,17 +101,17 @@ function SelectedComplaint({ isOpen, onClose, complaint }) {
                   <span className="text-[10px] md:text-xs font-bold text-white">+{complaint.votes.yes + complaint.votes.no - 2}</span>
                 </div>
               </div>
-              <span className="text-[10px] md:text-xs font-medium text-primary/60">Community</span>
+              <span className="text-[10px] md:text-xs font-medium text-primary/60">{t('modals:selected_complaint.community')}</span>
             </div>
 
             <div className="flex items-center gap-3 md:gap-4">
               <div className="text-right">
-                <span className="text-[10px] md:text-xs text-primary/50 block">Yes</span>
+                <span className="text-[10px] md:text-xs text-primary/50 block">{t('modals:selected_complaint.yes')}</span>
                 <span className="text-xs md:text-sm font-bold text-success">{complaint.votes.yes}</span>
               </div>
               <div className="w-px h-6 md:h-8 bg-primary/10" />
               <div className="text-right">
-                <span className="text-[10px] md:text-xs text-primary/50 block">No</span>
+                <span className="text-[10px] md:text-xs text-primary/50 block">{t('modals:selected_complaint.no')}</span>
                 <span className="text-xs md:text-sm font-bold text-error">{complaint.votes.no}</span>
               </div>
             </div>

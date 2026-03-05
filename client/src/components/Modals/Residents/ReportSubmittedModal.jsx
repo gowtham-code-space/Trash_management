@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Check } from "../../../assets/icons/icons";
 
 function ReportSubmittedModal({ onClose }) {
 const navigate = useNavigate();
+const { t } = useTranslation(["modals", "common"]);
 
 function handleGoToMap() {
 onClose();
@@ -24,9 +26,9 @@ return (
         <Check size={32} isPressed={false} isDarkTheme={true} />
     </div>
 
-    <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">Report submitted</h2>
+    <h2 className="text-xl font-bold text-primary mb-2 tracking-tight">{t('modals:report_submitted.title')}</h2>
     <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-        Your concern is now visible in the community map. Our teams will review it shortly.
+        {t('modals:report_submitted.message')}
     </p>
 
     <div className="flex gap-3">
@@ -34,13 +36,13 @@ return (
         onClick={handleGoToMap}
         className="flex-1 bg-primaryLight text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
         >
-        View on map
+        {t('modals:report_submitted.view_on_map')}
         </button>
         <button 
         onClick={onClose}
         className="flex-1 bg-primary text-white py-3 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
         >
-        Submit another
+        {t('modals:report_submitted.submit_another')}
         </button>
     </div>
     </div>

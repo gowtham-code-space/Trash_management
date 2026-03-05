@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { X, LeftArrow, RightArrow } from "../../../assets/icons/icons";
+import { useTranslation } from "react-i18next";
 
 function CalendarModal({ isOpen, onClose, onDateSelect, isDarkTheme }) {
+    const { t } = useTranslation(["modals", "common"]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     if (!isOpen) return null;
 
     const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        t('common:months.january'), t('common:months.february'), t('common:months.march'),
+        t('common:months.april'), t('common:months.may'), t('common:months.june'),
+        t('common:months.july'), t('common:months.august'), t('common:months.september'),
+        t('common:months.october'), t('common:months.november'), t('common:months.december')
     ];
 
     function getDaysInMonth(date) {
@@ -63,7 +67,7 @@ function CalendarModal({ isOpen, onClose, onDateSelect, isDarkTheme }) {
             onClick={(e) => e.stopPropagation()}
         >
             <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-primary">Select Date</h2>
+            <h2 className="text-lg font-bold text-primary">{t('modals:calendar.select_date')}</h2>
             <button
                 onClick={onClose}
                 className="text-secondaryDark hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
@@ -91,8 +95,8 @@ function CalendarModal({ isOpen, onClose, onDateSelect, isDarkTheme }) {
             </div>
 
             <div className="grid grid-cols-7 gap-2 mb-4">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="text-center text-xs font-semibold text-secondaryDark py-2">
+            {t('common:weekdays_short', { returnObjects: true }).map((day, idx) => (
+                <div key={idx} className="text-center text-xs font-semibold text-secondaryDark py-2">
                 {day}
                 </div>
             ))}
@@ -136,14 +140,14 @@ function CalendarModal({ isOpen, onClose, onDateSelect, isDarkTheme }) {
                 onClick={handleClear}
                 className="flex-1 bg-secondary text-primary px-4 py-2 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out"
             >
-                Clear
+                {t('modals:calendar.clear')}
             </button>
             <button
                 onClick={handleApply}
                 disabled={!selectedDate}
                 className="flex-1 bg-primary text-white px-4 py-2 rounded-medium text-sm font-medium hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                Apply
+                {t('modals:calendar.apply')}
             </button>
             </div>
         </div>

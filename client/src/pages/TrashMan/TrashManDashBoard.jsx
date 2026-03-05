@@ -16,49 +16,51 @@ import ToastNotification from "../../components/Notification/ToastNotification";
 import ThemeStore from "../../store/ThemeStore";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function TrashManDashboard() {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation('pages');
 
     function handleAttendance() {
-        ToastNotification("Navigating to Attendance", "info");
+        ToastNotification(t('trashman.dashboard.toast_attendance'), "info");
     }
 
     function handleRoutesTimings() {
-        ToastNotification("Opening Routes & Timings", "info");
+        ToastNotification(t('trashman.dashboard.toast_routes'), "info");
     }
 
     function handleImmediateTasks() {
-        ToastNotification("Loading Immediate Tasks", "info");
+        ToastNotification(t('trashman.dashboard.toast_tasks'), "info");
     }
 
     function handleFeedbackSession() {
-        ToastNotification("Starting Feedback Session", "success");
+        ToastNotification(t('trashman.dashboard.toast_feedback'), "success");
     }
 
     function handleQuiz() {
-        ToastNotification("Opening Daily Quiz", "info");
+        ToastNotification(t('trashman.dashboard.toast_quiz'), "info");
     }
 
     function handleNotificationClick() {
-        ToastNotification("You have 3 new notifications", "info");
+        ToastNotification(t('trashman.dashboard.toast_notifications', { count: 3 }), "info");
     }
 
     function handlePointsClick() {
-        ToastNotification("You have 420 points!", "success");
+        ToastNotification(t('trashman.dashboard.toast_points', { count: 420 }), "success");
     }
 
     function handleZoomIn() {
-        ToastNotification("Zooming in", "info");
+        ToastNotification(t('shared.zoom_in_toast'), "info");
     }
 
     function handleZoomOut() {
-        ToastNotification("Zooming out", "info");
+        ToastNotification(t('shared.zoom_out_toast'), "info");
     }
 
     function handleLocate() {
-        ToastNotification("Locating your position", "info");
+        ToastNotification(t('shared.locate_toast'), "info");
     }
 
     return (
@@ -72,13 +74,13 @@ function TrashManDashboard() {
                 {/* Header Card */}
                 <header className="bg-primary p-5 rounded-veryLarge flex items-center justify-between text-white shadow-sm transition-all duration-200 hover:scale-[0.99]">
                 <div>
-                    <h1 className="text-base md:text-lg font-bold tracking-tight">Good morning, Alex</h1>
-                    <p className="text-xs opacity-80 mt-1 font-medium">Your dedication keeps the neighborhood clean and healthy.</p>
+                    <h1 className="text-base md:text-lg font-bold tracking-tight">{t('trashman.dashboard.greeting', { name: 'Alex' })}</h1>
+                    <p className="text-xs opacity-80 mt-1 font-medium">{t('trashman.dashboard.greeting_subtitle')}</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <div className="bg-white/10 px-3 py-2 rounded-large flex items-center gap-2 border border-white/20">
                     <Star size={18} defaultColor="#F2C94C"/>
-                    <span className="text-xs font-bold whitespace-nowrap">420 Points</span>
+                    <span className="text-xs font-bold whitespace-nowrap">{t('trashman.dashboard.points', { count: 420 })}</span>
                     </div>
                     <button 
                     onClick={handleNotificationClick}
@@ -125,7 +127,7 @@ function TrashManDashboard() {
 
                 {/* MOBILE/MID QUICK ACTIONS */}
                 <div className="lg:hidden space-y-3">
-                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">Quick actions</h2>
+                    <h2 className="text-sm font-bold text-black uppercase tracking-widest pl-1">{t('shared.quick_actions')}</h2>
                     <div className="flex overflow-x-auto gap-4 pb-2 no-scrollbar snap-x snap-mandatory">
                         
                         {/* Routes & Timings */}
@@ -137,8 +139,8 @@ function TrashManDashboard() {
                                 <TrashRoute size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Routes & Timings</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Live Track the Trash truck</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.routes_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.routes_sub')}</p>
                             </div>
                         </div>
 
@@ -151,8 +153,8 @@ function TrashManDashboard() {
                                 <Task size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Immediate Tasks</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View urgent assignments</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.tasks_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.tasks_sub')}</p>
                             </div>
                         </div>
                         {/* Attendance */}
@@ -164,8 +166,8 @@ function TrashManDashboard() {
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Attendance</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Mark your presence</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.attendance_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.attendance_sub')}</p>
                             </div>
                         </div>
                         {/* Create Feedback Session */}
@@ -177,8 +179,8 @@ function TrashManDashboard() {
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Create Feedback Session</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">QR/OTP verification</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.feedback_create_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.feedback_create_sub')}</p>
                             </div>
                         </div>
                         
@@ -191,8 +193,8 @@ function TrashManDashboard() {
                                 <FeedBack size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Submit Feedback</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Feedback for Supervisor</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.feedback_submit_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.feedback_submit_sub')}</p>
                             </div>
                         </div>
                         {/* ID card */}
@@ -204,8 +206,8 @@ function TrashManDashboard() {
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">ID card</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">View ID card</p>
+                                <p className="text-sm font-bold leading-tight">{t('shared.id_card_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.id_card_sub')}</p>
                             </div>
                         </div>
                         {/* Quiz */}
@@ -217,8 +219,8 @@ function TrashManDashboard() {
                                 <Certificate size={22} isPressed={false} defaultColor="#145B47" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-bold leading-tight">Quiz</p>
-                                <p className="text-xs mt-1 font-medium opacity-80">Earn daily points</p>
+                                <p className="text-sm font-bold leading-tight">{t('trashman.dashboard.quiz_label')}</p>
+                                <p className="text-xs mt-1 font-medium opacity-80">{t('trashman.dashboard.quiz_sub')}</p>
                             </div>
                         </div>
 
@@ -231,10 +233,10 @@ function TrashManDashboard() {
                         <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                         </div>
-                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">Daily eco tip</h3>
+                        <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.daily_eco_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                        "Carry a reusable bottle today and avoid using at least 3 plastic bottles."
+                        "{t('trashman.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
@@ -248,7 +250,7 @@ function TrashManDashboard() {
                 <div className="bg-white border border-secondary rounded-large p-5 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
                     <div className="w-1.5 h-4 bg-primary rounded-full" />
-                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">Quick actions</h2>
+                    <h2 className="text-xs font-bold text-black uppercase tracking-widest">{t('shared.quick_actions')}</h2>
                     </div>
                     
                     <div className="space-y-3">
@@ -262,8 +264,8 @@ function TrashManDashboard() {
                                     <Certificate size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Attendance</p>
-                                    <p className="text-xs text-gray-500 font-medium">Mark your presence</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.attendance_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.attendance_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -279,8 +281,8 @@ function TrashManDashboard() {
                                     <TrashRoute size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Routes & Timings</p>
-                                    <p className="text-xs text-gray-500 font-medium">Live Track the Trash truck</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.routes_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.routes_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -296,8 +298,8 @@ function TrashManDashboard() {
                                     <Task size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Immediate Tasks</p>
-                                    <p className="text-xs text-gray-500 font-medium">View urgent assignments</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.tasks_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.tasks_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -313,8 +315,8 @@ function TrashManDashboard() {
                                     <FeedBack size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Create Feedback Session</p>
-                                    <p className="text-xs text-gray-500 font-medium">QR/OTP verification</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.feedback_create_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.feedback_create_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -330,8 +332,8 @@ function TrashManDashboard() {
                                     <FeedBack size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Submit Feedback</p>
-                                    <p className="text-xs text-gray-500 font-medium">Give feedback for your supervisor</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.feedback_submit_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.feedback_submit_sub_long')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -347,8 +349,8 @@ function TrashManDashboard() {
                                     <Certificate size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">ID Card</p>
-                                    <p className="text-xs text-gray-500 font-medium">View your ID card</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('shared.id_card_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('shared.view_id_card')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -364,8 +366,8 @@ function TrashManDashboard() {
                                     <Certificate size={18} isPressed={false} isDarkTheme={true} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-xs font-bold text-black tracking-tight">Quiz</p>
-                                    <p className="text-xs text-gray-500 font-medium">Earn daily points</p>
+                                    <p className="text-xs font-bold text-black tracking-tight">{t('trashman.dashboard.quiz_label')}</p>
+                                    <p className="text-xs text-gray-500 font-medium">{t('trashman.dashboard.quiz_sub')}</p>
                                 </div>
                             </div>
                             <RightArrow size={14} isPressed={false} isDarkTheme={false} />
@@ -379,21 +381,21 @@ function TrashManDashboard() {
                     <div className="p-1.5 bg-primary/10 rounded-large text-primary transition-transform group-hover:rotate-12">
                         <Add size={18} isPressed={false} isDarkTheme={false} />
                     </div>
-                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">Daily eco tip</h3>
+                    <h3 className="text-xs font-bold text-black uppercase tracking-tight">{t('shared.daily_eco_tip')}</h3>
                     </div>
                     <p className="text-xs leading-relaxed text-gray-700 font-medium italic">
-                    "Carry a reusable bottle today and avoid using at least 3 plastic bottles."
+                    "{t('trashman.dashboard.eco_tip_text')}"
                     </p>
                 </div>
 
                 {/* Support Action */}
                 <button 
                     onClick={function () {
-                    ToastNotification("Opening Support Contact", "info");
+                    ToastNotification(t('shared.contact_support_toast'), "info");
                     }}
                     className="w-full py-3.5 bg-secondary border border-primary/10 rounded-large text-xs font-bold text-primary uppercase tracking-widest hover:bg-primary hover:text-white hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm"
                 >
-                    Need Help? Contact Support
+                    {t('shared.contact_support')}
                 </button>
                 </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { 
   QR, 
   Mobile, 
@@ -25,6 +26,7 @@ function SubmitFeedBack() {
   const [showModal, setShowModal] = useState(false);
   const [stream, setStream] = useState(null);
   const { isDarkTheme } = ThemeStore();
+  const { t } = useTranslation(["pages", "common"]);
   
   const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   const videoRef = useRef(null);
@@ -49,7 +51,7 @@ function SubmitFeedBack() {
   function handleVerifySuccess() {
     const code = otp.join("");
     if (verifyMethod === "OTP" && code.length < 6) {
-      ToastNotification("Please enter the full 6-digit OTP", "warning");
+      ToastNotification(t('pages:common.submit_feedback.toast_enter_full_otp'), "warning");
       return;
     }
 
@@ -59,7 +61,7 @@ function SubmitFeedBack() {
       setIsScanning(false);
     }
 
-    ToastNotification("Verification Successful!", "success");
+    ToastNotification(t('pages:common.submit_feedback.toast_verification_success'), "success");
     setTimeout(function() {
       setShowModal(true);
     }, 600);
@@ -77,7 +79,7 @@ function SubmitFeedBack() {
         videoRef.current.play();
       }
       
-      ToastNotification("Camera activated - Position QR code", "info");
+      ToastNotification(t('pages:common.submit_feedback.toast_camera_activated'), "info");
       
       setTimeout(function() {
         handleVerifySuccess();
@@ -85,7 +87,7 @@ function SubmitFeedBack() {
       
     } catch (error) {
       console.error("Camera access error:", error);
-      ToastNotification("Unable to access camera. Please check permissions.", "error");
+      ToastNotification(t('pages:common.submit_feedback.toast_camera_error'), "error");
     }
   }
 
@@ -116,8 +118,8 @@ function SubmitFeedBack() {
         {/* Verification Section */}
         <div className="bg-white border border-secondary rounded-veryLarge p-6 md:p-8 shadow-sm">
           <header className="text-center mb-8">
-            <h1 className="text-xl font-bold text-primary uppercase tracking-wide">Submit Feedback</h1>
-            <p className="text-sm text-secondaryDark mt-2">Verify using QR / OTP to provide valuable feedback</p>
+            <h1 className="text-xl font-bold text-primary uppercase tracking-wide">{t('pages:common.submit_feedback.heading')}</h1>
+            <p className="text-sm text-secondaryDark mt-2">{t('pages:common.submit_feedback.subheading')}</p>
           </header>
 
           {/* Toggle Switch */}
@@ -127,14 +129,14 @@ function SubmitFeedBack() {
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-medium text-sm font-bold hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out ${verifyMethod === "QR" ? "bg-white text-primary shadow-sm" : "text-secondaryDark"}`}
             >
               <QR size={20} isPressed={verifyMethod === "QR"} />
-              Scan QR Code
+              {t('pages:common.submit_feedback.tab_scan_qr')}
             </button>
             <button 
               onClick={() => { setVerifyMethod("OTP"); stopCamera(); }}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-medium text-sm font-bold hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out ${verifyMethod === "OTP" ? "bg-white text-primary shadow-sm" : "text-secondaryDark"}`}
             >
               <Mobile size={20} isPressed={verifyMethod === "OTP"} />
-              Enter OTP Code
+              {t('pages:common.submit_feedback.tab_enter_otp')}
             </button>
           </div>
 
@@ -156,20 +158,20 @@ function SubmitFeedBack() {
                     <div className="qr-scanner-corners" />
                     <div className="qr-scanner-corners-bottom" />
                     <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-primary/80 to-transparent p-4">
-                      <p className="text-sm font-bold text-white text-center">Position QR Code in Frame</p>
+                      <p className="text-sm font-bold text-white text-center">{t('pages:common.submit_feedback.position_qr')}</p>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="text-sm font-bold text-primary">Camera Active</p>
-                    <p className="text-xs text-secondaryDark">Align QR code within the corner markers</p>
+                    <p className="text-sm font-bold text-primary">{t('pages:common.submit_feedback.camera_active')}</p>
+                    <p className="text-xs text-secondaryDark">{t('pages:common.submit_feedback.align_qr')}</p>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="w-full animate-in slide-in-from-bottom-4 duration-500">
                 <div className="mb-6">
-                  <p className="text-sm font-bold text-primary text-center mb-4">Enter 6-Digit Verification Code</p>
+                  <p className="text-sm font-bold text-primary text-center mb-4">{t('pages:common.submit_feedback.enter_otp_heading')}</p>
                   <div className="grid grid-cols-6 gap-2 max-w-md mx-auto">
                     {otp.map(function(digit, index) {
                       return (
@@ -193,7 +195,7 @@ function SubmitFeedBack() {
                   disabled={otp.join("").length !== 6}
                   className="w-full bg-primary text-white py-4 rounded-veryLarge font-bold text-sm flex items-center justify-center gap-2 hover:scale-[0.99] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-200 ease-in-out shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Verify & Continue
+                  {t('pages:common.submit_feedback.verify_continue')}
                   <RightArrow size={18} isPressed={false} isDarkTheme={true} />
                 </button>
               </div>
@@ -207,7 +209,7 @@ function SubmitFeedBack() {
             <Check size={20} isPressed={true} isDarkTheme={false} />
           </div>
           <p className="text-sm text-secondaryDark leading-relaxed">
-            Your verification helps us maintain service quality and recognize outstanding waste collection teams for a cleaner, healthier community.
+            {t('pages:common.submit_feedback.footer_text')}
           </p>
         </div>
       </div>

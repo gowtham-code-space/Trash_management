@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import PieChart from "../../components/Statistics/PieChart";
 import BarChart from "../../components/Statistics/BarChart";
 import Rating from "../../components/Statistics/Rating";
@@ -51,6 +52,7 @@ const residentFeedbackData = {
 
 // Main Component
 export default function TrashmanStats() {
+    const { t } = useTranslation(["pages", "common"]);
     return (
         <div className="min-h-screen bg-background">
             <div className="max-w-7xl mx-auto space-y-6">
@@ -94,19 +96,19 @@ export default function TrashmanStats() {
                         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {/* Zone */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Assigned Zone</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.assigned_zone')}</span>
                                 <p className="text-sm font-bold text-primary">{trashmanProfile.zone}</p>
                             </div>
 
                             {/* Joined Date */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Joined</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.joined')}</span>
                                 <p className="text-sm font-bold text-secondaryDark">{trashmanProfile.joinedDate}</p>
                             </div>
 
                             {/* Attendance */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Attendance</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:attendance')}</span>
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg font-bold text-success">{trashmanProfile.attendance}%</span>
                                     <div className="flex-1 bg-secondary rounded-full h-2 overflow-hidden">
@@ -120,19 +122,19 @@ export default function TrashmanStats() {
 
                             {/* Tasks Completed */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Tasks Completed</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('pages:shared.tasks_completed')}</span>
                                 <p className="text-lg font-bold text-primary">{trashmanProfile.tasksCompleted}</p>
                             </div>
 
                             {/* Phone */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Phone</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:phone')}</span>
                                 <p className="text-sm font-bold text-secondaryDark">{trashmanProfile.phone}</p>
                             </div>
 
                             {/* Email */}
                             <div className="bg-background rounded-medium p-4 border border-secondary/50">
-                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">Email</span>
+                                <span className="text-xs font-bold text-secondaryDark/60 uppercase tracking-wide block mb-2">{t('common:email')}</span>
                                 <p className="text-sm font-bold text-secondaryDark truncate" title={trashmanProfile.email}>
                                     {trashmanProfile.email}
                                 </p>
@@ -145,24 +147,24 @@ export default function TrashmanStats() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <PieChart data={attendanceData} yearDropDown={['2025', '2026']} />
                     <BarChart
-                        Heading={"Weekly Avg. rating"}
+                        Heading={t('pages:shared.weekly_avg_rating')}
                         data={weeklyRatingData} 
                         yearDropDown={['2025', '2026']} 
-                        monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+                        monthDropDown={[t('common:months.january'), t('common:months.february'), t('common:months.march'), t('common:months.april'), t('common:months.may'), t('common:months.june'), t('common:months.july'), t('common:months.august'), t('common:months.september'), t('common:months.october'), t('common:months.november'), t('common:months.december')]}
                     />
                 </div>
 
                 {/* Bottom Section - 2 columns */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <BarChart 
-                        Heading={"Immediate Tasks"}
+                        Heading={t('pages:shared.immediate_tasks')}
                         data={taskResolutionData}
                         yearDropDown={['2025', '2026']} 
-                        monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+                        monthDropDown={[t('common:months.january'), t('common:months.february'), t('common:months.march'), t('common:months.april'), t('common:months.may'), t('common:months.june'), t('common:months.july'), t('common:months.august'), t('common:months.september'), t('common:months.october'), t('common:months.november'), t('common:months.december')]}
                     />
                     <Rating
                     yearDropDown={['2025', '2026']} 
-                        monthDropDown={["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+                        monthDropDown={[t('common:months.january'), t('common:months.february'), t('common:months.march'), t('common:months.april'), t('common:months.may'), t('common:months.june'), t('common:months.july'), t('common:months.august'), t('common:months.september'), t('common:months.october'), t('common:months.november'), t('common:months.december')]}
                         averageRating={residentFeedbackData.averageRating}
                         totalReviews={residentFeedbackData.totalReviews}
                         ratingBreakdown={residentFeedbackData.ratingBreakdown}

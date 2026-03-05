@@ -1,0 +1,325 @@
+{
+  "calendar": {
+    "select_date": "तारीख चुनें",
+    "clear": "साफ़ करें",
+    "apply": "लागू करें"
+  },
+  "date_range": {
+    "select_date": "तारीख चुनें",
+    "from": "से:",
+    "to": "तक:",
+    "cancel": "रद्द करें",
+    "apply": "लागू करें"
+  },
+  "assign_task": {
+    "title": "कार्य सौंपना",
+    "confirm_message": "क्या आप वाकई सौंपना चाहते हैं",
+    "close": "बंद करें",
+    "yes_confirm": "हाँ, पुष्टि करें",
+    "toast_assigned_success": "कूड़ा कर्मचारी सफलतापूर्वक सौंपा गया"
+  },
+  "attendance_confirmation": {
+    "verify_title": "उपस्थिति सत्यापित करें",
+    "reject_title": "उपस्थिति अस्वीकार करें",
+    "verify_message": "क्या आप इसकी उपस्थिति सत्यापित करना चाहते हैं",
+    "reject_message": "क्या आप इसकी उपस्थिति अस्वीकार करना चाहते हैं",
+    "reject_suffix": "इससे उन्हें अनुपस्थित चिह्नित किया जाएगा।",
+    "name": "नाम:",
+    "employee_id": "कर्मचारी ID:",
+    "check_in_time": "चेक-इन समय:",
+    "location": "स्थान:",
+    "cancel": "रद्द करें",
+    "verify": "सत्यापित करें",
+    "reject": "अस्वीकार करें"
+  },
+  "priority": {
+    "label": "प्राथमिकता:",
+    "community_vote": "सामुदायिक मत",
+    "reported_by": "रिपोर्ट करने वाला",
+    "trash_type": "कूड़े का प्रकार",
+    "escalation_history": "एस्केलेशन इतिहास",
+    "l2_badge": "L2",
+    "escalated_by_supervisor": "सुपरवाइज़र द्वारा एस्केलेट",
+    "supervisor": "सुपरवाइज़र",
+    "l3_badge": "L3",
+    "escalated_by_inspector": "स्वच्छता निरीक्षक द्वारा आगे एस्केलेट",
+    "inspector": "स्वच्छता निरीक्षक",
+    "description": "विवरण",
+    "reported_on": "रिपोर्ट तारीख",
+    "close": "बंद करें"
+  },
+  "image_viewer": {
+    "alt_full_size": "पूर्ण आकार",
+    "click_outside_to_close": "बंद करने के लिए बाहर क्लिक करें"
+  },
+  "attendance_submitted": {
+    "title": "उपस्थिति दर्ज की गई",
+    "message": "आपकी उपस्थिति दर्ज हो गई है। स्थिति ट्रैक करने के लिए इतिहास देखें।",
+    "view_history": "इतिहास देखें",
+    "done": "हो गया"
+  },
+  "resolve_confirmation": {
+    "title": "समाधान की पुष्टि करें",
+    "message": "क्या आप इस कार्य को हल के रूप में चिह्नित करना चाहते हैं? यह क्रिया पूर्ववत नहीं होगी।",
+    "cancel": "रद्द करें",
+    "confirm": "पुष्टि करें"
+  },
+  "task_detail": {
+    "task_id": "कार्य ID:",
+    "location": "स्थान",
+    "reported_at": "रिपोर्ट तारीख",
+    "resolved_at": "हल होने की तारीख",
+    "resolved_by": "हल करने वाला",
+    "close": "बंद करें"
+  },
+  "deleted_config": {
+    "title": "हटाई गई कॉन्फ़िगरेशन",
+    "subtitle": "वापस लाने के लिए पुनर्स्थापित करें",
+    "empty": "कोई हटाई गई कॉन्फ़िगरेशन नहीं",
+    "config_prefix": "कॉन्फ़िग",
+    "restoring": "पुनर्स्थापित हो रहा है…",
+    "restore": "पुनर्स्थापित करें",
+    "time": "समय",
+    "questions": "प्रश्न",
+    "total_score": "कुल अंक",
+    "pass_mark": "उत्तीर्ण अंक",
+    "correct_mark": "+अंक",
+    "wrong_mark": "-अंक",
+    "close": "बंद करें",
+    "toast_load_failed": "हटाई गई कॉन्फ़िगरेशन लोड करने में विफल",
+    "toast_restored": "कॉन्फ़िग {{id}} पुनर्स्थापित",
+    "toast_restore_failed": "कॉन्फ़िगरेशन पुनर्स्थापित करने में विफल"
+  },
+  "delete_question": {
+    "title": "प्रश्न हटाएं",
+    "message": "क्या आप इस प्रश्न को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं होगी।",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं"
+  },
+  "log_details": {
+    "title": "लॉग विवरण",
+    "api_request_log": "API अनुरोध लॉग",
+    "audit_trail_log": "ऑडिट ट्रेल लॉग",
+    "event_log": "इवेंट लॉग",
+    "log_id": "लॉग ID",
+    "user_id": "उपयोगकर्ता ID",
+    "role_id": "भूमिका ID",
+    "endpoint": "एंडपॉइंट",
+    "http_method": "HTTP मेथड",
+    "status_code": "स्टेटस कोड",
+    "response_time": "प्रतिक्रिया समय",
+    "ip_address": "IP पता",
+    "user_agent": "यूज़र एजेंट",
+    "request_body": "अनुरोध बॉडी",
+    "response_body": "रिस्पॉन्स बॉडी",
+    "created_at": "बनाया गया",
+    "audit_id": "ऑडिट ID",
+    "entity_type": "इकाई प्रकार",
+    "entity_id": "इकाई ID",
+    "action_type": "क्रिया प्रकार",
+    "old_value": "पुराना मान",
+    "new_value": "नया मान",
+    "performed_by": "द्वारा किया गया",
+    "performed_role": "निष्पादित भूमिका",
+    "remarks": "टिप्पणियाँ",
+    "event_id": "इवेंट ID",
+    "event_type": "इवेंट प्रकार",
+    "severity": "गंभीरता",
+    "metadata": "मेटाडेटा"
+  },
+  "update_question": {
+    "edit_title": "प्रश्न संपादित करें",
+    "add_title": "नया प्रश्न जोड़ें",
+    "edit_subtitle": "नीचे प्रश्न विवरण अपडेट करें",
+    "add_subtitle": "नया प्रश्न जोड़ने के लिए विवरण भरें",
+    "question_text": "प्रश्न पाठ",
+    "question_placeholder": "प्रश्न पाठ दर्ज करें...",
+    "answer_options": "उत्तर विकल्प",
+    "option_placeholder": "विकल्प {{number}}",
+    "correct_answer_hint": "सही उत्तर के लिए गोले पर क्लिक करें",
+    "cancel": "रद्द करें",
+    "save_changes": "परिवर्तन सहेजें",
+    "add_question": "प्रश्न जोड़ें"
+  },
+  "transfer_employee": {
+    "title": "कर्मचारी स्थानांतरण",
+    "current_zone": "वर्तमान ज़ोन:",
+    "current_division": "वर्तमान डिवीज़न:",
+    "transfer_to_zone": "ज़ोन में स्थानांतरित करें",
+    "select_zone": "ज़ोन चुनें",
+    "transfer_to_division": "डिवीज़न में स्थानांतरित करें",
+    "select_division": "डिवीज़न चुनें",
+    "cancel": "रद्द करें",
+    "transfer": "स्थानांतरित करें",
+    "toast_select_zone": "कृपया एक ज़ोन चुनें",
+    "toast_select_division": "कृपया एक डिवीज़न चुनें",
+    "toast_transfer_success": "{{name}} सफलतापूर्वक स्थानांतरित"
+  },
+  "confirm": {
+    "confirm": "पुष्टि करें",
+    "cancel": "रद्द करें"
+  },
+  "quiz_result": {
+    "title": "क्विज़ पूरा हुआ!",
+    "quiz_id_prefix": "क्विज़ #",
+    "score_label": "अंक",
+    "passed": "उत्तीर्ण!",
+    "failed": "अनुत्तीर्ण",
+    "your_score": "आपके अंक",
+    "total_score": "कुल अंक",
+    "great_job": "शाबाश!",
+    "keep_practicing": "अभ्यास जारी रखें!",
+    "passed_message": "आपने {{percentage}}% अंक प्राप्त किए और पास किया! (उत्तीर्ण अंक: {{passMarkPercentage}}%)",
+    "failed_message": "आपने {{percentage}}% अंक प्राप्त किए। पास करने के लिए {{passMarkPercentage}}% चाहिए।",
+    "back_to_quiz": "क्विज़ पर वापस",
+    "retake_quiz": "क्विज़ दोबारा दें"
+  },
+  "review_quiz": {
+    "title_prefix": "क्विज़ समीक्षा - #",
+    "score_label": "अंक:",
+    "questions": "प्रश्न",
+    "question_of": "प्रश्न {{current}} / {{total}}",
+    "correct": "सही",
+    "incorrect": "गलत",
+    "correct_answer": "सही उत्तर: विकल्प {{letter}}",
+    "previous": "पिछला",
+    "prev": "पिछला",
+    "next": "अगला"
+  },
+  "show_certificate": {
+    "title": "उपलब्धि प्रमाणपत्र",
+    "quiz_id_prefix": "क्विज़ #",
+    "download_certificate": "प्रमाणपत्र डाउनलोड करें",
+    "toast_download_failed": "प्रमाणपत्र डाउनलोड करने में विफल। कृपया पुनः प्रयास करें।",
+    "toast_download_success": "प्रमाणपत्र सफलतापूर्वक डाउनलोड हुआ!"
+  },
+  "feedback": {
+    "id_prefix": "ID:",
+    "rate_experience": "अपने अनुभव को रेट करें",
+    "share_feedback": "अपनी प्रतिक्रिया साझा करें",
+    "placeholder": "कचरा संग्रहण सेवा के साथ अपने अनुभव के बारे में बताएं...",
+    "cancel": "रद्द करें",
+    "submitting": "सबमिट हो रहा है...",
+    "submit_feedback": "प्रतिक्रिया सबमिट करें",
+    "toast_select_rating": "कृपया एक स्टार रेटिंग चुनें",
+    "toast_submit_success": "प्रतिक्रिया सफलतापूर्वक सबमिट हुई!"
+  },
+  "report_submitted": {
+    "title": "रिपोर्ट सबमिट हो गई",
+    "message": "आपकी शिकायत अब सामुदायिक मानचित्र पर दिखाई दे रही है। हमारी टीम जल्द समीक्षा करेगी।",
+    "view_on_map": "मानचित्र पर देखें",
+    "submit_another": "एक और सबमिट करें"
+  },
+  "all_complaints": {
+    "title": "सभी शिकायतें"
+  },
+  "selected_complaint": {
+    "reported_by": "{{time}} पहले {{name}} द्वारा रिपोर्ट",
+    "is_info_correct": "क्या यह जानकारी सही है?",
+    "confirm_message": "पुष्टि करें कि कूड़ा अभी भी है और स्थान सटीक है।",
+    "yes_correct": "हाँ, सही है",
+    "no_gone": "नहीं, हट गया",
+    "community": "समुदाय",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "toast_confirmed": "शिकायत की पुष्टि के लिए धन्यवाद",
+    "toast_feedback": "आपकी प्रतिक्रिया के लिए धन्यवाद"
+  },
+  "update_address": {
+    "title": "पता परिवर्तन सूचना",
+    "subtitle": "पता अपडेट संबंधी महत्वपूर्ण जानकारी",
+    "monthly_limit": "मासिक अपडेट सीमा",
+    "limit_message": "पता परिवर्तन महीने में एक बार ही हो सकता है। सहेजने से पहले सुनिश्चित करें कि सभी जानकारी सही है।",
+    "cancel": "रद्द करें",
+    "agree": "मैं सहमत हूँ"
+  },
+  "update_contact": {
+    "title": "अपना संपर्क सत्यापित करें",
+    "subtitle": "हमने एक सत्यापन कोड भेजा है",
+    "code_sent_phone": "फोन नंबर पर कोड भेजा गया",
+    "code_sent_email": "ईमेल पर कोड भेजा गया",
+    "enter_code": "सत्यापन कोड दर्ज करें",
+    "didnt_receive": "कोड नहीं मिला?",
+    "resend_otp": "OTP पुनः भेजें",
+    "cancel": "रद्द करें",
+    "verifying": "सत्यापित हो रहा है...",
+    "verify_continue": "सत्यापित करें और आगे बढ़ें"
+  },
+  "view_profile": {
+    "title": "प्रोफ़ाइल चित्र",
+    "alt_profile": "प्रोफ़ाइल"
+  },
+  "si_street_filter": {
+    "title": "रूट के अनुसार फ़िल्टर"
+  },
+  "si_move_street": {
+    "title": "गली स्थानांतरित करें",
+    "street_name_label": "गली का नाम",
+    "households_count": "{{count}} घर",
+    "current_route": "वर्तमान रूट:",
+    "select_new_route": "नया रूट चुनें",
+    "street_count_one": "{{count}} गली",
+    "street_count_other": "{{count}} गलियाँ",
+    "move_street": "गली स्थानांतरित करें"
+  },
+  "si_trashman_filter": {
+    "title": "रूट के अनुसार फ़िल्टर"
+  },
+  "si_move_trashman": {
+    "title": "कूड़ा कर्मचारी पुनः सौंपें",
+    "current_route": "वर्तमान रूट:",
+    "select_new_route": "नया रूट चुनें",
+    "trashman_count_one": "{{count}} कूड़ा कर्मचारी",
+    "trashman_count_other": "{{count}} कूड़ा कर्मचारी",
+    "reassign": "पुनः सौंपें"
+  },
+  "config_route": {
+    "delete_title": "रूट हटाएं",
+    "delete_confirm_prefix": "क्या आप हटाना चाहते हैं",
+    "delete_confirm_suffix": "? यह क्रिया पूर्ववत नहीं होगी।"
+  },
+  "config_zone": {
+    "delete_title": "ज़ोन हटाएं",
+    "delete_confirm_prefix": "क्या आप हटाना चाहते हैं",
+    "delete_confirm_suffix": "? यह क्रिया पूर्ववत नहीं होगी।"
+  },
+  "mho_division_filter": {
+    "title": "ज़ोन के अनुसार फ़िल्टर"
+  },
+  "mho_move_division": {
+    "title": "डिवीज़न स्थानांतरित करें",
+    "division_name_label": "डिवीज़न का नाम",
+    "wards_streets_count": "{{wards}} वार्ड • {{streets}} गलियाँ",
+    "current_zone": "वर्तमान ज़ोन:",
+    "select_new_zone": "नया ज़ोन चुनें",
+    "division_count_one": "{{count}} डिवीज़न",
+    "division_count_other": "{{count}} डिवीज़न",
+    "move_division": "डिवीज़न स्थानांतरित करें"
+  },
+  "mho_ward_filter": {
+    "title": "डिवीज़न के अनुसार फ़िल्टर"
+  },
+  "mho_move_ward": {
+    "title": "वार्ड स्थानांतरित करें",
+    "ward_label": "वार्ड",
+    "streets_count": "{{count}} गलियाँ",
+    "current_division": "वर्तमान डिवीज़न:",
+    "select_new_division": "नया डिवीज़न चुनें",
+    "ward_count_one": "{{count}} वार्ड",
+    "ward_count_other": "{{count}} वार्ड",
+    "move_ward": "वार्ड स्थानांतरित करें"
+  },
+  "mho_street_filter": {
+    "title": "वार्ड के अनुसार फ़िल्टर"
+  },
+  "mho_move_street": {
+    "title": "गली स्थानांतरित करें",
+    "street_name_label": "गली का नाम",
+    "households_count": "{{count}} घर",
+    "current_ward": "वर्तमान वार्ड:",
+    "select_new_ward": "नया वार्ड चुनें",
+    "street_count_one": "{{count}} गली",
+    "street_count_other": "{{count}} गलियाँ",
+    "move_street": "गली स्थानांतरित करें"
+  }
+}

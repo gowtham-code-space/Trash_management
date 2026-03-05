@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { X } from "../../../../assets/icons/icons";
 
 function TrashManFilterModal({ routes, selectedRoutes, onClose, onApply }) {
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
     const [tempSelectedRoutes, setTempSelectedRoutes] = useState([...selectedRoutes]);
 
     function handleRouteToggle(routeName) {
@@ -28,7 +30,7 @@ function TrashManFilterModal({ routes, selectedRoutes, onClose, onApply }) {
             <div onClick={(e)=>e.stopPropagation()} className="bg-white rounded-large p-6 max-w-md w-full mx-4 border border-secondary">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-secondaryDark">
-                Filter by Route
+                {t('modals:si_trashman_filter.title')}
                 </h3>
                 
                 <button
@@ -73,7 +75,7 @@ function TrashManFilterModal({ routes, selectedRoutes, onClose, onApply }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                         transition-all duration-200 ease-in-out"
                 >
-                Clear All
+                {t('common:clear_all')}
                 </button>
                 
                 <button
@@ -83,7 +85,7 @@ function TrashManFilterModal({ routes, selectedRoutes, onClose, onApply }) {
                         focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                         transition-all duration-200 ease-in-out"
                 >
-                Apply Filter ({tempSelectedRoutes.length})
+                {t('common:apply_filter_count', { count: tempSelectedRoutes.length })}
                 </button>
             </div>
             </div>

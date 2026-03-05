@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../store/ThemeStore";
 import { Check, X, Star } from "../../../assets/icons/icons";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function QuizResultModal({ isOpen, onClose, results }) {
     const navigate = useNavigate();
     const { isDarkTheme } = ThemeStore();
+    const { t } = useTranslation(["modals", "common"]);
 
     console.log('QuizResultModal render:', { isOpen, hasResults: !!results, results });
 
@@ -33,10 +35,10 @@ function QuizResultModal({ isOpen, onClose, results }) {
             <div className="flex justify-between items-start mb-6">
                 <div>
                 <h2 className="text-xl font-bold text-secondaryDark mb-1">
-                    Quiz Completed!
+                    {t('modals:quiz_result.title')}
                 </h2>
                 <p className="text-sm text-gray-500">
-                    Quiz #{results.quiz_id}
+                    {t('modals:quiz_result.quiz_id_prefix')}{results.quiz_id}
                 </p>
                 </div>
                 <button
@@ -57,19 +59,19 @@ function QuizResultModal({ isOpen, onClose, results }) {
                     <p className={`text-3xl font-bold ${passed ? "text-success" : "text-error"}`}>
                     {percentage.toFixed(0)}%
                     </p>
-                    <p className="text-xs text-gray-500">Score</p>
+                    <p className="text-xs text-gray-500">{t('modals:quiz_result.score_label')}</p>
                 </div>
                 </div>
                 
                 {passed ? (
                 <div className="flex items-center gap-2 px-4 py-2 bg-success/10 rounded-medium">
                     <Check size={18} defaultColor="#1E8E54" />
-                    <span className="text-sm font-medium text-success">Passed!</span>
+                    <span className="text-sm font-medium text-success">{t('modals:quiz_result.passed')}</span>
                 </div>
                 ) : (
                 <div className="flex items-center gap-2 px-4 py-2 bg-error/10 rounded-medium">
                     <X size={18} defaultColor="#E75A4C" />
-                    <span className="text-sm font-medium text-error">Failed</span>
+                    <span className="text-sm font-medium text-error">{t('modals:quiz_result.failed')}</span>
                 </div>
                 )}
             </div>
@@ -80,14 +82,14 @@ function QuizResultModal({ isOpen, onClose, results }) {
                 <p className="text-2xl font-bold text-primary mb-1">
                     {score}
                 </p>
-                <p className="text-xs text-gray-500">Your Score</p>
+                <p className="text-xs text-gray-500">{t('modals:quiz_result.your_score')}</p>
                 </div>
                 
                 <div className="bg-secondary rounded-medium p-4 text-center border border-gray-200">
                 <p className="text-2xl font-bold text-primary mb-1">
                     {totalScore}
                 </p>
-                <p className="text-xs text-gray-500">Total Score</p>
+                <p className="text-xs text-gray-500">{t('modals:quiz_result.total_score')}</p>
                 </div>
             </div>
 
@@ -99,12 +101,12 @@ function QuizResultModal({ isOpen, onClose, results }) {
                 </div>
                 <div>
                     <h3 className="text-sm font-semibold text-secondaryDark mb-1">
-                    {passed ? "Great Job!" : "Keep Practicing!"}
+                    {passed ? t('modals:quiz_result.great_job') : t('modals:quiz_result.keep_practicing')}
                     </h3>
                     <p className="text-xs text-gray-500">
                     {passed 
-                        ? `You've scored ${percentage.toFixed(1)}% and passed the quiz! (Pass mark: ${passMarkPercentage}%)`
-                        : `You've scored ${percentage.toFixed(1)}%. You need ${passMarkPercentage}% to pass. Review the topics and try again!`}
+                        ? t('modals:quiz_result.passed_message', { percentage: percentage.toFixed(1), passMarkPercentage })
+                        : t('modals:quiz_result.failed_message', { percentage: percentage.toFixed(1), passMarkPercentage })}
                     </p>
                 </div>
                 </div>
@@ -120,7 +122,7 @@ function QuizResultModal({ isOpen, onClose, results }) {
                             hover:scale-[0.99] active:scale-[0.99] transition-all duration-200 ease-in-out
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]"
             >
-                {passed ? "Back to Quiz" : "Retake Quiz"}
+                {passed ? t('modals:quiz_result.back_to_quiz') : t('modals:quiz_result.retake_quiz')}
             </button>
             </div>
         </div>

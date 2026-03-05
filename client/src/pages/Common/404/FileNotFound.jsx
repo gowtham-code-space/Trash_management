@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 function FileNotFound() {
     const navigate = useNavigate();
+    const { t } = useTranslation(["pages", "common"]);
 
     return (
         <div className="relative w-screen h-screen bg-linear-to-br from-[#3d8b7a] via-[#4a9b88] to-[#2d5f6f] overflow-hidden flex items-center justify-center">
@@ -20,13 +22,12 @@ function FileNotFound() {
 
                 {/* Page Not Found */}
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-6 md:mb-8">
-                    Page Not Found
+                    {t('pages:common.not_found.message')}
                 </h2>
 
                 {/* Description */}
                 <p className="text-sm sm:text-base md:text-lg text-white/80 leading-relaxed mb-8 md:mb-10 max-w-3xl mx-auto px-4">
-                    The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. 
-                    Please check the URL or return to the homepage to continue exploring.
+                    {t('pages:common.not_found.description')}
                 </p>
 
                 {/* Button */}
@@ -34,7 +35,7 @@ function FileNotFound() {
                     onClick={() => navigate('/')}
                     className="inline-block px-8 py-3 md:px-10 md:py-4 bg-white text-primary font-bold text-sm md:text-base rounded-full shadow-lg hover:bg-white/90 hover:scale-105 active:scale-95 transition-all duration-200 ease-in-out focus:outline-none focus:ring-4 focus:ring-white/30"
                 >
-                    Back to Home
+                    {t('pages:common.not_found.go_home')}
                 </button>
             </div>
         </div>

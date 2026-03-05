@@ -7,8 +7,10 @@ import MoveTrashManModal from "../../../../components/Modals/SanitaryInspector/A
 import ToastNotification from "../../../../components/Notification/ToastNotification";
 import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 function AssignTrashMen() {
+    const { t } = useTranslation(["pages", "common"]);
     const { isDarkTheme } = ThemeStore();
     
     const [searchVisible, setSearchVisible] = useState(false);
@@ -178,7 +180,7 @@ function AssignTrashMen() {
     function handleFilterApply(selectedRoutes) {
         setSelectedRouteFilters(selectedRoutes);
         setFilterVisible(false);
-        ToastNotification("Filter applied successfully", "success");
+        ToastNotification(t('pages:inspector.assign_trashmen_tab.toast_filter_applied'), "success");
     }
 
     function handleRouteSelect(routeName) {
@@ -200,7 +202,7 @@ function AssignTrashMen() {
         }));
         setEditingTrashMan(null);
         setEditValue("");
-        ToastNotification("Trashman updated successfully", "success");
+        ToastNotification(t('pages:inspector.assign_trashmen_tab.toast_trashman_updated'), "success");
     }
 
     function handleEditCancel() {
@@ -211,7 +213,7 @@ function AssignTrashMen() {
     function handleDeleteConfirm(trashmanId) {
         setTrashmen(trashmen.filter(function(t) { return t.id !== trashmanId; }));
         setDeleteModal({ visible: false, trashmanId: null });
-        ToastNotification("Trashman removed successfully", "success");
+        ToastNotification(t('pages:inspector.assign_trashmen_tab.toast_trashman_removed'), "success");
     }
 
     function handleMoveTrashMan(trashmanId, newRoute) {
@@ -219,7 +221,7 @@ function AssignTrashMen() {
             return t.id === trashmanId ? { ...t, route: newRoute } : t;
         }));
         setMoveModal({ visible: false, trashman: null });
-        ToastNotification("Trashman reassigned to " + newRoute + " successfully", "success");
+        ToastNotification(t('pages:inspector.assign_trashmen_tab.toast_trashman_reassigned', { routeName: newRoute }), "success");
     }
 
     function handleTrashManClick(trashman, event) {
@@ -312,7 +314,7 @@ function AssignTrashMen() {
                     </div>
                     {trashman.isDraft && (
                         <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
-                        Draft
+                        {t('common:draft')}
                         </span>
                     )}
                     </>
@@ -345,7 +347,7 @@ function AssignTrashMen() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Edit size={14} />
-                        <span>Edit</span>
+                        <span>{t('common:edit')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -359,7 +361,7 @@ function AssignTrashMen() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Trash size={14} defaultColor="#E75A4C" />
-                        <span>Remove</span>
+                        <span>{t('common:remove')}</span>
                     </button>
                     </div>
                 )}
@@ -378,14 +380,14 @@ function AssignTrashMen() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ALL TRASHMEN ({filteredTrashmen.length})
+                    {t('pages:inspector.assign_trashmen_tab.all_trashmen')} ({filteredTrashmen.length})
                     </h2>
                     
                     <div className="flex items-center gap-2">
                     {searchVisible && (
                         <input
                         type="text"
-                        placeholder="Search trashmen..."
+                        placeholder={t('pages:inspector.assign_trashmen_tab.search_placeholder')}
                         value={searchQuery}
                         onChange={function(e) { setSearchQuery(e.target.value); }}
                         className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -430,7 +432,7 @@ function AssignTrashMen() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ROUTE ASSIGNMENTS ({routes.length})
+                    {t('pages:inspector.assign_trashmen_tab.route_assignments')} ({routes.length})
                     </h2>
                 </div>
 
@@ -505,8 +507,8 @@ function AssignTrashMen() {
 
             {deleteModal.visible && (
             <AssignTrashMenModal
-                title="Remove Trashman"
-                message="Are you sure you want to remove this trashman from the system? This action cannot be undone."
+                title={t('pages:inspector.assign_trashmen_tab.remove_trashman_title')}
+                message={t('pages:inspector.assign_trashmen_tab.remove_trashman_message')}
                 onConfirm={function() { handleDeleteConfirm(deleteModal.trashmanId); }}
                 onCancel={function() { setDeleteModal({ visible: false, trashmanId: null }); }}
             />

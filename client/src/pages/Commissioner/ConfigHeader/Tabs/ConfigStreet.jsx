@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import ThemeStore from "../../../../store/ThemeStore";
 import { Search, Filter, X, Check, Edit, Trash } from "../../../../assets/icons/icons";
 import ConfigStreetModal from "../../../../components/Modals/MHO/ConfigStreet/ConfigStreetModal";
@@ -9,6 +10,7 @@ import Pagination from "../../../../utils/Pagination";
 import { ToastContainer } from "react-toastify";
 
 function ConfigStreet() {
+    const { t } = useTranslation(["pages", "common"]);
     const { isDarkTheme } = ThemeStore();
     
     const [searchVisible, setSearchVisible] = useState(false);
@@ -90,7 +92,7 @@ function ConfigStreet() {
     function handleFilterApply(selectedWards) {
         setSelectedWardFilters(selectedWards);
         setFilterVisible(false);
-        ToastNotification("Filter applied successfully", "success");
+        ToastNotification(t('common:filter_applied'), "success");
     }
 
     function handleWardSelect(wardName) {
@@ -103,7 +105,7 @@ function ConfigStreet() {
 
     function handleAddStreet() {
         if (!selectedWard) {
-        ToastNotification("Please select a ward first", "error");
+        ToastNotification(t('pages:commissioner.config_street.toast_select_ward_first'), "error");
         return;
         }
 
@@ -116,7 +118,7 @@ function ConfigStreet() {
         };
 
         setStreets([...streets, newStreet]);
-        ToastNotification("Draft street added to " + selectedWard, "success");
+        ToastNotification(t('pages:commissioner.config_street.toast_draft_street_added', { wardName: selectedWard }), "success");
     }
 
     function handleEditStart(street) {
@@ -130,7 +132,7 @@ function ConfigStreet() {
         }));
         setEditingStreet(null);
         setEditValue("");
-        ToastNotification("Street updated successfully", "success");
+        ToastNotification(t('pages:commissioner.config_street.toast_street_updated'), "success");
     }
 
     function handleEditCancel() {
@@ -141,7 +143,7 @@ function ConfigStreet() {
     function handleDeleteConfirm(streetId) {
         setStreets(streets.filter(function(s) { return s.id !== streetId; }));
         setDeleteModal({ visible: false, streetId: null });
-        ToastNotification("Street deleted successfully", "success");
+        ToastNotification(t('pages:commissioner.config_street.toast_street_deleted'), "success");
     }
 
     function handleMoveStreet(streetId, newWard) {
@@ -149,7 +151,7 @@ function ConfigStreet() {
         return s.id === streetId ? { ...s, ward: newWard } : s;
         }));
         setMoveModal({ visible: false, street: null });
-        ToastNotification("Street moved to " + newWard + " successfully", "success");
+        ToastNotification(t('pages:commissioner.config_street.toast_street_moved', { wardName: newWard }), "success");
     }
 
     const filteredStreets = streets.filter(function(street) {
@@ -258,14 +260,14 @@ function ConfigStreet() {
                         {street.street_name}
                     </h3>
                     <p className="text-xs text-secondaryDark mt-1">
-                        {street.households} Households
+                        {street.households} {t('common:households')}
                     </p>
                     <p className="text-xs text-primary font-bold mt-1">
                         {street.ward}
                     </p>
                     {street.isDraft && (
                         <span className="inline-block mt-2 px-2 py-0.5 bg-warning/20 text-warning text-xs rounded-small font-bold">
-                        Draft
+                        {t('common:draft')}
                         </span>
                     )}
                     </>
@@ -302,7 +304,7 @@ function ConfigStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Edit size={14} />
-                        <span>Edit</span>
+                        <span>{t('common:edit')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -316,7 +318,7 @@ function ConfigStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <span>↔</span>
-                        <span>Move</span>
+                        <span>{t('common:move')}</span>
                     </button>
                     <button
                         onClick={function() {
@@ -330,7 +332,7 @@ function ConfigStreet() {
                                 transition-all duration-200 ease-in-out"
                     >
                         <Trash size={14} defaultColor="#E75A4C" />
-                        <span>Delete</span>
+                        <span>{t('common:delete')}</span>
                     </button>
                     </div>
                 )}
@@ -350,14 +352,14 @@ function ConfigStreet() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    ALL STREETS ({filteredStreets.length})
+                    {t('pages:commissioner.config_street.all_streets')} ({filteredStreets.length})
                     </h2>
                     
                     <div className="flex items-center gap-2">
                     {searchVisible && (
                         <input
                         type="text"
-                        placeholder="Search streets..."
+                        placeholder={t('pages:commissioner.config_street.search_placeholder')}
                         value={searchQuery}
                         onChange={function(e) { setSearchQuery(e.target.value); }}
                         className="px-3 py-1.5 border border-secondary rounded-medium text-sm bg-white text-secondaryDark
@@ -402,7 +404,7 @@ function ConfigStreet() {
                 <div className="bg-white rounded-large p-6 border border-secondary">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-bold text-secondaryDark">
-                    TARGET WARDS ({wards.length})
+                    {t('pages:commissioner.config_street.target_wards')} ({wards.length})
                     </h2>
                     
                     <button
@@ -412,7 +414,7 @@ function ConfigStreet() {
                             focus:outline-none focus:ring-2 focus:ring-primary/20 focus:scale-[0.99]
                             transition-all duration-200 ease-in-out"
                     >
-                    Add Street
+                    {t('pages:commissioner.config_street.add_street_btn')}
                     </button>
                 </div>
 
@@ -438,8 +440,8 @@ function ConfigStreet() {
 
             {deleteModal.visible && (
             <ConfigStreetModal
-                title="Delete Street"
-                message="Are you sure you want to delete this street? This action cannot be undone."
+                title={t('pages:commissioner.config_street.delete_street_title')}
+                message={t('pages:commissioner.config_street.delete_street_message')}
                 onConfirm={function() { handleDeleteConfirm(deleteModal.streetId); }}
                 onCancel={function() { setDeleteModal({ visible: false, streetId: null }); }}
             />
